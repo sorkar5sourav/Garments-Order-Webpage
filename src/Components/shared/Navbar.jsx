@@ -15,7 +15,8 @@ const NavBar = () => {
 
   const navLinkClass = ({ isActive }) =>
     isActive ? "btn btn-primary rounded-full text-black" : "";
-
+  //Home, All-Product, About Us, Contact, Login, and Register.
+  //Home, All-Products, Dashboard, User Avatar, and Logout Button.
   const links = (
     <>
       <li>
@@ -23,32 +24,26 @@ const NavBar = () => {
           Services
         </NavLink>
       </li>
+
       <li>
-        <NavLink to="/coverage" className={navLinkClass}>
-          Coverage
-        </NavLink>
-      </li>
-      <li>
-        <NavLink to="/about" className={navLinkClass}>
-          About Us
-        </NavLink>
-      </li>
-      <li>
-        <NavLink to="/be-a-rider" className={navLinkClass}>
-          Be a Rider
-        </NavLink>
-      </li>
-      <li>
-        <NavLink to="/pricing" className={navLinkClass}>
-          Pricing
+        <NavLink to="/contact" className={navLinkClass}>
+          Contact
         </NavLink>
       </li>
 
-      {user && (
+      {user ? (
         <>
           <li>
             <NavLink to="/dashboard/my-parcels" className={navLinkClass}>
               My Parcels
+            </NavLink>
+          </li>
+        </>
+      ) : (
+        <>
+          <li>
+            <NavLink to="/about-us" className={navLinkClass}>
+              About Us
             </NavLink>
           </li>
         </>

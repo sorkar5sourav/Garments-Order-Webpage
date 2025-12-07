@@ -1,9 +1,5 @@
 import { Link } from "react-router";
-import logo from "../../assets/Images/logo.png";
-import FB from "../../assets/Images/FB.png";
-import LD from "../../assets/Images/LD.png";
-import twitter from "../../assets/Images/twitter.png";
-import YT from "../../assets/Images/YT.png";
+import logo from "../../assets/Logo.png";
 const Footer = () => {
   const fLInks = [
     "Services",
@@ -17,7 +13,7 @@ const Footer = () => {
     <footer className="bg-[#0b0b0b] flex flex-col justify-center items-center p-10 md:rounded-2xl">
       <aside className="max-w-3xl text-center">
         <div className="flex justify-center items-end">
-          <img src={logo} alt="" />
+          <img src={logo} className="h-10 w-10" alt="" />
           <h3 className="text-3xl text-white font-bold -ms-2.5">zapShift</h3>
         </div>
         <p className="black5 max-w-[80vw] mx-auto mt-4">
@@ -40,12 +36,12 @@ const Footer = () => {
           Copyright © {new Date().getFullYear()} - All right reserved
         </p>
       </aside>
-      <nav className="flex items-center gap-4">
+      {/* <nav className="flex items-center gap-4">
         <img src={LD} alt="" />
         <img src={twitter} alt="" />
         <img src={FB} alt="" />
         <img src={YT} alt="" />
-      </nav>
+      </nav> */}
     </footer>
   );
 };

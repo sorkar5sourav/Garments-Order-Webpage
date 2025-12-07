@@ -1,16 +1,17 @@
 import { Link, NavLink } from "react-router";
 import Logo from "../atoms/Logo";
+import useAuth from "../../hooks/useAuth";
 
 const NavBar = () => {
-  // const { user, logOut } = useAuth();
+  const { user, logOut } = useAuth();
 
-  // const handleLogOut = () => {
-  //   logOut()
-  //     .then()
-  //     .catch((error) => {
-  //       console.log(error);
-  //     });
-  // };
+  const handleLogOut = () => {
+    logOut()
+      .then()
+      .catch((error) => {
+        console.log(error);
+      });
+  };
 
   const navLinkClass = ({ isActive }) =>
     isActive ? "btn btn-primary rounded-full text-black" : "";
@@ -43,7 +44,7 @@ const NavBar = () => {
         </NavLink>
       </li>
 
-      {/* {user && (
+      {user && (
         <>
           <li>
             <NavLink to="/dashboard/my-parcels" className={navLinkClass}>
@@ -51,7 +52,7 @@ const NavBar = () => {
             </NavLink>
           </li>
         </>
-      )} */}
+      )}
     </>
   );
   return (
@@ -89,7 +90,7 @@ const NavBar = () => {
       <div className="navbar-center hidden lg:flex">
         <ul className="menu menu-horizontal items-center px-1">{links}</ul>
       </div>
-      {/* <div className="navbar-end">
+      <div className="navbar-end">
         {user ? (
           <a
             onClick={handleLogOut}
@@ -108,12 +109,9 @@ const NavBar = () => {
             >
               Sign up
             </Link>
-            <Link to="/rider">
-              <img src={Arrow} alt="" className="w-10 h-10" />
-            </Link>
           </div>
         )}
-      </div> */}
+      </div>
     </div>
   );
 };

@@ -2,9 +2,8 @@ import LogoPNG from "../../assets/Logo.png";
 
 const Logo = () => {
   return (
-    <div className="">
-      <img src={LogoPNG} alt="" />
-      Garments Order & <br /> Production Tracker System
+    <div className="flex items-center">
+      <img src={LogoPNG} className="h-10 w-10" alt="" />
     </div>
   );
 };

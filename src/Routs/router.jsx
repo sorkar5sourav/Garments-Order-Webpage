@@ -3,6 +3,11 @@ import Homepage from "../Pages/Homeoage/Homepage";
 import { createBrowserRouter } from "react-router";
 import Login from "../Pages/Auth/Login";
 import Register from "../Pages/Auth/Register";
+import ErrorPage from "../Pages/ErrorPage/ErrorPage";
+import AllProducts from "../Pages/Products/AllProducts";
+import ProductDetails from "../Pages/Products/ProductDetails";
+import PrivateRoute from "./PrivateRoute";
+
 export const router = createBrowserRouter([
   {
     path: "/",
@@ -17,6 +22,22 @@ export const router = createBrowserRouter([
         path: "register",
         element: <Register />,
       },
+      {
+        path: "products",
+        element: <AllProducts />,
+      },
+      {
+        path: "products/:id",
+        element: (
+          <PrivateRoute>
+            <ProductDetails />
+          </PrivateRoute>
+        ),
+      },
     ],
+  },
+  {
+    path: "/*",
+    element: <ErrorPage />,
   },
 ]);

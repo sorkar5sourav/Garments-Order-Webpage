@@ -1,0 +1,272 @@
+[
+  {
+    "productImage": "https://example.com/image1.jpg",
+    "productName": "Cotton T-Shirt",
+    "productDescription": "A high-quality, breathable cotton t-shirt perfect for casual wear and everyday activities. Made from 100% premium cotton, this t-shirt is exceptionally comfortable and built to last through multiple washes. Available in a wide variety of vibrant colors and sizes ranging from XS to XXL, ensuring a perfect fit for everyone. The soft fabric provides excellent breathability in warm weather, making it ideal for summer outings and casual gatherings. Whether paired with jeans or shorts, this versatile t-shirt is a wardrobe essential that combines style with durability.",
+    "category": "T-Shirts",
+    "price": 250,
+    "availableQuantity": 500,
+    "minimumOrder": 50
+  },
+  {
+    "productImage": "https://example.com/image2.jpg",
+    "productName": "Linen Shirt",
+    "productDescription": "A stylish and exceptionally comfortable linen shirt designed for both casual and formal occasions. Crafted from premium 100% linen fabric, this shirt offers superior breathability and a lightweight feel that's perfect for hot climates and summer wear. The elegant design features a classic collar, full-length sleeves, and a tailored fit that enhances any professional wardrobe. Linen's natural properties keep you cool and dry throughout the day while maintaining its sophisticated appearance. Whether dressing up for a business meeting or a casual evening out, this linen shirt delivers timeless elegance and unmatched comfort.",
+    "category": "Shirts",
+    "price": 800,
+    "availableQuantity": 200,
+    "minimumOrder": 20
+  },
+  {
+    "productImage": "https://example.com/image3.jpg",
+    "productName": "Denim Jeans",
+    "productDescription": "A pair of premium high-quality denim jeans designed for casual wear that never goes out of style. Constructed from 100% durable denim fabric, these jeans are engineered to withstand daily wear and maintain their shape and color through countless washes. The comfortable fit provides freedom of movement while the sturdy stitching ensures long-lasting durability. Available in various shades from classic blue to trendy faded finishes, these jeans work perfectly with any casual outfit. The reinforced seams and quality zippers guarantee years of reliable wear, making them an investment piece in your everyday wardrobe.",
+    "category": "Jeans",
+    "price": 1200,
+    "availableQuantity": 300,
+    "minimumOrder": 30
+  },
+  {
+    "productImage": "https://example.com/image4.jpg",
+    "productName": "Silk Dress",
+    "productDescription": "A beautiful and elegant silk dress crafted for formal occasions and special events. Made from 100% luxurious silk fabric, this dress exudes sophistication and timeless elegance that commands attention. The smooth, lustrous finish of silk drapes beautifully on the body, creating a flattering silhouette for all body types. The refined design features intricate detailing and premium construction that reflects superior craftsmanship. Perfect for evening galas, formal dinners, and upscale celebrations, this silk dress is sure to make a lasting impression. The delicate nature of silk requires gentle care, ensuring that this investment piece becomes a treasured addition to your formal wardrobe.",
+    "category": "Dresses",
+    "price": 2500,
+    "availableQuantity": 100,
+    "minimumOrder": 10
+  },
+  {
+    "productImage": "https://example.com/image5.jpg",
+    "productName": "Wool Sweater",
+    "productDescription": "A warm and exceptionally cozy wool sweater designed specifically for winter comfort and style. Crafted from 100% premium wool fibers, this sweater provides superior insulation and warmth during cold months. The soft, plush texture feels luxurious against the skin while the breathable nature of wool prevents overheating indoors. The classic design pairs seamlessly with jeans, skirts, or dress pants, making it incredibly versatile for various occasions. Hand-knitted with meticulous attention to detail, this sweater maintains its shape and color through proper care. Whether worn casually at home or layered for outdoor adventures, this wool sweater is the perfect blend of comfort, durability, and timeless style.",
+    "category": "Sweaters",
+    "price": 1500,
+    "availableQuantity": 200,
+    "minimumOrder": 20
+  },
+  {
+    "productImage": "https://example.com/image6.jpg",
+    "productName": "Cotton Socks",
+    "productDescription": "A versatile pack of high-quality cotton socks designed for everyday wear and maximum comfort. Made from 100% breathable cotton, these socks keep your feet dry and comfortable throughout the day. The breathable fabric allows proper air circulation, preventing moisture buildup and keeping feet fresh even during extended wear. The reinforced heel and toe areas provide enhanced durability for long-lasting wear. Available in multiple color options and patterns to match any outfit or occasion. Whether for work, sports, or casual activities, these cotton socks deliver the perfect combination of comfort, breathability, and reliability. Stock up on these essentials to ensure your feet stay comfortable every single day.",
+    "category": "Socks",
+    "price": 50,
+    "availableQuantity": 1000,
+    "minimumOrder": 50
+  },
+  {
+    "productImage": "https://example.com/image7.jpg",
+    "productName": "Leather Belt",
+    "productDescription": "A sophisticated high-quality leather belt perfect for both formal and semi-formal occasions. Crafted from 100% premium genuine leather, this belt combines durability with refined elegance. The sturdy construction ensures the belt maintains its shape and integrity even with regular daily use. The polished buckle and smooth leather surface create a professional appearance suitable for business settings. Available in classic colors such as black and brown that complement any wardrobe. The premium leather develops a beautiful patina over time, adding character and uniqueness to your accessory. Invest in this timeless piece that will serve you reliably for many years while enhancing your professional appearance.",
+    "category": "Accessories",
+    "price": 800,
+    "availableQuantity": 50,
+    "minimumOrder": 5
+  },
+  {
+    "productImage": "https://example.com/image8.jpg",
+    "productName": "Rayon Scarf",
+    "productDescription": "A beautiful and elegant rayon scarf perfect for formal occasions and sophisticated style. Made from 100% smooth rayon fabric, this scarf drapes gracefully and adds an instant touch of elegance to any outfit. The lightweight nature of rayon ensures comfortable wear without adding bulk, making it ideal for layering. The lustrous finish of rayon provides a premium appearance that elevates your overall look. Available in various sophisticated colors and patterns that complement both casual and formal wear. The scarf's versatility allows for multiple styling options, whether worn around the neck, as a headwrap, or even as a stylish belt accessory. Perfect for adding that finishing touch to complete your ensemble with timeless elegance and refinement.",
+    "category": "Accessories",
+    "price": 400,
+    "availableQuantity": 100,
+    "minimumOrder": 10
+  },
+  {
+    "productImage": "https://example.com/image9.jpg",
+    "productName": "Cotton Handkerchief",
+    "productDescription": "A practical pack of high-quality cotton handkerchiefs perfect for everyday use and special occasions. Crafted from 100% pure cotton, these handkerchiefs are exceptionally breathable and highly absorbent. The soft texture is gentle on the skin while maintaining durability through frequent washing. Each handkerchief features carefully finished edges for a polished and refined appearance. These versatile cloths serve multiple purposes including personal hygiene, wiping hands, and decorative accessorizing. The traditional design makes them suitable for both casual and formal settings. Perfect for keeping in your pocket, purse, or using at home, these cotton handkerchiefs are a timeless essential. Available in various colors and patterns to suit your personal style and preferences.",
+    "category": "Accessories",
+    "price": 100,
+    "availableQuantity": 500,
+    "minimumOrder": 50
+  },
+  {
+    "productImage": "https://example.com/image10.jpg",
+    "productName": "Polyester Jacket",
+    "productDescription": "A high-quality polyester jacket designed for casual wear and everyday protection from the elements. Constructed from 100% durable polyester, this jacket offers excellent weather resistance and practical functionality. The water-resistant properties keep you dry during light rain and drizzle, making it perfect for unpredictable weather conditions. The lightweight design provides comfort and freedom of movement without compromising on warmth. Available in various stylish colors and modern designs that complement contemporary fashion trends. The jacket features multiple pockets for convenient storage and reinforced seams for enhanced durability. Whether heading to work, running errands, or enjoying outdoor activities, this polyester jacket is a reliable choice that combines style with practical performance.",
+    "category": "Jackets",
+    "price": 1800,
+    "availableQuantity": 100,
+    "minimumOrder": 10
+  },
+  {
+    "productImage": "https://example.com/image11.jpg",
+    "productName": "Cotton Trousers",
+    "productDescription": "A pair of refined high-quality cotton trousers designed for formal occasions and professional settings. Made from 100% premium cotton, these trousers offer exceptional comfort combined with a sophisticated appearance. The natural fiber breathes beautifully, keeping you comfortable throughout the day while maintaining its polished look. The tailored fit flatters various body types while the quality stitching ensures durability through extensive wear. Perfect for office environments, business meetings, and upscale events where professional appearance matters. The versatile design pairs well with dress shirts, blazers, and formal footwear. These cotton trousers represent a smart investment in your professional wardrobe, offering timeless style and everyday comfort.",
+    "category": "Trousers",
+    "price": 1200,
+    "availableQuantity": 200,
+    "minimumOrder": 20
+  },
+  {
+    "productImage": "https://example.com/image12.jpg",
+    "productName": "Linen Blazer",
+    "productDescription": "A sophisticated high-quality linen blazer perfect for formal occasions and elevated style. Tailored from 100% breathable linen fabric, this blazer combines professional appearance with exceptional comfort. The naturally textured linen provides an upscale look that's perfect for business meetings, formal dinners, and special events. The structured design creates clean lines while maintaining comfort and freedom of movement. Linen's superior breathability ensures you stay cool and composed even during extended wear in warm weather. The classic silhouette pairs beautifully with dress pants or skirts for a complete formal ensemble. This versatile linen blazer is an investment in timeless elegance that will remain fashionable for years to come.",
+    "category": "Blazers",
+    "price": 2500,
+    "availableQuantity": 50,
+    "minimumOrder": 5
+  },
+  {
+    "productImage": "https://example.com/image13.jpg",
+    "productName": "Denim Jacket",
+    "productDescription": "A high-quality denim jacket perfect for casual wear and everyday style. Constructed from 100% premium denim fabric, this jacket offers exceptional durability and a timeless aesthetic. The sturdy construction withstands regular wear while developing a unique patina that adds character over time. The versatile design pairs effortlessly with jeans, dresses, and casual trousers creating endless styling possibilities. Multiple pockets provide practical functionality for everyday activities. The reinforced stitching and quality hardware ensure this jacket remains a reliable wardrobe staple for years. Whether layered over t-shirts or worn over sweaters, this denim jacket brings an instant cool factor to any outfit.",
+    "category": "Jackets",
+    "price": 2000,
+    "availableQuantity": 100,
+    "minimumOrder": 10
+  },
+  {
+    "productImage": "https://example.com/image14.jpg",
+    "productName": "Silk Tie",
+    "productDescription": "A high-quality silk tie perfect for formal occasions and professional settings. Handcrafted from 100% luxurious silk, this tie exudes elegance and sophistication. The smooth, lustrous silk provides a premium appearance that immediately elevates any business suit or formal attire. The masterful craftsmanship ensures secure stitching and proper weight distribution for ideal draping around the neck. Available in various classic colors and sophisticated patterns suitable for any formal event. The silk material maintains its vibrant appearance and luxurious feel through proper care. Whether attending board meetings, formal dinners, or upscale events, this silk tie is the perfect accessory for completing a polished, professional look.",
+    "category": "Accessories",
+    "price": 500,
+    "availableQuantity": 50,
+    "minimumOrder": 5
+  },
+  {
+    "productImage": "https://example.com/image15.jpg",
+    "productName": "Cotton Dress",
+    "productDescription": "A beautiful cotton dress perfect for casual wear and everyday style. Crafted from 100% soft cotton, this dress offers exceptional comfort and a relaxed, effortless aesthetic. The breathable fabric keeps you cool during warm days while the natural fibers feel gentle against the skin. The practical design features convenient pockets and a flattering silhouette that works for various body types. Perfect for casual outings, weekend gatherings, and relaxed social events. The versatile styling allows for mixing and matching with various accessories and shoes. Available in multiple colors and patterns, this cotton dress is an essential piece for building a comfortable, casual wardrobe.",
+    "category": "Dresses",
+    "price": 1000,
+    "availableQuantity": 200,
+    "minimumOrder": 20
+  },
+  {
+    "productImage": "https://example.com/image16.jpg",
+    "productName": "Wool Socks",
+    "productDescription": "A pack of premium high-quality wool socks designed specifically for winter warmth and comfort. Made from 100% natural wool, these socks provide exceptional insulation during cold months. The natural crimping of wool fibers creates air pockets that trap body heat for superior warmth. The moisture-wicking properties keep feet dry even during extended activity, preventing discomfort and odor buildup. The thick, cushioned sole provides comfort during long hours of standing or walking. Perfect for winter activities including skiing, hiking, and outdoor sports. The durable construction ensures these socks maintain their warmth and integrity through numerous washes. Invest in these wool socks for reliable winter warmth that lasts season after season.",
+    "category": "Socks",
+    "price": 200,
+    "availableQuantity": 500,
+    "minimumOrder": 50
+  },
+  {
+    "productImage": "https://example.com/image17.jpg",
+    "productName": "Leather Shoes",
+    "productDescription": "A pair of premium high-quality leather shoes perfect for formal occasions and professional settings. Handcrafted from 100% genuine leather, these shoes combine elegance with exceptional durability. The supple leather molds to your feet over time, creating a custom fit that improves with wear. The sturdy leather sole provides excellent traction and stability while the refined design ensures a polished appearance. Perfect for business meetings, formal dinners, weddings, and upscale events. The timeless style transcends fashion trends, making these shoes a worthy investment. Proper care and maintenance will allow these leather shoes to serve you reliably for many years while developing a beautiful patina.",
+    "category": "Shoes",
+    "price": 3000,
+    "availableQuantity": 50,
+    "minimumOrder": 5
+  },
+  {
+    "productImage": "https://example.com/image18.jpg",
+    "productName": "Cotton Scarf",
+    "productDescription": "A beautiful cotton scarf perfect for casual wear and everyday styling. Made from 100% soft cotton, this scarf drapes beautifully while maintaining its shape. The breathable fabric makes it suitable for various seasons, providing warmth in cooler months and breathability in warmer weather. The lightweight design allows comfortable wear without adding bulk or weight. Available in numerous vibrant colors and charming patterns that complement any casual outfit. The versatile scarf can be styled multiple ways including around the neck, as a headwrap, or tied to a purse. Perfect for adding a finishing touch to casual ensembles while maintaining comfort and style throughout the day.",
+    "category": "Accessories",
+    "price": 300,
+    "availableQuantity": 100,
+    "minimumOrder": 10
+  },
+  {
+    "productImage": "https://example.com/image19.jpg",
+    "productName": "Polyester Trousers",
+    "productDescription": "A pair of high-quality polyester trousers designed for formal occasions and professional wear. Constructed from 100% durable polyester, these trousers offer excellent shape retention and easy maintenance. The wrinkle-resistant properties ensure a crisp, polished appearance even after extended wear. The comfortable fit provides freedom of movement while maintaining a sophisticated silhouette. Perfect for office environments, formal events, and professional gatherings where appearance matters. The reinforced seams and quality construction guarantee durability through extensive wear. Available in classic colors that complement various formal ensembles. These polyester trousers represent a practical choice for building a professional wardrobe that maintains its appearance with minimal effort.",
+    "category": "Trousers",
+    "price": 1500,
+    "availableQuantity": 200,
+    "minimumOrder": 20
+  },
+  {
+    "productImage": "https://example.com/image20.jpg",
+    "productName": "Linen Shirt",
+    "productDescription": "A stylish and exceptionally comfortable linen shirt designed for both casual and formal occasions. Crafted from premium 100% linen fabric, this shirt offers superior breathability and a lightweight feel that's perfect for hot climates and summer wear. The elegant design features a classic collar, full-length sleeves, and a tailored fit that enhances any professional wardrobe. Linen's natural properties keep you cool and dry throughout the day while maintaining its sophisticated appearance. Whether dressing up for a business meeting or a casual evening out, this linen shirt delivers timeless elegance and unmatched comfort. The natural linen texture adds visual interest and dimension to your overall look.",
+    "category": "Shirts",
+    "price": 800,
+    "availableQuantity": 200,
+    "minimumOrder": 20
+  },
+  {
+    "productImage": "https://example.com/image21.jpg",
+    "productName": "Denim Jeans",
+    "productDescription": "A pair of premium high-quality denim jeans designed for casual wear that never goes out of style. Constructed from 100% durable denim fabric, these jeans are engineered to withstand daily wear and maintain their shape and color through countless washes. The comfortable fit provides freedom of movement while the sturdy stitching ensures long-lasting durability. Available in various shades from classic blue to trendy faded finishes, these jeans work perfectly with any casual outfit. The reinforced seams and quality zippers guarantee years of reliable wear, making them an investment piece in your everyday wardrobe. Perfect for creating effortless casual looks.",
+    "category": "Jeans",
+    "price": 1200,
+    "availableQuantity": 300,
+    "minimumOrder": 30
+  },
+  {
+    "productImage": "https://example.com/image22.jpg",
+    "productName": "Silk Dress",
+    "productDescription": "A beautiful and elegant silk dress crafted for formal occasions and special events. Made from 100% luxurious silk fabric, this dress exudes sophistication and timeless elegance that commands attention. The smooth, lustrous finish of silk drapes beautifully on the body, creating a flattering silhouette for all body types. The refined design features intricate detailing and premium construction that reflects superior craftsmanship. Perfect for evening galas, formal dinners, and upscale celebrations, this silk dress is sure to make a lasting impression. The delicate nature of silk requires gentle care, ensuring that this investment piece becomes a treasured addition to your formal wardrobe.",
+    "category": "Dresses",
+    "price": 2500,
+    "availableQuantity": 100,
+    "minimumOrder": 10
+  },
+  {
+    "productImage": "https://example.com/image23.jpg",
+    "productName": "Wool Sweater",
+    "productDescription": "A warm and exceptionally cozy wool sweater designed specifically for winter comfort and style. Crafted from 100% premium wool fibers, this sweater provides superior insulation and warmth during cold months. The soft, plush texture feels luxurious against the skin while the breathable nature of wool prevents overheating indoors. The classic design pairs seamlessly with jeans, skirts, or dress pants, making it incredibly versatile for various occasions. Hand-knitted with meticulous attention to detail, this sweater maintains its shape and color through proper care. Whether worn casually at home or layered for outdoor adventures, this wool sweater is the perfect blend of comfort, durability, and timeless style.",
+    "category": "Sweaters",
+    "price": 1500,
+    "availableQuantity": 200,
+    "minimumOrder": 20
+  },
+  {
+    "productImage": "https://example.com/image24.jpg",
+    "productName": "Cotton Socks",
+    "productDescription": "A versatile pack of high-quality cotton socks designed for everyday wear and maximum comfort. Made from 100% breathable cotton, these socks keep your feet dry and comfortable throughout the day. The breathable fabric allows proper air circulation, preventing moisture buildup and keeping feet fresh even during extended wear. The reinforced heel and toe areas provide enhanced durability for long-lasting wear. Available in multiple color options and patterns to match any outfit or occasion. Whether for work, sports, or casual activities, these cotton socks deliver the perfect combination of comfort, breathability, and reliability. Stock up on these essentials to ensure your feet stay comfortable every single day.",
+    "category": "Socks",
+    "price": 50,
+    "availableQuantity": 1000,
+    "minimumOrder": 50
+  },
+  {
+    "productImage": "https://example.com/image25.jpg",
+    "productName": "Leather Belt",
+    "productDescription": "A sophisticated high-quality leather belt perfect for both formal and semi-formal occasions. Crafted from 100% premium genuine leather, this belt combines durability with refined elegance. The sturdy construction ensures the belt maintains its shape and integrity even with regular daily use. The polished buckle and smooth leather surface create a professional appearance suitable for business settings. Available in classic colors such as black and brown that complement any wardrobe. The premium leather develops a beautiful patina over time, adding character and uniqueness to your accessory. Invest in this timeless piece that will serve you reliably for many years while enhancing your professional appearance.",
+    "category": "Accessories",
+    "price": 800,
+    "availableQuantity": 50,
+    "minimumOrder": 5
+  },
+  {
+    "productImage": "https://example.com/image26.jpg",
+    "productName": "Rayon Scarf",
+    "productDescription": "A beautiful and elegant rayon scarf perfect for formal occasions and sophisticated style. Made from 100% smooth rayon fabric, this scarf drapes gracefully and adds an instant touch of elegance to any outfit. The lightweight nature of rayon ensures comfortable wear without adding bulk, making it ideal for layering. The lustrous finish of rayon provides a premium appearance that elevates your overall look. Available in various sophisticated colors and patterns that complement both casual and formal wear. The scarf's versatility allows for multiple styling options, whether worn around the neck, as a headwrap, or even as a stylish belt accessory. Perfect for adding that finishing touch to complete your ensemble with timeless elegance and refinement.",
+    "category": "Accessories",
+    "price": 400,
+    "availableQuantity": 100,
+    "minimumOrder": 10
+  },
+  {
+    "productImage": "https://example.com/image27.jpg",
+    "productName": "Cotton Handkerchief",
+    "productDescription": "A practical pack of high-quality cotton handkerchiefs perfect for everyday use and special occasions. Crafted from 100% pure cotton, these handkerchiefs are exceptionally breathable and highly absorbent. The soft texture is gentle on the skin while maintaining durability through frequent washing. Each handkerchief features carefully finished edges for a polished and refined appearance. These versatile cloths serve multiple purposes including personal hygiene, wiping hands, and decorative accessorizing. The traditional design makes them suitable for both casual and formal settings. Perfect for keeping in your pocket, purse, or using at home, these cotton handkerchiefs are a timeless essential. Available in various colors and patterns to suit your personal style and preferences.",
+    "category": "Accessories",
+    "price": 100,
+    "availableQuantity": 500,
+    "minimumOrder": 50
+  },
+  {
+    "productImage": "https://example.com/image28.jpg",
+    "productName": "Polyester Jacket",
+    "productDescription": "A high-quality polyester jacket designed for casual wear and everyday protection from the elements. Constructed from 100% durable polyester, this jacket offers excellent weather resistance and practical functionality. The water-resistant properties keep you dry during light rain and drizzle, making it perfect for unpredictable weather conditions. The lightweight design provides comfort and freedom of movement without compromising on warmth. Available in various stylish colors and modern designs that complement contemporary fashion trends. The jacket features multiple pockets for convenient storage and reinforced seams for enhanced durability. Whether heading to work, running errands, or enjoying outdoor activities, this polyester jacket is a reliable choice that combines style with practical performance.",
+    "category": "Jackets",
+    "price": 1800,
+    "availableQuantity": 100,
+    "minimumOrder": 10
+  },
+  {
+    "productImage": "https://example.com/image29.jpg",
+    "productName": "Cotton Trousers",
+    "productDescription": "A pair of refined high-quality cotton trousers designed for formal occasions and professional settings. Made from 100% premium cotton, these trousers offer exceptional comfort combined with a sophisticated appearance. The natural fiber breathes beautifully, keeping you comfortable throughout the day while maintaining its polished look. The tailored fit flatters various body types while the quality stitching ensures durability through extensive wear. Perfect for office environments, business meetings, and upscale events where professional appearance matters. The versatile design pairs well with dress shirts, blazers, and formal footwear. These cotton trousers represent a smart investment in your professional wardrobe, offering timeless style and everyday comfort.",
+    "category": "Trousers",
+    "price": 1200,
+    "availableQuantity": 200,
+    "minimumOrder": 20
+  },
+  {
+    "productImage": "https://example.com/image30.jpg",
+    "productName": "Linen Blazer",
+    "productDescription": "A sophisticated high-quality linen blazer perfect for formal occasions and elevated style. Tailored from 100% breathable linen fabric, this blazer combines professional appearance with exceptional comfort. The naturally textured linen provides an upscale look that's perfect for business meetings, formal dinners, and special events. The structured design creates clean lines while maintaining comfort and freedom of movement. Linen's superior breathability ensures you stay cool and composed even during extended wear in warm weather. The classic silhouette pairs beautifully with dress pants or skirts for a complete formal ensemble. This versatile linen blazer is an investment in timeless elegance that will remain fashionable for years to come.",
+    "category": "Blazers",
+    "price": 2500,
+    "availableQuantity": 50,
+    "minimumOrder": 5
+  }
+]

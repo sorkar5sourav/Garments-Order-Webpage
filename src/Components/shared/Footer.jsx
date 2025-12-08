@@ -14,7 +14,7 @@ const Footer = () => {
     "Contact",
   ];
   return (
-    <footer className="bg-[#0b0b0b] flex flex-col justify-center items-center p-10 md:rounded-2xl">
+    <footer className="bg-[#0b0b0b] flex flex-col w-full justify-center items-center p-10 md:rounded-2xl">
       <aside className="max-w-3xl text-center">
         <div className="flex justify-center items-center flex-col">
           <img src={logo} className="w-40" alt="" />

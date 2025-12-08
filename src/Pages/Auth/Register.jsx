@@ -3,7 +3,6 @@ import { useForm } from "react-hook-form";
 import useAuth from "../../hooks/useAuth";
 import { Link, useLocation, useNavigate } from "react-router";
 import SocialLogin from "./SocialLogin";
-import axios from "axios";
 import useAxiosSecure from "../../hooks/useAxiosSecure";
 
 const Register = () => {
@@ -17,52 +16,38 @@ const Register = () => {
   const navigate = useNavigate();
   const axiosSecure = useAxiosSecure();
 
-  const handleRegistration = (data) => {
-    const profileImg = data.photo[0];
+  const handleRegistration = async (data) => {
+    try {
+      // 1. Register user with Firebase
+      await registerUser(data.email, data.password);
 
-    registerUser(data.email, data.password)
-      .then(() => {
-        // 1. store the image in form data
-        const formData = new FormData();
-        formData.append("image", profileImg);
+      // 2. Update user profile in Firebase
+      const userProfile = {
+        displayName: data.name,
+      };
+      await updateUserProfile(userProfile);
 
-        // 2. send the photo to store and get the ul
-        const image_API_URL = `https://api.imgbb.com/1/upload?key=${
-          import.meta.env.VITE_image_host_key
-        }`;
+      // 3. Save user info to database
+      const userInfo = {
+        email: data.email,
+        name: data.name,
+        role: data.role,
+        status: "pending",
+      };
+      axiosSecure
+        .post("/users", userInfo)
+        .then((res) => {
+          if (res.data.insertedId) {
+            console.log("user created in the database");
+          }
+        })
+        .catch((error) => console.log("Database save error:", error));
 
-        axios.post(image_API_URL, formData).then((res) => {
-          const photoURL = res.data.data.url;
-
-          // create user in the database
-          const userInfo = {
-            email: data.email,
-            displayName: data.name,
-            photoURL: photoURL,
-          };
-          axiosSecure.post("/users", userInfo).then((res) => {
-            if (res.data.insertedId) {
-              console.log("user created in the database");
-            }
-          });
-
-          // update user profile to firebase
-          const userProfile = {
-            displayName: data.name,
-            photoURL: photoURL,
-          };
-
-          updateUserProfile(userProfile)
-            .then(() => {
-              // console.log('user profile updated done.')
-              navigate(location.state || "/");
-            })
-            .catch((error) => console.log(error));
-        });
-      })
-      .catch((error) => {
-        console.log(error);
-      });
+      // 4. Redirect user after successful registration and profile update
+      navigate(location.state?.pathname || "/");
+    } catch (error) {
+      console.log("Registration error:", error.message);
+    }
   };
 
   return (
@@ -75,70 +60,74 @@ const Register = () => {
           <label className="label">Name</label>
           <input
             type="text"
-            {...register("name", { required: true })}
+            {...register("name", { required: "Name is required" })}
             className="input"
             placeholder="Your Name"
           />
-          {errors.name?.type === "required" && (
-            <p className="text-red-500">Name is required.</p>
-          )}
+          {errors.name && <p className="text-red-500">{errors.name.message}</p>}
 
-          {/* photo image field */}
-          <label className="label">Photo</label>
-
+          {/* photo url field */}
+          <label className="label">Photo URL</label>
           <input
-            type="file"
-            {...register("photo", { required: true })}
-            className="file-input"
-            placeholder="Your Photo"
+            type="text"
+            {...register("photoURL", { required: "Photo URL is required" })}
+            className="input"
+            placeholder="Enter photo URL"
           />
-
-          {errors.name?.type === "required" && (
-            <p className="text-red-500">Photo is required.</p>
+          {errors.photoURL && (
+            <p className="text-red-500">{errors.photoURL.message}</p>
           )}
 
           {/* email field */}
           <label className="label">Email</label>
           <input
             type="email"
-            {...register("email", { required: true })}
+            {...register("email", { required: "Email is required" })}
             className="input"
             placeholder="Email"
           />
-          {errors.email?.type === "required" && (
-            <p className="text-red-500">Email is required.</p>
+          {errors.email && (
+            <p className="text-red-500">{errors.email.message}</p>
           )}
+
+          {/* role dropdown */}
+          <label className="label">Role</label>
+          <select
+            {...register("role", { required: "Role is required" })}
+            className="select select-bordered"
+          >
+            <option value="">Select Role</option>
+            <option value="buyer">Buyer</option>
+            <option value="manager">Manager</option>
+          </select>
+          {errors.role && <p className="text-red-500">{errors.role.message}</p>}
 
           {/* password */}
           <label className="label">Password</label>
           <input
             type="password"
             {...register("password", {
-              required: true,
-              minLength: 6,
-              pattern: /^(?=.*[A-Z])(?=.*[a-z])(?=.*\d)(?=.*[^A-Za-z0-9]).+$/,
+              required: "Password is required",
+              minLength: {
+                value: 6,
+                message: "Password must be at least 6 characters",
+              },
+              validate: {
+                hasUppercase: (value) =>
+                  /[A-Z]/.test(value) ||
+                  "Password must have at least one uppercase letter",
+                hasLowercase: (value) =>
+                  /[a-z]/.test(value) ||
+                  "Password must have at least one lowercase letter",
+              },
             })}
             className="input"
             placeholder="Password"
           />
-          {errors.password?.type === "required" && (
-            <p className="text-red-500">Password is required.</p>
-          )}
-          {errors.password?.type === "minLength" && (
-            <p className="text-red-500">
-              Password must be 6 characters or longer
-            </p>
-          )}
-          {errors.password?.type === "pattern" && (
-            <p className="text-red-500">
-              Password must have at least one uppercase, at least one lowercase,
-              at least one number, and at least one special characters
-            </p>
+          {errors.password && (
+            <p className="text-red-500 text-sm">{errors.password.message}</p>
           )}
 
-          <div>
-            <a className="link link-hover">Forgot password?</a>
-          </div>
           <button className="btn btn-neutral mt-4">Register</button>
         </fieldset>
         <p>

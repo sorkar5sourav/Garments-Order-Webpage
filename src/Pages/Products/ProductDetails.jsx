@@ -50,7 +50,13 @@ const ProductDetails = () => {
       return;
     }
 
-    // Check user role and account status
+    // Check user role - don't allow admins or managers to order
+    if (user.role === "admin" || user.role === "manager") {
+      alert("Admins and Managers cannot place orders.");
+      return;
+    }
+
+    // Check account status
     if (user.role === "pending") {
       alert(
         "Your account is pending approval. Please wait for admin approval."
@@ -58,8 +64,8 @@ const ProductDetails = () => {
       return;
     }
 
-    // Navigate to order/booking page
-    navigate(`/order/${id}`, { state: { quantity } });
+    // Navigate to booking form
+    navigate(`/booking/${id}`, { state: { quantity } });
   };
 
   if (loading) {
@@ -177,10 +183,17 @@ const ProductDetails = () => {
               {/* Order Button */}
               <button
                 onClick={handleOrder}
-                disabled={product.availableQuantity < product.minimumOrder}
+                disabled={
+                  product.availableQuantity < product.minimumOrder ||
+                  (user && (user.role === "admin" || user.role === "manager"))
+                }
                 className="w-full bg-blue-600 hover:bg-blue-700 disabled:bg-gray-400 text-white font-bold py-3 px-6 rounded-lg transition-colors duration-200 mb-4"
               >
-                {user ? "Place Order" : "Login to Order"}
+                {!user
+                  ? "Login to Order"
+                  : user.role === "admin" || user.role === "manager"
+                  ? "Admins Cannot Order"
+                  : "Place Order"}
               </button>
 
               {product.availableQuantity < product.minimumOrder && (

@@ -15,13 +15,14 @@ const NavBar = () => {
 
   const navLinkClass = ({ isActive }) =>
     isActive ? "btn btn-primary rounded-full text-black" : "";
-  //Home, All-Product, About Us, Contact, Login, and Register.
-  //Home, All-Products, Dashboard, User Avatar, and Logout Button.
-  const links = (
+
+  // Before Login: Home, All-Products, About Us, Contact, Login, Register
+  // After Login: Home, All-Products, Dashboard, Logout
+  const beforeLoginLinks = (
     <>
       <li>
         <NavLink to="/" className={navLinkClass}>
-          Services
+          Home
         </NavLink>
       </li>
 
@@ -32,30 +33,42 @@ const NavBar = () => {
       </li>
 
       <li>
+        <NavLink to="/about-us" className={navLinkClass}>
+          About Us
+        </NavLink>
+      </li>
+
+      <li>
         <NavLink to="/contact" className={navLinkClass}>
           Contact
         </NavLink>
       </li>
-
-      {user ? (
-        <>
-          <li>
-            <NavLink to="/dashboard/my-parcels" className={navLinkClass}>
-              My Parcels
-            </NavLink>
-          </li>
-        </>
-      ) : (
-        <>
-          <li>
-            <NavLink to="/about-us" className={navLinkClass}>
-              About Us
-            </NavLink>
-          </li>
-        </>
-      )}
     </>
   );
+
+  const afterLoginLinks = (
+    <>
+      <li>
+        <NavLink to="/" className={navLinkClass}>
+          Home
+        </NavLink>
+      </li>
+
+      <li>
+        <NavLink to="/products" className={navLinkClass}>
+          All Products
+        </NavLink>
+      </li>
+
+      <li>
+        <NavLink to="/dashboard" className={navLinkClass}>
+          Dashboard
+        </NavLink>
+      </li>
+    </>
+  );
+
+  const links = user ? afterLoginLinks : beforeLoginLinks;
   return (
     <div className="navbar bg-base-100 rounded-2xl shadow-sm p-5 ">
       <div className="navbar-start">
@@ -91,24 +104,58 @@ const NavBar = () => {
       <div className="navbar-center hidden lg:flex">
         <ul className="menu menu-horizontal items-center px-1">{links}</ul>
       </div>
-      <div className="navbar-end">
+      <div className="navbar-end gap-2">
         {user ? (
-          <a
-            onClick={handleLogOut}
-            className="btn btn-primary rounded-lg text-black font-bold"
-          >
-            Log Out
-          </a>
+          <>
+            {/* User Avatar with dropdown */}
+            <div className="dropdown dropdown-end">
+              <div
+                tabIndex={0}
+                role="button"
+                className="btn btn-ghost btn-circle avatar"
+              >
+                <div className="w-10 rounded-full">
+                  <img
+                    src={user?.photoURL || "https://via.placeholder.com/150"}
+                    alt={user?.displayName || "User"}
+                    title={user?.displayName || "User"}
+                  />
+                </div>
+              </div>
+              <ul
+                tabIndex={0}
+                className="dropdown-content z-[1] menu p-2 shadow bg-base-100 rounded-box w-52"
+              >
+                <li>
+                  <a>{user?.displayName || "User"}</a>
+                </li>
+                <li>
+                  <a>{user?.email}</a>
+                </li>
+                <li>
+                  <a onClick={handleLogOut}>Logout</a>
+                </li>
+              </ul>
+            </div>
+
+            {/* Logout Button */}
+            <button
+              onClick={handleLogOut}
+              className="btn btn-primary rounded-lg text-black font-bold"
+            >
+              Logout
+            </button>
+          </>
         ) : (
-          <div className="flex items-center">
+          <div className="flex items-center gap-2">
             <Link className="btn rounded-lg" to="/login">
-              Sign in
+              Login
             </Link>
             <Link
-              className="btn btn-primary rounded-lg text-black ml-4"
+              className="btn btn-primary rounded-lg text-black"
               to="/register"
             >
-              Sign up
+              Register
             </Link>
           </div>
         )}

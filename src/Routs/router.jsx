@@ -6,7 +6,10 @@ import Register from "../Pages/Auth/Register";
 import ErrorPage from "../Pages/ErrorPage/ErrorPage";
 import AllProducts from "../Pages/Products/AllProducts";
 import ProductDetails from "../Pages/Products/ProductDetails";
+import BookingForm from "../Pages/Products/BookingForm";
 import PrivateRoute from "./PrivateRoute";
+import DashboardHome from "../Pages/Dashboard/DashboardHome";
+import DashboardLayout from "../Layouts/DashboardLayout";
 
 export const router = createBrowserRouter([
   {
@@ -33,6 +36,28 @@ export const router = createBrowserRouter([
             <ProductDetails />
           </PrivateRoute>
         ),
+      },
+      {
+        path: "booking/:id",
+        element: (
+          <PrivateRoute>
+            <BookingForm />
+          </PrivateRoute>
+        ),
+      },
+    ],
+  },
+  {
+    path: "dashboard",
+    element: (
+      <PrivateRoute>
+        <DashboardLayout></DashboardLayout>
+      </PrivateRoute>
+    ),
+    children: [
+      {
+        index: true,
+        element: <DashboardHome />,
       },
     ],
   },

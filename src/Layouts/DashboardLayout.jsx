@@ -1,14 +1,19 @@
 import React from "react";
 import { CiDeliveryTruck } from "react-icons/ci";
 import {
-  FaMotorcycle,
   FaRegCreditCard,
   FaTasks,
   FaUsers,
+  FaBoxOpen,
+  FaPlus,
+  FaClock,
+  FaCheckSquare,
+  FaUserCircle,
+  FaSearch,
 } from "react-icons/fa";
+import { FaClipboardList } from "react-icons/fa6";
 import { Link, NavLink, Outlet } from "react-router";
 import useRole from "../hooks/useRole";
-import { RiEBikeFill } from "react-icons/ri";
 import { SiGoogletasks } from "react-icons/si";
 import logoImg from "../assets/Logo.png";
 
@@ -107,6 +112,16 @@ const DashboardLayout = () => {
                 <span className="is-drawer-close:hidden">Payment History</span>
               </NavLink>
             </li>
+            <li>
+              <NavLink
+                className="is-drawer-close:tooltip is-drawer-close:tooltip-right"
+                data-tip="Track Order"
+                to="/dashboard/track-order"
+              >
+                <FaSearch />
+                <span className="is-drawer-close:hidden">Track Order</span>
+              </NavLink>
+            </li>
             {role === "rider" && (
               <>
                 <li>
@@ -142,37 +157,99 @@ const DashboardLayout = () => {
                 <li>
                   <NavLink
                     className="is-drawer-close:tooltip is-drawer-close:tooltip-right"
-                    data-tip="Approve Riders"
-                    to="/dashboard/approve-riders"
+                    data-tip="Manage Users"
+                    to="/dashboard/manage-users"
                   >
-                    <FaMotorcycle />
+                    <FaUsers />
                     <span className="is-drawer-close:hidden">
-                      Approve Riders
+                      Manage Users
                     </span>
                   </NavLink>
                 </li>
                 <li>
                   <NavLink
                     className="is-drawer-close:tooltip is-drawer-close:tooltip-right"
-                    data-tip="Assign Riders"
-                    to="/dashboard/assign-riders"
+                    data-tip="All Products"
+                    to="/dashboard/all-products"
                   >
-                    <RiEBikeFill />
+                    <FaBoxOpen />
                     <span className="is-drawer-close:hidden">
-                      Assign Riders
+                      All Products
                     </span>
                   </NavLink>
                 </li>
                 <li>
                   <NavLink
                     className="is-drawer-close:tooltip is-drawer-close:tooltip-right"
-                    data-tip="Users Management"
-                    to="/dashboard/users-management"
+                    data-tip="All Orders"
+                    to="/dashboard/all-orders"
                   >
-                    <FaUsers></FaUsers>
+                    <FaClipboardList />
                     <span className="is-drawer-close:hidden">
-                      Users Management
+                      All Orders
                     </span>
+                  </NavLink>
+                </li>
+              </>
+            )}
+
+            {/* manager only links */}
+            {role === "manager" && (
+              <>
+                <li>
+                  <NavLink
+                    className="is-drawer-close:tooltip is-drawer-close:tooltip-right"
+                    data-tip="Add Product"
+                    to="/dashboard/add-product"
+                  >
+                    <FaPlus />
+                    <span className="is-drawer-close:hidden">Add Product</span>
+                  </NavLink>
+                </li>
+                <li>
+                  <NavLink
+                    className="is-drawer-close:tooltip is-drawer-close:tooltip-right"
+                    data-tip="Manage Products"
+                    to="/dashboard/manage-products"
+                  >
+                    <FaBoxOpen />
+                    <span className="is-drawer-close:hidden">
+                      Manage Products
+                    </span>
+                  </NavLink>
+                </li>
+                <li>
+                  <NavLink
+                    className="is-drawer-close:tooltip is-drawer-close:tooltip-right"
+                    data-tip="Pending Orders"
+                    to="/dashboard/pending-orders"
+                  >
+                    <FaClock />
+                    <span className="is-drawer-close:hidden">
+                      Pending Orders
+                    </span>
+                  </NavLink>
+                </li>
+                <li>
+                  <NavLink
+                    className="is-drawer-close:tooltip is-drawer-close:tooltip-right"
+                    data-tip="Approved Orders"
+                    to="/dashboard/approved-orders"
+                  >
+                    <FaCheckSquare />
+                    <span className="is-drawer-close:hidden">
+                      Approved Orders
+                    </span>
+                  </NavLink>
+                </li>
+                <li>
+                  <NavLink
+                    className="is-drawer-close:tooltip is-drawer-close:tooltip-right"
+                    data-tip="My Profile"
+                    to="/dashboard/profile"
+                  >
+                    <FaUserCircle />
+                    <span className="is-drawer-close:hidden">My Profile</span>
                   </NavLink>
                 </li>
               </>

@@ -45,17 +45,37 @@ const MyParcels = () => {
   };
 
   const handlePayment = async (order) => {
-    const orderInfo = {
-      cost: order.cost,
-      parcelId: order._id,
-      senderEmail: order.senderEmail,
-      parcelName: order.parcelName,
-      trackingId: order.trackingId,
-    };
-    const res = await axiosSecure.post("/payment-checkout-session", orderInfo);
+    try {
+      const orderInfo = {
+        cost: order.totalPrice || order.cost || order.total || 0,
+        parcelId: order._id,
+        senderEmail: order.email || order.senderEmail || order.userEmail,
+        parcelName: order.productTitle || order.parcelName || "Order",
+        trackingId: order.trackingId || "",
+      };
 
-    // console.log(res.data.url);
-    window.location.assign(res.data.url);
+      console.log("Creating checkout session with:", orderInfo);
+
+      const res = await axiosSecure.post(
+        "/payment-checkout-session",
+        orderInfo
+      );
+
+      console.log("Checkout session response:", res?.data);
+
+      const url = res?.data?.url;
+      if (!url) {
+        console.error("No checkout URL returned from server", res?.data);
+        alert("Failed to create checkout session. See console for details.");
+        return;
+      }
+
+      // Redirect to Stripe Checkout
+      window.location.assign(url);
+    } catch (err) {
+      console.error("Error creating checkout session:", err?.response || err);
+      alert("Unable to initiate payment. Please try again later.");
+    }
   };
 
   return (

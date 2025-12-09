@@ -4,7 +4,7 @@ import Loading from "../Components/atoms/Loading";
 import useAuth from "../hooks/useAuth";
 import useRole from "../hooks/useRole";
 
-const AdminRoute = ({ children }) => {
+const ManagerRoute = ({ children }) => {
   const { user, loading } = useAuth();
   const { role, roleLoading } = useRole();
   const location = useLocation();
@@ -13,12 +13,12 @@ const AdminRoute = ({ children }) => {
     return <Loading />;
   }
 
-  if (!user || role !== "admin") {
+  if (!user || role !== "manager") {
     return <Navigate to="/" state={location.pathname} replace />;
   }
 
   return children;
 };
 
-export default AdminRoute;
+export default ManagerRoute;
 

@@ -8,12 +8,23 @@ import AllProducts from "../Pages/Products/AllProducts";
 import ProductDetails from "../Pages/Products/ProductDetails";
 import BookingForm from "../Pages/Products/BookingForm";
 import PrivateRoute from "./PrivateRoute";
+import AdminRoute from "./AdminRoute";
+import ManagerRoute from "./ManagerRoute";
 import DashboardHome from "../Pages/Dashboard/DashboardHome";
 import DashboardLayout from "../Layouts/DashboardLayout";
 import Payment from "../Pages/Dashboard/Payment/Payment";
 import PaymentSuccess from "../Pages/Dashboard/Payment/PaymentSuccess";
 import PaymentCancelled from "../Pages/Dashboard/Payment/PaymentCancel";
 import MyParcels from "../Pages/Dashboard/MyParcels";
+import ManageUsers from "../Pages/Dashboard/Admin/ManageUsers";
+import AdminProducts from "../Pages/Dashboard/Admin/AdminProducts";
+import AdminOrders from "../Pages/Dashboard/Admin/AdminOrders";
+import ManagerAddProduct from "../Pages/Dashboard/Manager/ManagerAddProduct";
+import ManageProducts from "../Pages/Dashboard/Manager/ManageProducts";
+import PendingOrders from "../Pages/Dashboard/Manager/PendingOrders";
+import ApprovedOrders from "../Pages/Dashboard/Manager/ApprovedOrders";
+import ManagerProfile from "../Pages/Dashboard/Manager/ManagerProfile";
+import TrackOrder from "../Pages/Dashboard/TrackOrder";
 
 export const router = createBrowserRouter([
   {
@@ -82,6 +93,74 @@ export const router = createBrowserRouter([
       {
         path: "payment-cancelled",
         element: <PaymentCancelled />,
+      },
+      {
+        path: "track-order",
+        element: <TrackOrder />,
+      },
+      {
+        path: "manage-users",
+        element: (
+          <AdminRoute>
+            <ManageUsers />
+          </AdminRoute>
+        ),
+      },
+      {
+        path: "all-products",
+        element: (
+          <AdminRoute>
+            <AdminProducts />
+          </AdminRoute>
+        ),
+      },
+      {
+        path: "all-orders",
+        element: (
+          <AdminRoute>
+            <AdminOrders />
+          </AdminRoute>
+        ),
+      },
+      {
+        path: "add-product",
+        element: (
+          <ManagerRoute>
+            <ManagerAddProduct />
+          </ManagerRoute>
+        ),
+      },
+      {
+        path: "manage-products",
+        element: (
+          <ManagerRoute>
+            <ManageProducts />
+          </ManagerRoute>
+        ),
+      },
+      {
+        path: "pending-orders",
+        element: (
+          <ManagerRoute>
+            <PendingOrders />
+          </ManagerRoute>
+        ),
+      },
+      {
+        path: "approved-orders",
+        element: (
+          <ManagerRoute>
+            <ApprovedOrders />
+          </ManagerRoute>
+        ),
+      },
+      {
+        path: "profile",
+        element: (
+          <ManagerRoute>
+            <ManagerProfile />
+          </ManagerRoute>
+        ),
       },
     ],
   },

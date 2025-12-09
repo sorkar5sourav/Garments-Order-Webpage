@@ -10,6 +10,10 @@ import BookingForm from "../Pages/Products/BookingForm";
 import PrivateRoute from "./PrivateRoute";
 import DashboardHome from "../Pages/Dashboard/DashboardHome";
 import DashboardLayout from "../Layouts/DashboardLayout";
+import Payment from "../Pages/Dashboard/Payment/Payment";
+import PaymentSuccess from "../Pages/Dashboard/Payment/PaymentSuccess";
+import PaymentCancelled from "../Pages/Dashboard/Payment/PaymentCancel";
+import MyParcels from "../Pages/Dashboard/MyParcels";
 
 export const router = createBrowserRouter([
   {
@@ -58,6 +62,26 @@ export const router = createBrowserRouter([
       {
         index: true,
         element: <DashboardHome />,
+      },
+      {
+        path: "my-parcels",
+        element: <MyParcels />,
+      },
+      {
+        path: "payment/:parcelId",
+        element: <Payment />,
+      },
+      // {
+      //   path: 'payment-history',
+      //   element: <PaymentHistory />
+      // },
+      {
+        path: "payment-success",
+        element: <PaymentSuccess />,
+      },
+      {
+        path: "payment-cancelled",
+        element: <PaymentCancelled />,
       },
     ],
   },

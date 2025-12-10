@@ -153,7 +153,8 @@ const MyOrders = () => {
                 <th>Product Title</th>
                 <th>Quantity</th>
                 <th>Total Price</th>
-                <th>Status</th>
+                <th>Payment Status</th>
+                <th>Admin Approval</th>
                 <th>Order Date</th>
                 <th>Delivery Address</th>
                 <th>Actions</th>
@@ -167,6 +168,17 @@ const MyOrders = () => {
                   <td>{order.quantity} units</td>
                   <td className="font-bold text-blue-600">
                     ৳{order.totalPrice}
+                  </td>
+                  <td>
+                    <span
+                      className={`px-3 py-1 rounded-full text-sm font-semibold ${
+                        order.paymentStatus === "paid"
+                          ? "bg-green-100 text-green-800"
+                          : "bg-yellow-100 text-yellow-800"
+                      }`}
+                    >
+                      {order.paymentStatus === "paid" ? "✓ Paid" : "⏳ Unpaid"}
+                    </span>
                   </td>
                   <td>
                     <span
@@ -191,13 +203,15 @@ const MyOrders = () => {
                   <td className="text-sm">{order.deliveryAddress}</td>
                   <td>
                     <div className="flex gap-2 flex-wrap">
-                      <button
-                        onClick={() => handlePayment(order)}
-                        className="btn btn-sm btn-success"
-                        title="Pay"
-                      >
-                        <FaMoneyBill />
-                      </button>
+                      {order.paymentStatus === "unpaid" && (
+                        <button
+                          onClick={() => handlePayment(order)}
+                          className="btn btn-sm btn-success"
+                          title="Pay Now"
+                        >
+                          <FaMoneyBill />
+                        </button>
+                      )}
                       <button
                         onClick={() => handleViewDetails(order._id)}
                         className="btn btn-sm btn-info"
@@ -205,17 +219,18 @@ const MyOrders = () => {
                       >
                         <FaEye />
                       </button>
-                      {order.status === "pending" && (
-                        <button
-                          onClick={() =>
-                            handleCancelOrder(order._id, order.status)
-                          }
-                          className="btn btn-sm btn-error"
-                          title="Cancel Order"
-                        >
-                          <FaTimes />
-                        </button>
-                      )}
+                      {order.status === "pending" &&
+                        order.paymentStatus === "unpaid" && (
+                          <button
+                            onClick={() =>
+                              handleCancelOrder(order._id, order.status)
+                            }
+                            className="btn btn-sm btn-error"
+                            title="Cancel Order"
+                          >
+                            <FaTimes />
+                          </button>
+                        )}
                       <button
                         onClick={() => handleDeleteOrder(order._id)}
                         className="btn btn-sm btn-error"

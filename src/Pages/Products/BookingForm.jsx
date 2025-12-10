@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useParams, useNavigate, useLocation } from "react-router";
-import useAxios from "../../hooks/useAxios";
+import useAxiosSecure from "../../hooks/useAxiosSecure";
 import useAuth from "../../hooks/useAuth";
 
 const BookingForm = () => {
@@ -8,7 +8,7 @@ const BookingForm = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const { user } = useAuth();
-  const axiosInstance = useAxios();
+  const axiosInstance = useAxiosSecure();
 
   const [product, setProduct] = useState(null);
   const [loading, setLoading] = useState(true);

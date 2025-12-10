@@ -7,26 +7,39 @@ const axiosSecure = axios.create({
   baseURL: "http://localhost:3000",
 });
 
+// Helper function to get token from cookie
+const getTokenFromCookie = () => {
+  const cookieValue = document.cookie
+    .split("; ")
+    .find((row) => row.startsWith("token="));
+  return cookieValue ? cookieValue.split("=")[1] : null;
+};
+
 const useAxiosSecure = () => {
   const { user, logOut } = useAuth();
   const navigate = useNavigate();
 
   useEffect(() => {
-    // intercept request
+    // Intercept request to add token in Authorization header
     const reqInterceptor = axiosSecure.interceptors.request.use((config) => {
-      config.headers.Authorization = `Bearer ${user?.accessToken}`;
+      const token = getTokenFromCookie();
+      if (token) {
+        config.headers.Authorization = `Bearer ${token}`;
+      }
       return config;
     });
 
-    // interceptor response
+    // Interceptor response to handle errors
     const resInterceptor = axiosSecure.interceptors.response.use(
       (response) => {
         return response;
       },
       (error) => {
-        console.log(error);
+        console.log("Axios error:", error);
 
-        const statusCode = error.status;
+        const statusCode = error.response?.status;
+
+        // If 401 or 403, user is not authorized - log them out
         if (statusCode === 401 || statusCode === 403) {
           logOut().then(() => {
             navigate("/login");

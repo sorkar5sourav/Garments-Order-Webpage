@@ -80,6 +80,10 @@ export const router = createBrowserRouter([
         element: <MyOrders />,
       },
       {
+        path: "track-order",
+        element: <TrackOrder />,
+      },
+      {
         path: "track-order/:orderId",
         element: <TrackOrder />,
       },

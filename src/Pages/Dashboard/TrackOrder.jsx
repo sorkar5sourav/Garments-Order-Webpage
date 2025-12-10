@@ -8,32 +8,63 @@ const TrackOrder = () => {
   const navigate = useNavigate();
   const axiosSecure = useAxiosSecure();
   const [order, setOrder] = useState(null);
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
+  const [trackingInput, setTrackingInput] = useState("");
+  const [searching, setSearching] = useState(false);
 
   useEffect(() => {
-    const fetchOrder = async () => {
+    const fetchOrderById = async () => {
+      if (!orderId) return;
       try {
         setLoading(true);
-        const response = await axiosSecure.get("/orders");
-        const selectedOrder = response.data.find((o) => o._id === orderId);
-
-        if (selectedOrder) {
-          setOrder(selectedOrder);
+        const res = await axiosSecure.get(`/orders/id/${orderId}`);
+        if (res?.data && res.data._id) {
+          setOrder(res.data);
           setError(null);
         } else {
           setError("Order not found");
         }
       } catch (err) {
-        console.error("Error fetching order:", err);
+        console.error("Error fetching order by id:", err);
         setError("Failed to load order details");
       } finally {
         setLoading(false);
       }
     };
 
-    fetchOrder();
+    fetchOrderById();
   }, [orderId, axiosSecure]);
+
+  const handleSearchByTracking = async (e) => {
+    e?.preventDefault?.();
+    if (!trackingInput || trackingInput.trim().length === 0) {
+      setError("Please enter a tracking ID to search");
+      return;
+    }
+
+    try {
+      setSearching(true);
+      setLoading(true);
+      setError(null);
+      const res = await axiosSecure.get(
+        `/orders/track/${trackingInput.trim()}`
+      );
+      if (res?.data && res.data._id) {
+        setOrder(res.data);
+      } else {
+        setOrder(null);
+        setError("No order found for this tracking ID");
+      }
+    } catch (err) {
+      console.error("Error searching by tracking id:", err);
+      setError("Failed to search order");
+      setOrder(null);
+    } finally {
+      setSearching(false);
+      setLoading(false);
+    }
+  };
 
   const timelineSteps = [
     {
@@ -96,186 +127,218 @@ const TrackOrder = () => {
     },
   ];
 
-  if (loading) {
-    return (
-      <div className="flex justify-center items-center min-h-screen">
-        <span className="loading loading-spinner loading-lg"></span>
-      </div>
-    );
-  }
-
-  if (error || !order) {
-    return (
-      <div className="min-h-screen flex justify-center items-center">
-        <div className="alert alert-error">
-          <span>{error || "Order not found"}</span>
-        </div>
-      </div>
-    );
-  }
+  // Render
+  // If loading, show spinner
+  // If no order and no error, show only search box (handled below)
 
   return (
     <div className="min-h-screen bg-gray-50 py-12">
       <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
-        {/* Back Button */}
-        <button
-          onClick={() => navigate("/dashboard/my-orders")}
-          className="mb-6 text-blue-600 hover:text-blue-800 flex items-center gap-2 font-semibold"
+        {/* Back Button (only when viewing an order) */}
+        {(orderId || order) && (
+          <button
+            onClick={() => navigate("/dashboard/my-orders")}
+            className="mb-6 text-blue-600 hover:text-blue-800 flex items-center gap-2 font-semibold"
+          >
+            ← Back to My Orders
+          </button>
+        )}
+
+        {/* Search by Tracking ID */}
+        <form
+          onSubmit={handleSearchByTracking}
+          className="mb-6 flex gap-2 items-center"
         >
-          ← Back to My Orders
-        </button>
+          <input
+            type="text"
+            placeholder="Enter tracking ID (e.g. PRCL-20251210-ABC123)"
+            value={trackingInput}
+            onChange={(e) => setTrackingInput(e.target.value)}
+            className="input input-bordered w-full max-w-md"
+          />
+          <button
+            type="submit"
+            className={`btn btn-primary ${searching ? "btn-disabled" : ""}`}
+          >
+            Search
+          </button>
+        </form>
 
-        {/* Order Summary Card */}
-        <div className="bg-white rounded-lg shadow-lg p-8 mb-8">
-          <h1 className="text-3xl font-bold text-gray-900 mb-6">Track Order</h1>
+        {/* Show loader / error / order details depending on state */}
+        {loading && (
+          <div className="flex justify-center items-center my-12">
+            <span className="loading loading-spinner loading-lg"></span>
+          </div>
+        )}
 
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
-            {/* Order Info */}
-            <div>
-              <h2 className="text-lg font-bold text-gray-900 mb-4">
-                Order Information
-              </h2>
-              <div className="space-y-3">
-                <div>
-                  <p className="text-gray-600 text-sm">Order ID</p>
-                  <p className="text-gray-900 font-mono">{order._id}</p>
-                </div>
-                <div>
-                  <p className="text-gray-600 text-sm">Product</p>
-                  <p className="text-gray-900 font-semibold">
-                    {order.productTitle}
-                  </p>
-                </div>
-                <div>
-                  <p className="text-gray-600 text-sm">Quantity</p>
-                  <p className="text-gray-900">{order.quantity} units</p>
-                </div>
-              </div>
-            </div>
-
-            {/* Delivery Info */}
-            <div>
-              <h2 className="text-lg font-bold text-gray-900 mb-4">
-                Delivery Details
-              </h2>
-              <div className="space-y-3">
-                <div>
-                  <p className="text-gray-600 text-sm">Recipient</p>
-                  <p className="text-gray-900 font-semibold">
-                    {order.firstName} {order.lastName}
-                  </p>
-                </div>
-                <div>
-                  <p className="text-gray-600 text-sm">Contact</p>
-                  <p className="text-gray-900">{order.contactNumber}</p>
-                </div>
-                <div>
-                  <p className="text-gray-600 text-sm">Delivery Address</p>
-                  <p className="text-gray-900">{order.deliveryAddress}</p>
-                </div>
-              </div>
+        {!loading && error && !order && (
+          <div className="min-h-20 flex items-center">
+            <div className="alert alert-error w-full">
+              <span>{error}</span>
             </div>
           </div>
+        )}
 
-          {/* Status Badge */}
-          <div className="mb-8 p-4 bg-blue-50 rounded-lg border border-blue-200">
-            <p className="text-sm text-gray-600 mb-2">Current Status</p>
-            <div className="flex items-center gap-3">
-              <span
-                className={`px-4 py-2 rounded-full font-bold text-white ${
-                  order.status === "pending"
-                    ? "bg-yellow-500"
-                    : order.status === "confirmed"
-                    ? "bg-blue-500"
-                    : order.status === "shipped"
-                    ? "bg-purple-500"
-                    : order.status === "delivered"
-                    ? "bg-green-500"
-                    : "bg-red-500"
-                }`}
-              >
-                {order.status.toUpperCase()}
-              </span>
-              <p className="text-gray-700">
-                Ordered on {new Date(order.orderDate).toLocaleDateString()}
-              </p>
-            </div>
-          </div>
-        </div>
+        {!loading && order && (
+          <>
+            <div className="bg-white rounded-lg shadow-lg p-8 mb-8">
+              <h1 className="text-3xl font-bold text-gray-900 mb-6">
+                Track Order
+              </h1>
 
-        {/* Timeline */}
-        <div className="bg-white rounded-lg shadow-lg p-8">
-          <h2 className="text-2xl font-bold text-gray-900 mb-8">
-            Production & Delivery Timeline
-          </h2>
-
-          <div className="space-y-6">
-            {timelineSteps.map((item, index) => (
-              <div key={index} className="flex gap-4">
-                {/* Timeline Dot and Line */}
-                <div className="flex flex-col items-center">
-                  <div
-                    className={`w-12 h-12 rounded-full flex items-center justify-center text-2xl font-bold border-4 ${
-                      item.status === "completed"
-                        ? "bg-green-100 border-green-500 text-green-600"
-                        : item.status === "pending"
-                        ? "bg-gray-100 border-gray-300 text-gray-400"
-                        : "bg-blue-100 border-blue-500 text-blue-600"
-                    }`}
-                  >
-                    {item.icon}
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
+                {/* Order Info */}
+                <div>
+                  <h2 className="text-lg font-bold text-gray-900 mb-4">
+                    Order Information
+                  </h2>
+                  <div className="space-y-3">
+                    <div>
+                      <p className="text-gray-600 text-sm">Order ID</p>
+                      <p className="text-gray-900 font-mono">{order._id}</p>
+                    </div>
+                    <div>
+                      <p className="text-gray-600 text-sm">Product</p>
+                      <p className="text-gray-900 font-semibold">
+                        {order.productTitle}
+                      </p>
+                    </div>
+                    <div>
+                      <p className="text-gray-600 text-sm">Quantity</p>
+                      <p className="text-gray-900">{order.quantity} units</p>
+                    </div>
                   </div>
-                  {index < timelineSteps.length - 1 && (
-                    <div
-                      className={`w-1 h-12 ${
-                        item.status === "completed"
-                          ? "bg-green-500"
-                          : "bg-gray-300"
-                      }`}
-                    ></div>
-                  )}
                 </div>
 
-                {/* Timeline Content */}
-                <div className="pb-6">
-                  <h3
-                    className={`text-lg font-bold ${
-                      item.status === "completed"
-                        ? "text-green-600"
-                        : "text-gray-600"
+                {/* Delivery Info */}
+                <div>
+                  <h2 className="text-lg font-bold text-gray-900 mb-4">
+                    Delivery Details
+                  </h2>
+                  <div className="space-y-3">
+                    <div>
+                      <p className="text-gray-600 text-sm">Recipient</p>
+                      <p className="text-gray-900 font-semibold">
+                        {order.firstName} {order.lastName}
+                      </p>
+                    </div>
+                    <div>
+                      <p className="text-gray-600 text-sm">Contact</p>
+                      <p className="text-gray-900">{order.contactNumber}</p>
+                    </div>
+                    <div>
+                      <p className="text-gray-600 text-sm">Delivery Address</p>
+                      <p className="text-gray-900">{order.deliveryAddress}</p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              {/* Status Badge */}
+              <div className="mb-8 p-4 bg-blue-50 rounded-lg border border-blue-200">
+                <p className="text-sm text-gray-600 mb-2">Current Status</p>
+                <div className="flex items-center gap-3">
+                  <span
+                    className={`px-4 py-2 rounded-full font-bold text-white ${
+                      order.status === "pending"
+                        ? "bg-yellow-500"
+                        : order.status === "confirmed"
+                        ? "bg-blue-500"
+                        : order.status === "shipped"
+                        ? "bg-purple-500"
+                        : order.status === "delivered"
+                        ? "bg-green-500"
+                        : "bg-red-500"
                     }`}
                   >
-                    {item.step}
-                  </h3>
-                  <p className="text-gray-700 mt-1">{item.description}</p>
-                  <p className="text-sm text-gray-500 mt-2">
-                    {item.status === "completed"
-                      ? "✓ Completed"
-                      : "⏳ In Progress or Pending"}
+                    {order.status.toUpperCase()}
+                  </span>
+                  <p className="text-gray-700">
+                    Ordered on {new Date(order.orderDate).toLocaleDateString()}
                   </p>
                 </div>
               </div>
-            ))}
-          </div>
-
-          {/* Additional Notes */}
-          {order.additionalNotes && (
-            <div className="mt-8 p-4 bg-blue-50 rounded-lg border border-blue-200">
-              <h3 className="font-bold text-gray-900 mb-2">Special Notes</h3>
-              <p className="text-gray-700">{order.additionalNotes}</p>
             </div>
-          )}
-        </div>
 
-        {/* Contact Support */}
-        <div className="mt-8 bg-white rounded-lg shadow-lg p-8 text-center">
-          <h3 className="text-lg font-bold text-gray-900 mb-4">Need Help?</h3>
-          <p className="text-gray-600 mb-4">
-            If you have any questions about your order, please contact our
-            support team.
-          </p>
-          <button className="btn btn-primary">Contact Support</button>
-        </div>
+            {/* Timeline */}
+            <div className="bg-white rounded-lg shadow-lg p-8">
+              <h2 className="text-2xl font-bold text-gray-900 mb-8">
+                Production & Delivery Timeline
+              </h2>
+
+              <div className="space-y-6">
+                {timelineSteps.map((item, index) => (
+                  <div key={index} className="flex gap-4">
+                    {/* Timeline Dot and Line */}
+                    <div className="flex flex-col items-center">
+                      <div
+                        className={`w-12 h-12 rounded-full flex items-center justify-center text-2xl font-bold border-4 ${
+                          item.status === "completed"
+                            ? "bg-green-100 border-green-500 text-green-600"
+                            : item.status === "pending"
+                            ? "bg-gray-100 border-gray-300 text-gray-400"
+                            : "bg-blue-100 border-blue-500 text-blue-600"
+                        }`}
+                      >
+                        {item.icon}
+                      </div>
+                      {index < timelineSteps.length - 1 && (
+                        <div
+                          className={`w-1 h-12 ${
+                            item.status === "completed"
+                              ? "bg-green-500"
+                              : "bg-gray-300"
+                          }`}
+                        ></div>
+                      )}
+                    </div>
+
+                    {/* Timeline Content */}
+                    <div className="pb-6">
+                      <h3
+                        className={`text-lg font-bold ${
+                          item.status === "completed"
+                            ? "text-green-600"
+                            : "text-gray-600"
+                        }`}
+                      >
+                        {item.step}
+                      </h3>
+                      <p className="text-gray-700 mt-1">{item.description}</p>
+                      <p className="text-sm text-gray-500 mt-2">
+                        {item.status === "completed"
+                          ? "✓ Completed"
+                          : "⏳ In Progress or Pending"}
+                      </p>
+                    </div>
+                  </div>
+                ))}
+              </div>
+
+              {/* Additional Notes */}
+              {order.additionalNotes && (
+                <div className="mt-8 p-4 bg-blue-50 rounded-lg border border-blue-200">
+                  <h3 className="font-bold text-gray-900 mb-2">
+                    Special Notes
+                  </h3>
+                  <p className="text-gray-700">{order.additionalNotes}</p>
+                </div>
+              )}
+            </div>
+
+            {/* Contact Support */}
+            <div className="mt-8 bg-white rounded-lg shadow-lg p-8 text-center">
+              <h3 className="text-lg font-bold text-gray-900 mb-4">
+                Need Help?
+              </h3>
+              <p className="text-gray-600 mb-4">
+                If you have any questions about your order, please contact our
+                support team.
+              </p>
+              <button className="btn btn-primary">Contact Support</button>
+            </div>
+          </>
+        )}
       </div>
     </div>
   );

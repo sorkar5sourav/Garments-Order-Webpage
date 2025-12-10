@@ -1,0 +1,168 @@
+import React from "react";
+import { useQuery } from "@tanstack/react-query";
+import { useNavigate } from "react-router";
+import useAuth from "../../hooks/useAuth";
+import useAxiosSecure from "../../hooks/useAxiosSecure";
+import { FaEye, FaTimes } from "react-icons/fa";
+import Swal from "sweetalert2";
+
+const MyOrders = () => {
+  const { user } = useAuth();
+  const navigate = useNavigate();
+  const axiosSecure = useAxiosSecure();
+
+  const { data: orders = [], refetch } = useQuery({
+    queryKey: ["my-orders", user?.email],
+    queryFn: async () => {
+      const res = await axiosSecure.get(`/orders?email=${user.email}`);
+      return res.data;
+    },
+    enabled: !!user?.email,
+  });
+
+  const handleViewDetails = (orderId) => {
+    navigate(`/dashboard/track-order/${orderId}`);
+  };
+
+  const handleCancelOrder = (orderId, orderStatus) => {
+    if (orderStatus !== "pending") {
+      Swal.fire({
+        icon: "warning",
+        title: "Cannot Cancel",
+        text: "Only pending orders can be canceled.",
+      });
+      return;
+    }
+
+    Swal.fire({
+      title: "Cancel Order?",
+      text: "Are you sure you want to cancel this order?",
+      icon: "question",
+      showCancelButton: true,
+      confirmButtonColor: "#d33",
+      cancelButtonColor: "#3085d6",
+      confirmButtonText: "Yes, cancel it!",
+    }).then((result) => {
+      if (result.isConfirmed) {
+        axiosSecure
+          .patch(`/orders/${orderId}`, { status: "cancelled" })
+          .then((res) => {
+            if (res.data.modifiedCount > 0) {
+              refetch();
+              Swal.fire({
+                icon: "success",
+                title: "Cancelled!",
+                text: "Your order has been cancelled.",
+              });
+            }
+          })
+          .catch((error) => {
+            console.error("Error canceling order:", error);
+            Swal.fire({
+              icon: "error",
+              title: "Error",
+              text: "Failed to cancel order. Please try again.",
+            });
+          });
+      }
+    });
+  };
+
+  return (
+    <div className="p-6">
+      <h2 className="text-3xl font-bold text-gray-900 mb-6">
+        My Orders: {orders.length}
+      </h2>
+
+      {orders.length === 0 ? (
+        <div className="bg-white rounded-lg shadow p-8 text-center">
+          <p className="text-xl text-gray-500 mb-4">You have no orders yet.</p>
+          <button
+            onClick={() => navigate("/products")}
+            className="btn btn-primary"
+          >
+            Browse Products
+          </button>
+        </div>
+      ) : (
+        <div className="overflow-x-auto">
+          <table className="table table-zebra w-full">
+            <thead className="bg-gray-200">
+              <tr>
+                <th>#</th>
+                <th>Order ID</th>
+                <th>Product</th>
+                <th>Quantity</th>
+                <th>Total Price</th>
+                <th>Status</th>
+                <th>Payment</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody>
+              {orders.map((order, index) => (
+                <tr key={order._id}>
+                  <th>{index + 1}</th>
+                  <td className="font-mono text-sm">
+                    {order._id.substring(0, 8)}...
+                  </td>
+                  <td className="font-semibold">{order.productTitle}</td>
+                  <td>{order.quantity} units</td>
+                  <td className="font-bold text-blue-600">
+                    ৳{order.totalPrice}
+                  </td>
+                  <td>
+                    <span
+                      className={`px-3 py-1 rounded-full text-sm font-semibold ${
+                        order.status === "pending"
+                          ? "bg-yellow-100 text-yellow-800"
+                          : order.status === "confirmed"
+                          ? "bg-blue-100 text-blue-800"
+                          : order.status === "shipped"
+                          ? "bg-purple-100 text-purple-800"
+                          : order.status === "delivered"
+                          ? "bg-green-100 text-green-800"
+                          : "bg-red-100 text-red-800"
+                      }`}
+                    >
+                      {order.status}
+                    </span>
+                  </td>
+                  <td>
+                    <span className="text-sm">
+                      {order.paymentStatus ? "Paid" : "Pending"}
+                    </span>
+                  </td>
+                  <td>
+                    <div className="flex gap-2 flex-wrap">
+                      <button
+                        onClick={() => handleViewDetails(order._id)}
+                        className="btn btn-sm btn-info"
+                        title="View Details & Track"
+                      >
+                        <FaEye />
+                      </button>
+                      {order.status === "pending" && (
+                        <button
+                          onClick={() =>
+                            handleCancelOrder(order._id, order.status)
+                          }
+                          className="btn btn-sm btn-error"
+                          title="Cancel Order"
+                        >
+                          <FaTimes />
+                        </button>
+                      )}
+                    </div>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      )}
+    </div>
+  );
+};
+
+export default MyOrders;

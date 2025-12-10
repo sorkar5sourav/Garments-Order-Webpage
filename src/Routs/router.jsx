@@ -25,6 +25,8 @@ import PendingOrders from "../Pages/Dashboard/Manager/PendingOrders";
 import ApprovedOrders from "../Pages/Dashboard/Manager/ApprovedOrders";
 import ManagerProfile from "../Pages/Dashboard/Manager/ManagerProfile";
 import TrackOrder from "../Pages/Dashboard/TrackOrder";
+import MyOrders from "../Pages/Dashboard/MyOrders";
+import MyProfile from "../Pages/Dashboard/MyProfile";
 
 export const router = createBrowserRouter([
   {
@@ -79,6 +81,18 @@ export const router = createBrowserRouter([
         element: <MyParcels />,
       },
       {
+        path: "my-orders",
+        element: <MyOrders />,
+      },
+      {
+        path: "track-order/:orderId",
+        element: <TrackOrder />,
+      },
+      {
+        path: "profile",
+        element: <MyProfile />,
+      },
+      {
         path: "payment/:parcelId",
         element: <Payment />,
       },
@@ -93,10 +107,6 @@ export const router = createBrowserRouter([
       {
         path: "payment-cancelled",
         element: <PaymentCancelled />,
-      },
-      {
-        path: "track-order",
-        element: <TrackOrder />,
       },
       {
         path: "manage-users",
@@ -155,7 +165,7 @@ export const router = createBrowserRouter([
         ),
       },
       {
-        path: "profile",
+        path: "manager-profile",
         element: (
           <ManagerRoute>
             <ManagerProfile />

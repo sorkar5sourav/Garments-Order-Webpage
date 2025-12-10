@@ -95,21 +95,11 @@ const DashboardLayout = () => {
             <li>
               <NavLink
                 className="is-drawer-close:tooltip is-drawer-close:tooltip-right"
-                data-tip="MyParcels"
-                to="/dashboard/my-parcels"
+                data-tip="MyOrders"
+                to="/dashboard/my-orders"
               >
-                <CiDeliveryTruck />
-                <span className="is-drawer-close:hidden">My Parcels</span>
-              </NavLink>
-            </li>
-            <li>
-              <NavLink
-                className="is-drawer-close:tooltip is-drawer-close:tooltip-right"
-                data-tip="Payment History"
-                to="/dashboard/payment-history"
-              >
-                <FaRegCreditCard />
-                <span className="is-drawer-close:hidden">Payment History</span>
+                <FaClipboardList />
+                <span className="is-drawer-close:hidden">My Orders</span>
               </NavLink>
             </li>
             <li>
@@ -120,6 +110,16 @@ const DashboardLayout = () => {
               >
                 <FaSearch />
                 <span className="is-drawer-close:hidden">Track Order</span>
+              </NavLink>
+            </li>
+            <li>
+              <NavLink
+                className="is-drawer-close:tooltip is-drawer-close:tooltip-right"
+                data-tip="My Profile"
+                to="/dashboard/profile"
+              >
+                <FaUserCircle />
+                <span className="is-drawer-close:hidden">My Profile</span>
               </NavLink>
             </li>
             {role === "rider" && (
@@ -161,9 +161,7 @@ const DashboardLayout = () => {
                     to="/dashboard/manage-users"
                   >
                     <FaUsers />
-                    <span className="is-drawer-close:hidden">
-                      Manage Users
-                    </span>
+                    <span className="is-drawer-close:hidden">Manage Users</span>
                   </NavLink>
                 </li>
                 <li>
@@ -173,9 +171,7 @@ const DashboardLayout = () => {
                     to="/dashboard/all-products"
                   >
                     <FaBoxOpen />
-                    <span className="is-drawer-close:hidden">
-                      All Products
-                    </span>
+                    <span className="is-drawer-close:hidden">All Products</span>
                   </NavLink>
                 </li>
                 <li>
@@ -185,9 +181,7 @@ const DashboardLayout = () => {
                     to="/dashboard/all-orders"
                   >
                     <FaClipboardList />
-                    <span className="is-drawer-close:hidden">
-                      All Orders
-                    </span>
+                    <span className="is-drawer-close:hidden">All Orders</span>
                   </NavLink>
                 </li>
               </>
@@ -246,7 +240,7 @@ const DashboardLayout = () => {
                   <NavLink
                     className="is-drawer-close:tooltip is-drawer-close:tooltip-right"
                     data-tip="My Profile"
-                    to="/dashboard/profile"
+                    to="/dashboard/manager-profile"
                   >
                     <FaUserCircle />
                     <span className="is-drawer-close:hidden">My Profile</span>

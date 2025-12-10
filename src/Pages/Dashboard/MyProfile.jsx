@@ -58,7 +58,7 @@ const MyProfile = () => {
       <div className="max-w-2xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="bg-white rounded-lg shadow-lg overflow-hidden">
           {/* Header */}
-          <div className="bg-gradient-to-r from-blue-600 to-blue-800 p-8 text-white">
+          <div className="bg-linear-to-r from-blue-600 to-blue-800 p-8 text-white">
             <div className="flex items-center gap-4">
               <div className="w-20 h-20 bg-white rounded-full flex items-center justify-center">
                 <div className="w-16 h-16 bg-blue-200 rounded-full flex items-center justify-center text-2xl font-bold text-blue-600">

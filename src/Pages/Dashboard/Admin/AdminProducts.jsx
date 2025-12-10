@@ -1,23 +1,29 @@
 import { useQuery } from "@tanstack/react-query";
-import React from "react";
+import React, { useState } from "react";
 import Swal from "sweetalert2";
 import Loading from "../../../Components/atoms/Loading";
 import useAxiosSecure from "../../../hooks/useAxiosSecure";
 
 const AdminProducts = () => {
   const axiosSecure = useAxiosSecure();
+  const [currentPage, setCurrentPage] = useState(1);
+  const ITEMS_PER_PAGE = 12;
 
   const {
-    data: products = [],
+    data: productData = { products: [], pagination: {} },
     isLoading,
     refetch,
   } = useQuery({
-    queryKey: ["admin-products"],
+    queryKey: ["admin-products", currentPage],
     queryFn: async () => {
-      const res = await axiosSecure.get("/products");
-      return res.data || [];
+      const res = await axiosSecure.get("/products", {
+        params: { page: currentPage, limit: ITEMS_PER_PAGE },
+      });
+      return res.data || { products: [], pagination: {} };
     },
   });
+
+  const { products = [], pagination = {} } = productData;
 
   const handleToggleHome = async (product) => {
     await axiosSecure.patch(`/products/${product._id}`, {
@@ -59,9 +65,9 @@ const AdminProducts = () => {
           product.productImage || ""
         }" />
       `,
-    showCancelButton: true,
-    focusConfirm: false,
-    preConfirm: () => {
+      showCancelButton: true,
+      focusConfirm: false,
+      preConfirm: () => {
         const name = document.getElementById("swal-name").value;
         const price = Number(document.getElementById("swal-price").value);
         const category = document.getElementById("swal-category").value;
@@ -89,7 +95,7 @@ const AdminProducts = () => {
           </p>
         </div>
         <div className="badge badge-info badge-outline">
-          Total: {products.length}
+          Total: {pagination.totalProducts || 0}
         </div>
       </div>
 
@@ -160,9 +166,51 @@ const AdminProducts = () => {
           </tbody>
         </table>
       </div>
+
+      {/* Pagination Controls */}
+      {pagination.totalPages > 1 && (
+        <div className="flex justify-center items-center gap-2 mt-6">
+          <button
+            disabled={currentPage === 1}
+            onClick={() => setCurrentPage(currentPage - 1)}
+            className="btn btn-sm"
+          >
+            Previous
+          </button>
+          <div className="flex gap-1">
+            {Array.from({ length: pagination.totalPages }, (_, i) => i + 1).map(
+              (page) => (
+                <button
+                  key={page}
+                  onClick={() => setCurrentPage(page)}
+                  className={`btn btn-sm ${
+                    page === currentPage ? "btn-active" : ""
+                  }`}
+                >
+                  {page}
+                </button>
+              )
+            )}
+          </div>
+          <button
+            disabled={currentPage === pagination.totalPages}
+            onClick={() => setCurrentPage(currentPage + 1)}
+            className="btn btn-sm"
+          >
+            Next
+          </button>
+        </div>
+      )}
+
+      {/* Page Info */}
+      {pagination.totalProducts > 0 && (
+        <div className="text-center text-sm text-gray-500 mt-4">
+          Page {pagination.currentPage} of {pagination.totalPages} | Showing{" "}
+          {products.length} of {pagination.totalProducts} products
+        </div>
+      )}
     </div>
   );
 };
 
 export default AdminProducts;
-

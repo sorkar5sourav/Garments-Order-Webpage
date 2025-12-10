@@ -1,100 +1,26 @@
-import React, { useEffect, useState, useRef, useCallback } from "react";
+import React, { useState } from "react";
+import { useQuery } from "@tanstack/react-query";
 import useAxios from "../../hooks/useAxios";
 import ProductCard from "../../Components/ProductCard";
 import Loading from "../../Components/atoms/Loading";
 
 const AllProducts = () => {
-  const [allProducts, setAllProducts] = useState([]);
-  const [displayedProducts, setDisplayedProducts] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const [loadingMore, setLoadingMore] = useState(false);
-  const [error, setError] = useState(null);
-  const [hasMore, setHasMore] = useState(true);
+  const [currentPage, setCurrentPage] = useState(1);
+  const ITEMS_PER_PAGE = 10;
   const axiosInstance = useAxios();
-  const observerTarget = useRef(null);
 
-  const ITEMS_PER_LOAD = 6;
-
-  // Initial fetch of all products
-  useEffect(() => {
-    const fetchProducts = async () => {
-      try {
-        setLoading(true);
-        const response = await axiosInstance.get("/products");
-        setAllProducts(response.data);
-        // Load first 6 products
-        setDisplayedProducts(response.data.slice(0, ITEMS_PER_LOAD));
-        setError(null);
-      } catch (err) {
-        console.error("Error fetching products:", err);
-        setError("Failed to load products. Please try again later.");
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchProducts();
-  }, [axiosInstance]);
-
-  // Load more products
-  const loadMoreProducts = useCallback(() => {
-    setLoadingMore(true);
-    setTimeout(() => {
-      const currentLength = displayedProducts.length;
-      const newProducts = allProducts.slice(
-        currentLength,
-        currentLength + ITEMS_PER_LOAD
-      );
-      setDisplayedProducts((prev) => [...prev, ...newProducts]);
-
-      // Check if there are more products to load
-      if (currentLength + ITEMS_PER_LOAD >= allProducts.length) {
-        setHasMore(false);
-      }
-      setLoadingMore(false);
-    }, 300);
-  }, [displayedProducts.length, allProducts]);
-
-  // Intersection Observer for infinite scroll
-  useEffect(() => {
-    const observer = new IntersectionObserver(
-      (entries) => {
-        if (
-          entries[0].isIntersecting &&
-          !loadingMore &&
-          hasMore &&
-          displayedProducts.length > 0
-        ) {
-          loadMoreProducts();
-        }
+  const { data: productData = { products: [], pagination: {} }, isLoading } =
+    useQuery({
+      queryKey: ["all-products", currentPage],
+      queryFn: async () => {
+        const response = await axiosInstance.get("/products", {
+          params: { page: currentPage, limit: ITEMS_PER_PAGE },
+        });
+        return response.data || { products: [], pagination: {} };
       },
-      { threshold: 0.1 }
-    );
+    });
 
-    if (observerTarget.current) {
-      observer.observe(observerTarget.current);
-    }
-
-    return () => {
-      if (observerTarget.current) {
-        observer.unobserve(observerTarget.current);
-      }
-    };
-  }, [loadMoreProducts, loadingMore, hasMore, displayedProducts.length]);
-
-  if (loading) {
-    return <Loading />;
-  }
-
-  if (error) {
-    return (
-      <div className="min-h-screen flex justify-center items-center">
-        <div className="alert alert-error">
-          <span>{error}</span>
-        </div>
-      </div>
-    );
-  }
+  const { products = [], pagination = {} } = productData;
 
   return (
     <div className="min-h-screen bg-gray-50 py-12">
@@ -108,34 +34,63 @@ const AllProducts = () => {
           </p>
         </div>
 
-        {displayedProducts.length === 0 ? (
+        {isLoading ? (
+          <Loading />
+        ) : products.length === 0 ? (
           <div className="text-center py-12">
             <p className="text-xl text-gray-500">No products available</p>
           </div>
         ) : (
           <>
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-              {displayedProducts.map((product) => (
+              {products.map((product) => (
                 <ProductCard key={product._id} product={product} />
               ))}
             </div>
 
-            {/* Intersection observer target */}
-            <div ref={observerTarget} className="py-10 text-center">
-              {loadingMore && hasMore && (
-                <div className="flex justify-center items-center space-x-2">
-                  <span className="loading loading-spinner loading-lg"></span>
-                  <span className="text-gray-600">
-                    Loading more products...
-                  </span>
+            {/* Pagination Controls */}
+            {pagination.totalPages > 1 && (
+              <div className="flex justify-center items-center gap-2 mt-8">
+                <button
+                  disabled={currentPage === 1}
+                  onClick={() => setCurrentPage(currentPage - 1)}
+                  className="btn btn-sm"
+                >
+                  Previous
+                </button>
+                <div className="flex gap-1">
+                  {Array.from(
+                    { length: pagination.totalPages },
+                    (_, i) => i + 1
+                  ).map((page) => (
+                    <button
+                      key={page}
+                      onClick={() => setCurrentPage(page)}
+                      className={`btn btn-sm ${
+                        page === currentPage ? "btn-active" : ""
+                      }`}
+                    >
+                      {page}
+                    </button>
+                  ))}
                 </div>
-              )}
-              {!hasMore && displayedProducts.length > 0 && (
-                <p className="text-gray-500 text-lg">
-                  No more products to load
-                </p>
-              )}
-            </div>
+                <button
+                  disabled={currentPage === pagination.totalPages}
+                  onClick={() => setCurrentPage(currentPage + 1)}
+                  className="btn btn-sm"
+                >
+                  Next
+                </button>
+              </div>
+            )}
+
+            {/* Page Info */}
+            {pagination.totalProducts > 0 && (
+              <div className="text-center text-sm text-gray-500 mt-4">
+                Page {pagination.currentPage} of {pagination.totalPages} |
+                Showing {products.length} of {pagination.totalProducts} products
+              </div>
+            )}
           </>
         )}
       </div>

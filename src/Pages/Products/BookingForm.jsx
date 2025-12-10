@@ -171,7 +171,7 @@ const BookingForm = () => {
 
       if (response.status === 201) {
         alert("Order placed successfully!");
-        navigate("/dashboard", { replace: true });
+        navigate("/dashboard/my-orders", { replace: true });
       }
     } catch (err) {
       console.error("Error placing order:", err);

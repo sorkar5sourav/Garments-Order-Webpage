@@ -3,8 +3,9 @@ import { useQuery } from "@tanstack/react-query";
 import { useNavigate } from "react-router";
 import useAuth from "../../hooks/useAuth";
 import useAxiosSecure from "../../hooks/useAxiosSecure";
-import { FaEye, FaTimes } from "react-icons/fa";
+import { FaEye, FaMoneyBill, FaTrashCan } from "react-icons/fa6";
 import Swal from "sweetalert2";
+import { FaTimes } from "react-icons/fa";
 
 const MyOrders = () => {
   const { user } = useAuth();
@@ -68,6 +69,65 @@ const MyOrders = () => {
     });
   };
 
+  const handleDeleteOrder = (orderId) => {
+    Swal.fire({
+      title: "Are you sure?",
+      text: "You won't be able to revert this!",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Yes, delete it!",
+    }).then((result) => {
+      if (result.isConfirmed) {
+        axiosSecure.delete(`/orders/${orderId}`).then((res) => {
+          if (res.data.deletedCount) {
+            refetch();
+            Swal.fire({
+              title: "Deleted!",
+              text: "Your order has been deleted.",
+              icon: "success",
+            });
+          }
+        });
+      }
+    });
+  };
+
+  const handlePayment = async (order) => {
+    try {
+      const orderInfo = {
+        cost: order.totalPrice || order.cost || order.total || 0,
+        parcelId: order._id,
+        senderEmail: order.email || order.senderEmail || order.userEmail,
+        parcelName: order.productTitle || order.parcelName || "Order",
+        trackingId: order.trackingId || "",
+      };
+
+      console.log("Creating checkout session with:", orderInfo);
+
+      const res = await axiosSecure.post(
+        "/payment-checkout-session",
+        orderInfo
+      );
+
+      console.log("Checkout session response:", res?.data);
+
+      const url = res?.data?.url;
+      if (!url) {
+        console.error("No checkout URL returned from server", res?.data);
+        alert("Failed to create checkout session. See console for details.");
+        return;
+      }
+
+      // Redirect to Stripe Checkout
+      window.location.assign(url);
+    } catch (err) {
+      console.error("Error creating checkout session:", err?.response || err);
+      alert("Unable to initiate payment. Please try again later.");
+    }
+  };
+
   return (
     <div className="p-6">
       <h2 className="text-3xl font-bold text-gray-900 mb-6">
@@ -90,12 +150,12 @@ const MyOrders = () => {
             <thead className="bg-gray-200">
               <tr>
                 <th>#</th>
-                <th>Order ID</th>
-                <th>Product</th>
+                <th>Product Title</th>
                 <th>Quantity</th>
                 <th>Total Price</th>
                 <th>Status</th>
-                <th>Payment</th>
+                <th>Order Date</th>
+                <th>Delivery Address</th>
                 <th>Actions</th>
               </tr>
             </thead>
@@ -103,9 +163,6 @@ const MyOrders = () => {
               {orders.map((order, index) => (
                 <tr key={order._id}>
                   <th>{index + 1}</th>
-                  <td className="font-mono text-sm">
-                    {order._id.substring(0, 8)}...
-                  </td>
                   <td className="font-semibold">{order.productTitle}</td>
                   <td>{order.quantity} units</td>
                   <td className="font-bold text-blue-600">
@@ -128,13 +185,19 @@ const MyOrders = () => {
                       {order.status}
                     </span>
                   </td>
-                  <td>
-                    <span className="text-sm">
-                      {order.paymentStatus ? "Paid" : "Pending"}
-                    </span>
+                  <td className="text-sm">
+                    {new Date(order.orderDate).toLocaleDateString()}
                   </td>
+                  <td className="text-sm">{order.deliveryAddress}</td>
                   <td>
                     <div className="flex gap-2 flex-wrap">
+                      <button
+                        onClick={() => handlePayment(order)}
+                        className="btn btn-sm btn-success"
+                        title="Pay"
+                      >
+                        <FaMoneyBill />
+                      </button>
                       <button
                         onClick={() => handleViewDetails(order._id)}
                         className="btn btn-sm btn-info"
@@ -153,6 +216,13 @@ const MyOrders = () => {
                           <FaTimes />
                         </button>
                       )}
+                      <button
+                        onClick={() => handleDeleteOrder(order._id)}
+                        className="btn btn-sm btn-error"
+                        title="Delete Order"
+                      >
+                        <FaTrashCan />
+                      </button>
                     </div>
                   </td>
                 </tr>

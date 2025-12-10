@@ -15,7 +15,6 @@ import DashboardLayout from "../Layouts/DashboardLayout";
 import Payment from "../Pages/Dashboard/Payment/Payment";
 import PaymentSuccess from "../Pages/Dashboard/Payment/PaymentSuccess";
 import PaymentCancelled from "../Pages/Dashboard/Payment/PaymentCancel";
-import MyParcels from "../Pages/Dashboard/MyParcels";
 import ManageUsers from "../Pages/Dashboard/Admin/ManageUsers";
 import AdminProducts from "../Pages/Dashboard/Admin/AdminProducts";
 import AdminOrders from "../Pages/Dashboard/Admin/AdminOrders";
@@ -75,10 +74,6 @@ export const router = createBrowserRouter([
       {
         index: true,
         element: <DashboardHome />,
-      },
-      {
-        path: "my-parcels",
-        element: <MyParcels />,
       },
       {
         path: "my-orders",

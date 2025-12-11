@@ -17,8 +17,10 @@ const ProductDetails = () => {
     const fetchProduct = async () => {
       try {
         setLoading(true);
-        const response = await axiosInstance.get("/products");
-        const selectedProduct = response.data.find((p) => p._id === id);
+        const response = await axiosInstance.get("/products", {
+          params: { limit: 1000 }, // Fetch all products to ensure we find the one we need
+        });
+        const selectedProduct = response.data.products?.find((p) => p._id === id);
 
         if (selectedProduct) {
           setProduct(selectedProduct);

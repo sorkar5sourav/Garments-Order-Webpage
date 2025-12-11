@@ -39,7 +39,7 @@ const TrackOrder = () => {
   const handleSearchByTracking = async (e) => {
     e?.preventDefault?.();
     if (!trackingInput || trackingInput.trim().length === 0) {
-      setError("Please enter a tracking ID to search");
+      setError("Please enter an order ID to search");
       return;
     }
 
@@ -48,16 +48,16 @@ const TrackOrder = () => {
       setLoading(true);
       setError(null);
       const res = await axiosSecure.get(
-        `/orders/track/${trackingInput.trim()}`
+        `/orders/id/${trackingInput.trim()}`
       );
       if (res?.data && res.data._id) {
         setOrder(res.data);
       } else {
         setOrder(null);
-        setError("No order found for this tracking ID");
+        setError("No order found for this order ID");
       }
     } catch (err) {
-      console.error("Error searching by tracking id:", err);
+        console.error("Error searching by order id:", err);
       setError("Failed to search order");
       setOrder(null);
     } finally {
@@ -151,7 +151,7 @@ const TrackOrder = () => {
         >
           <input
             type="text"
-            placeholder="Enter tracking ID (e.g. PRCL-20251210-ABC123)"
+            placeholder="Enter Order ID"
             value={trackingInput}
             onChange={(e) => setTrackingInput(e.target.value)}
             className="input input-bordered w-full max-w-md"

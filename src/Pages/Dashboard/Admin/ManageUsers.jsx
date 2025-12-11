@@ -52,21 +52,66 @@ const ManageUsers = () => {
   };
 
   const handleToggleStatus = async (user) => {
-    const nextStatus = user.status === "suspended" ? "active" : "suspended";
-    const confirmed = await Swal.fire({
-      title: `Confirm ${
-        nextStatus === "suspended" ? "suspension" : "activation"
-      }`,
-      text: `This will mark the user as ${nextStatus}.`,
-      icon: "warning",
-      showCancelButton: true,
-      confirmButtonText: "Yes, proceed",
-    });
+    const isSuspending = user.status !== "suspended";
 
-    if (!confirmed.isConfirmed) return;
+    if (isSuspending) {
+      const { value } = await Swal.fire({
+        title: `Suspend ${user.displayName || user.name || "user"}?`,
+        html: `
+          <div class="text-left space-y-3">
+            <div>
+              <label class="font-semibold text-sm">Suspend Reason<span class="text-red-500">*</span></label>
+              <input id="swal-suspend-reason" class="swal2-input" placeholder="e.g. Policy violation" />
+            </div>
+            <div>
+              <label class="font-semibold text-sm">Feedback (visible to user)<span class="text-red-500">*</span></label>
+              <textarea id="swal-suspend-feedback" class="swal2-textarea" placeholder="Explain why the account is suspended"></textarea>
+            </div>
+          </div>
+        `,
+        focusConfirm: false,
+        showCancelButton: true,
+        confirmButtonText: "Suspend user",
+        preConfirm: () => {
+          const reason = Swal.getPopup().querySelector("#swal-suspend-reason")?.value?.trim();
+          const feedback = Swal.getPopup().querySelector("#swal-suspend-feedback")?.value?.trim();
+          if (!reason || !feedback) {
+            Swal.showValidationMessage("Reason and feedback are required");
+            return null;
+          }
+          return { reason, feedback };
+        },
+      });
 
-    await axiosSecure.patch(`/users/${user._id}/role`, { status: nextStatus });
-    Swal.fire("Updated!", "User status updated successfully.", "success");
+      if (!value) return;
+
+      await axiosSecure.patch(`/users/${user._id}/role`, {
+        status: "suspended",
+        suspendReason: value.reason,
+        suspendFeedback: value.feedback,
+        suspendedAt: new Date().toISOString(),
+      });
+      Swal.fire("Suspended", "User has been suspended with feedback.", "success");
+    } else {
+      const confirmed = await Swal.fire({
+        title: "Reactivate user?",
+        text: "This will allow the user to resume activity.",
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonText: "Yes, activate",
+      });
+
+      if (!confirmed.isConfirmed) return;
+
+      await axiosSecure.patch(`/users/${user._id}/role`, {
+        status: "active",
+        suspendReason: null,
+        suspendFeedback: null,
+        suspendedAt: null,
+      });
+      Swal.fire("Activated", "User has been reactivated.", "success");
+    }
+
     refetch();
   };
 

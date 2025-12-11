@@ -101,7 +101,6 @@ const MyOrders = () => {
         parcelId: order._id,
         senderEmail: order.email || order.senderEmail || order.userEmail,
         parcelName: order.productTitle || order.parcelName || "Order",
-        trackingId: order.trackingId || "",
       };
 
       console.log("Creating checkout session with:", orderInfo);

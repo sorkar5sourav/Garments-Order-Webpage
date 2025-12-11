@@ -2,11 +2,13 @@ import React, { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router";
 import useAxios from "../../hooks/useAxios";
 import useAuth from "../../hooks/useAuth";
+import useRole from "../../hooks/useRole";
 
 const ProductDetails = () => {
   const { id } = useParams();
   const navigate = useNavigate();
   const { user } = useAuth();
+  const { role, status, suspendFeedback, suspendReason } = useRole();
   const [product, setProduct] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -53,15 +55,19 @@ const ProductDetails = () => {
     }
 
     // Check user role - don't allow admins or managers to order
-    if (user.role === "admin" || user.role === "manager") {
+    if (role === "admin" || role === "manager") {
       alert("Admins and Managers cannot place orders.");
       return;
     }
 
     // Check account status
-    if (user.role === "pending") {
+    if (status === "suspended") {
       alert(
-        "Your account is pending approval. Please wait for admin approval."
+        `Your account is suspended. ${
+          suspendFeedback || suspendReason
+            ? `Feedback: ${suspendFeedback || suspendReason}`
+            : "You cannot place new bookings."
+        }`
       );
       return;
     }
@@ -187,14 +193,18 @@ const ProductDetails = () => {
                 onClick={handleOrder}
                 disabled={
                   product.availableQuantity < product.minimumOrder ||
-                  (user && (user.role === "admin" || user.role === "manager"))
+                  role === "admin" ||
+                  role === "manager" ||
+                  status === "suspended"
                 }
                 className="w-full bg-blue-600 hover:bg-blue-700 disabled:bg-gray-400 text-white font-bold py-3 px-6 rounded-lg transition-colors duration-200 mb-4"
               >
                 {!user
                   ? "Login to Order"
-                  : user.role === "admin" || user.role === "manager"
+                  : role === "admin" || role === "manager"
                   ? "Admins Cannot Order"
+                  : status === "suspended"
+                  ? "Account Suspended"
                   : "Place Order"}
               </button>
 

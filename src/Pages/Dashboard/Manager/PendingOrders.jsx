@@ -3,9 +3,11 @@ import React, { useState } from "react";
 import Swal from "sweetalert2";
 import useAxiosSecure from "../../../hooks/useAxiosSecure";
 import Loading from "../../../Components/atoms/Loading";
+import useRole from "../../../hooks/useRole";
 
 const PendingOrders = () => {
   const axiosSecure = useAxiosSecure();
+  const { status, suspendFeedback, suspendReason } = useRole();
   const [selected, setSelected] = useState(null);
 
   const {
@@ -20,21 +22,46 @@ const PendingOrders = () => {
     },
   });
 
-  const updateStatus = async (order, status) => {
+  const handleUpdateStatus = async (order, nextStatus) => {
+    if (status === "suspended") {
+      Swal.fire(
+        "Account Suspended",
+        suspendFeedback ||
+          suspendReason ||
+          "You cannot approve or reject orders while suspended.",
+        "error"
+      );
+      return;
+    }
     const confirm = await Swal.fire({
-      title: `Mark as ${status}?`,
+      title: `Mark as ${nextStatus}?`,
       icon: "question",
       showCancelButton: true,
       confirmButtonText: "Yes",
     });
     if (!confirm.isConfirmed) return;
 
-    await axiosSecure.patch(`/orders/${order._id}/status`, {
-      status,
-      approvedAt: status === "approved" ? new Date().toISOString() : null,
-    });
-    Swal.fire("Updated", "Order status updated", "success");
-    refetch();
+    try {
+      await axiosSecure.patch(`/orders/${order._id}/status`, {
+        status: nextStatus,
+        approvedAt: nextStatus === "approved" ? new Date().toISOString() : null,
+      });
+      Swal.fire("Updated", "Order status updated", "success");
+      refetch();
+    } catch (error) {
+      if (error.response?.data?.code === "SUSPENDED") {
+        Swal.fire(
+          "Account Suspended",
+          error.response?.data?.suspendFeedback ||
+            error.response?.data?.suspendReason ||
+            error.response?.data?.message ||
+            "You cannot approve or reject orders while suspended.",
+          "error"
+        );
+      } else {
+        Swal.fire("Error", "Failed to update order status.", "error");
+      }
+    }
   };
 
   if (isLoading) return <Loading />;
@@ -47,6 +74,16 @@ const PendingOrders = () => {
           Approve or reject orders awaiting confirmation.
         </p>
       </div>
+      {status === "suspended" && (
+        <div className="alert alert-error">
+          <span>
+            You cannot approve or reject orders while suspended.{" "}
+            {suspendFeedback || suspendReason
+              ? `Feedback: ${suspendFeedback || suspendReason}`
+              : ""}
+          </span>
+        </div>
+      )}
 
       <div className="overflow-x-auto bg-white rounded-box shadow">
         <table className="table">
@@ -84,13 +121,15 @@ const PendingOrders = () => {
                   </button>
                   <button
                     className="btn btn-sm btn-success"
-                    onClick={() => updateStatus(order, "approved")}
+                    disabled={status === "suspended"}
+                    onClick={() => handleUpdateStatus(order, "approved")}
                   >
                     Approve
                   </button>
                   <button
                     className="btn btn-sm btn-error"
-                    onClick={() => updateStatus(order, "rejected")}
+                    disabled={status === "suspended"}
+                    onClick={() => handleUpdateStatus(order, "rejected")}
                   >
                     Reject
                   </button>

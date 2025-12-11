@@ -2,12 +2,14 @@ import React, { useEffect, useState } from "react";
 import { useParams, useNavigate, useLocation } from "react-router";
 import useAxiosSecure from "../../hooks/useAxiosSecure";
 import useAuth from "../../hooks/useAuth";
+import useRole from "../../hooks/useRole";
 
 const BookingForm = () => {
   const { id } = useParams();
   const navigate = useNavigate();
   const location = useLocation();
   const { user } = useAuth();
+  const { status, suspendReason, suspendFeedback } = useRole();
   const axiosInstance = useAxiosSecure();
 
   const [product, setProduct] = useState(null);
@@ -157,6 +159,17 @@ const BookingForm = () => {
       return;
     }
 
+    if (status === "suspended") {
+      alert(
+        `Your account is suspended. ${
+          suspendFeedback || suspendReason
+            ? `Feedback: ${suspendFeedback || suspendReason}`
+            : "You cannot place new orders."
+        }`
+      );
+      return;
+    }
+
     setSubmitting(true);
 
     try {
@@ -184,7 +197,16 @@ const BookingForm = () => {
       }
     } catch (err) {
       console.error("Error placing order:", err);
-      alert("Failed to place order. Please try again.");
+      if (err.response?.data?.code === "SUSPENDED") {
+        alert(
+          err.response?.data?.suspendFeedback ||
+            err.response?.data?.suspendReason ||
+            err.response?.data?.message ||
+            "Your account is suspended."
+        );
+      } else {
+        alert("Failed to place order. Please try again.");
+      }
     } finally {
       setSubmitting(false);
     }
@@ -223,6 +245,16 @@ const BookingForm = () => {
           <h1 className="text-3xl font-bold text-gray-900 mb-8">
             Complete Your Order
           </h1>
+          {status === "suspended" && (
+            <div className="alert alert-error mb-6">
+              <span>
+                Your account is suspended.{" "}
+                {suspendFeedback || suspendReason
+                  ? `Feedback: ${suspendFeedback || suspendReason}`
+                  : "You cannot place new bookings."}
+              </span>
+            </div>
+          )}
 
           <form onSubmit={handleSubmit} className="space-y-6">
             {/* Product Information Section */}
@@ -419,10 +451,14 @@ const BookingForm = () => {
             <div className="flex gap-4">
               <button
                 type="submit"
-                disabled={submitting || !!quantityError}
+                disabled={submitting || !!quantityError || status === "suspended"}
                 className="flex-1 bg-blue-600 hover:bg-blue-700 disabled:bg-gray-400 text-white font-bold py-3 px-6 rounded-lg transition-colors duration-200"
               >
-                {submitting ? "Placing Order..." : "Place Order"}
+                {status === "suspended"
+                  ? "Account Suspended"
+                  : submitting
+                  ? "Placing Order..."
+                  : "Place Order"}
               </button>
 
               <button

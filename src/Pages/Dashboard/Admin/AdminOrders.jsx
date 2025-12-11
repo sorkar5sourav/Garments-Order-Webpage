@@ -34,9 +34,24 @@ const AdminOrders = () => {
     });
     if (!confirmed.isConfirmed) return;
 
-    await axiosSecure.patch(`/orders/${order._id}/status`, { status });
-    Swal.fire("Updated", "Order status updated.", "success");
-    refetch();
+    try {
+      await axiosSecure.patch(`/orders/${order._id}/status`, { status });
+      Swal.fire("Updated", "Order status updated.", "success");
+      refetch();
+    } catch (error) {
+      if (error.response?.data?.code === "SUSPENDED") {
+        Swal.fire(
+          "Account Suspended",
+          error.response?.data?.suspendFeedback ||
+            error.response?.data?.suspendReason ||
+            error.response?.data?.message ||
+            "You cannot update order status while suspended.",
+          "error"
+        );
+      } else {
+        Swal.fire("Error", "Failed to update order status.", "error");
+      }
+    }
   };
 
   if (isLoading) return <Loading />;

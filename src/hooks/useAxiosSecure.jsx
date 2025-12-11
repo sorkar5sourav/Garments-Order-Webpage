@@ -68,6 +68,7 @@ const useAxiosSecure = () => {
         console.log("Error status:", error.response?.status);
 
         const statusCode = error.response?.status;
+        const errorCode = error.response?.data?.code;
         const originalRequest = error.config;
 
         // If 401 and we haven't retried yet, try to refresh token and retry
@@ -108,6 +109,11 @@ const useAxiosSecure = () => {
         }
 
         // If 401/403 after retry, or 403 directly, log out
+        if (statusCode === 403 && errorCode === "SUSPENDED") {
+          // Keep user logged in so they can view suspension details
+          return Promise.reject(error);
+        }
+
         if ((statusCode === 401 && originalRequest._retry) || statusCode === 403) {
           console.error("Unauthorized access after retry - logging out");
           await logOut();

@@ -1,8 +1,10 @@
 import React from "react";
 import useAuth from "../../../hooks/useAuth";
+import useRole from "../../../hooks/useRole";
 
 const ManagerProfile = () => {
-  const { user, logout } = useAuth();
+  const { user, logOut } = useAuth();
+  const { status, suspendReason, suspendFeedback } = useRole();
 
   return (
     <div className="p-6 max-w-3xl mx-auto space-y-4">
@@ -40,7 +42,30 @@ const ManagerProfile = () => {
               <p className="break-all">{user?.uid}</p>
             </div>
           </div>
-          <button className="btn btn-error mt-4" onClick={logout}>
+          {status === "suspended" && (
+            <div className="bg-red-50 border border-red-200 rounded-lg p-3 text-sm">
+              <p className="font-semibold text-red-800">Account Suspended</p>
+              <p className="text-red-700 mt-1">
+                Reason: {suspendReason || "Not provided"}
+              </p>
+              <p className="text-red-700 mt-1">
+                Feedback: {suspendFeedback || "No feedback available"}
+              </p>
+            </div>
+          )}
+          <div>
+            <p className="font-semibold">Status</p>
+            <p
+              className={`inline-block mt-1 px-3 py-1 rounded-full text-xs font-semibold ${
+                status === "suspended"
+                  ? "bg-red-100 text-red-800"
+                  : "bg-green-100 text-green-800"
+              }`}
+            >
+              {status || "active"}
+            </p>
+          </div>
+          <button className="btn btn-error mt-4" onClick={logOut}>
             Logout
           </button>
         </div>

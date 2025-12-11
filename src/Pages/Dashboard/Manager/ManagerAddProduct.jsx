@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import Swal from "sweetalert2";
 import useAxiosSecure from "../../../hooks/useAxiosSecure";
 import useAuth from "../../../hooks/useAuth";
+import useRole from "../../../hooks/useRole";
 
 const categories = ["Shirt", "Pant", "Jacket", "Accessories"];
 const paymentModes = ["Cash on Delivery", "PayFirst"];
@@ -9,6 +10,7 @@ const paymentModes = ["Cash on Delivery", "PayFirst"];
 const ManagerAddProduct = () => {
   const axiosSecure = useAxiosSecure();
   const { user } = useAuth();
+  const { status, suspendReason, suspendFeedback } = useRole();
   const [form, setForm] = useState({
     productName: "",
     productDescription: "",
@@ -52,6 +54,16 @@ const ManagerAddProduct = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    if (status === "suspended") {
+      Swal.fire(
+        "Account Suspended",
+        suspendFeedback ||
+          suspendReason ||
+          "You cannot add new products while suspended.",
+        "error"
+      );
+      return;
+    }
     if (!validate()) {
       Swal.fire("Validation", "Please fill all required fields correctly.", "warning");
       return;
@@ -96,7 +108,18 @@ const ManagerAddProduct = () => {
       setImages([]);
       setPreviews([]);
     } catch (err) {
-      Swal.fire("Error", "Failed to create product", "error");
+      if (err.response?.data?.code === "SUSPENDED") {
+        Swal.fire(
+          "Account Suspended",
+          err.response?.data?.suspendFeedback ||
+            err.response?.data?.suspendReason ||
+            err.response?.data?.message ||
+            "You cannot add new products while suspended.",
+          "error"
+        );
+      } else {
+        Swal.fire("Error", "Failed to create product", "error");
+      }
     } finally {
       setSubmitting(false);
     }
@@ -110,6 +133,17 @@ const ManagerAddProduct = () => {
           Managers can add new products with details and media.
         </p>
       </div>
+
+      {status === "suspended" && (
+        <div className="alert alert-error">
+          <span>
+            You cannot add products while suspended.{" "}
+            {suspendFeedback || suspendReason
+              ? `Feedback: ${suspendFeedback || suspendReason}`
+              : ""}
+          </span>
+        </div>
+      )}
 
       <form onSubmit={handleSubmit} className="space-y-4">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -238,8 +272,16 @@ const ManagerAddProduct = () => {
           )}
         </div>
 
-        <button className="btn btn-primary" type="submit" disabled={submitting}>
-          {submitting ? "Saving..." : "Create Product"}
+        <button
+          className="btn btn-primary"
+          type="submit"
+          disabled={submitting || status === "suspended"}
+        >
+          {status === "suspended"
+            ? "Account Suspended"
+            : submitting
+            ? "Saving..."
+            : "Create Product"}
         </button>
       </form>
     </div>

@@ -8,7 +8,7 @@ import Swal from "sweetalert2";
 const MyProfile = () => {
   const { user, logOut } = useAuth();
   const navigate = useNavigate();
-  const { role } = useRole();
+  const { role, status, suspendReason, suspendFeedback } = useRole();
   //   const axiosSecure = useAxiosSecure();
 
   const handleLogout = async () => {
@@ -109,14 +109,20 @@ const MyProfile = () => {
                 </p>
               </div>
 
-              {/* Account Created */}
+              {/* Account Status */}
               <div className="bg-gray-50 p-4 rounded-lg">
                 <label className="block text-sm font-semibold text-gray-700 mb-2">
                   Account Status
                 </label>
                 <p className="text-lg text-gray-900">
-                  <span className="inline-block bg-green-100 text-green-800 px-3 py-1 rounded-full text-sm font-semibold">
-                    Active
+                  <span
+                    className={`inline-block px-3 py-1 rounded-full text-sm font-semibold ${
+                      status === "suspended"
+                        ? "bg-red-100 text-red-800"
+                        : "bg-green-100 text-green-800"
+                    }`}
+                  >
+                    {status || "active"}
                   </span>
                 </p>
               </div>
@@ -130,6 +136,19 @@ const MyProfile = () => {
                   {role || user.role || "user"}
                 </p>
               </div>
+              {status === "suspended" && (
+                <div className="bg-red-50 p-4 rounded-lg border border-red-200">
+                  <h3 className="text-lg font-bold text-red-800 mb-2">
+                    Suspension Details
+                  </h3>
+                  <p className="text-sm text-red-700 font-semibold">
+                    Reason: {suspendReason || "Not provided"}
+                  </p>
+                  <p className="text-sm text-red-700 mt-1">
+                    Feedback: {suspendFeedback || "No feedback available"}
+                  </p>
+                </div>
+              )}
               {/* Last Sign In */}
               <div className="bg-gray-50 p-4 rounded-lg">
                 <label className="block text-sm font-semibold text-gray-700 mb-2">

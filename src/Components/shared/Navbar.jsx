@@ -1,7 +1,7 @@
 import { Link, NavLink } from "react-router";
 import Logo from "../atoms/Logo";
 import useAuth from "../../hooks/useAuth";
-
+import LogoText from "../../assets/Logo-Text.png";
 const NavBar = () => {
   const { user, logOut } = useAuth();
 
@@ -70,7 +70,7 @@ const NavBar = () => {
 
   const links = user ? afterLoginLinks : beforeLoginLinks;
   return (
-    <div className="navbar bg-base-100 rounded-2xl shadow-sm p-5 ">
+    <div className="navbar bg-[#fbf8ec] md:rounded-2xl shadow-sm p-5 ">
       <div className="navbar-start">
         <div className="dropdown">
           <div tabIndex={0} role="button" className="btn btn-ghost lg:hidden">
@@ -97,9 +97,10 @@ const NavBar = () => {
             {links}
           </ul>
         </div>
-        <button className="btn btn-ghost text-xl">
+        <Link to="/" className="ml-2 flex items-center">
           <Logo></Logo>
-        </button>
+          {/* <img src={LogoText} alt="" /> */}
+        </Link>
       </div>
       <div className="navbar-center hidden lg:flex">
         <ul className="menu menu-horizontal items-center px-1">{links}</ul>
@@ -124,7 +125,7 @@ const NavBar = () => {
               </div>
               <ul
                 tabIndex={0}
-                className="dropdown-content z-[1] menu p-2 shadow bg-base-100 rounded-box w-52"
+                className="dropdown-content z-1 menu p-2 shadow bg-base-100 rounded-box w-52"
               >
                 <li>
                   <a>{user?.displayName || "User"}</a>

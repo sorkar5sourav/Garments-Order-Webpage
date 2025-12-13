@@ -6,7 +6,7 @@ import Loading from "../../Components/atoms/Loading";
 
 const AllProducts = () => {
   const [currentPage, setCurrentPage] = useState(1);
-  const ITEMS_PER_PAGE = 10;
+  const ITEMS_PER_PAGE = 12;
   const axiosInstance = useAxios();
 
   const { data: productData = { products: [], pagination: {} }, isLoading } =

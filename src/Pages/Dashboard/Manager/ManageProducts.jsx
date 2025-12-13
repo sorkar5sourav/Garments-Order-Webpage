@@ -21,7 +21,11 @@ const ManageProducts = () => {
       const res = await axiosSecure.get("/products", {
         params: { createdBy: user.email },
       });
-      return res.data || [];
+      // API returns an object: { products: [...], pagination: { ... } }
+      // Ensure we return an array for react-query data so callers can use .filter
+      const data = res?.data;
+      if (Array.isArray(data)) return data;
+      return data?.products || [];
     },
   });
 

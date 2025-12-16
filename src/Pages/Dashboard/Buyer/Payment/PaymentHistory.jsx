@@ -5,8 +5,7 @@ import usePageTitle from "../../../../hooks/usePageTitle";
 
 
 const PaymentHistory = () => {
-  usePageTitle
-  ("Payment History - Garments Order");
+  usePageTitle("Payment History - Garments Order");
 
   const { user } = useAuth();
   const axiosSecure = useAxiosSecure();

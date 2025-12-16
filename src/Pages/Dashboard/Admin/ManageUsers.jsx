@@ -135,6 +135,7 @@ const ManageUsers = () => {
       Swal.fire("Approved!", "User has been approved and activated.", "success");
       refetch();
     } catch (error) {
+      console.error(error);
       Swal.fire("Error", "Failed to approve user. Please try again.", "error");
     }
   };

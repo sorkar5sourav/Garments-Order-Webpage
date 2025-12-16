@@ -112,7 +112,7 @@ const ProductDetails = () => {
         {/* Back Button */}
         <button
           onClick={() => navigate("/products")}
-          className="mb-6 text-blue-600 hover:text-blue-800 flex items-center gap-2"
+          className="btn btn-ghost mb-6"
         >
           ← Back to Products
         </button>
@@ -200,7 +200,7 @@ const ProductDetails = () => {
                   role === "manager" ||
                   status === "suspended"
                 }
-                className="w-full bg-blue-600 hover:bg-blue-700 disabled:bg-gray-400 text-white font-bold py-3 px-6 rounded-lg transition-colors duration-200 mb-4"
+                className="btn btn-primary w-full mb-4"
               >
                 {!user
                   ? "Login to Order"

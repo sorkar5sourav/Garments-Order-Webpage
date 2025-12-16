@@ -2,6 +2,7 @@ import React, { createContext, useContext, useEffect, useState } from 'react';
 
 const ThemeContext = createContext();
 
+// eslint-disable-next-line react-refresh/only-export-components
 export const useTheme = () => {
   const context = useContext(ThemeContext);
   if (!context) {
@@ -10,52 +11,46 @@ export const useTheme = () => {
   return context;
 };
 
+const getSystemTheme = () =>
+  window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+
+const getInitialThemeState = () => {
+  const savedTheme = localStorage.getItem('theme');
+  const savedIsSystemTheme = localStorage.getItem('isSystemTheme');
+
+  const initialIsSystemTheme =
+    savedIsSystemTheme !== null ? savedIsSystemTheme === 'true' : true;
+
+  if (savedTheme && savedTheme !== 'system') {
+    return {
+      theme: savedTheme,
+      isSystemTheme: false,
+    };
+  }
+
+  return {
+    theme: getSystemTheme(),
+    isSystemTheme: initialIsSystemTheme,
+  };
+};
+
 export const ThemeProvider = ({ children }) => {
-  const [theme, setTheme] = useState('light');
-  const [isSystemTheme, setIsSystemTheme] = useState(true);
+  const initial = getInitialThemeState();
+  const [theme, setTheme] = useState(initial.theme);
+  const [isSystemTheme, setIsSystemTheme] = useState(initial.isSystemTheme);
 
-  // Load theme preferences from localStorage on mount
-  useEffect(() => {
-    const savedTheme = localStorage.getItem('theme');
-    const savedIsSystemTheme = localStorage.getItem('isSystemTheme');
-
-    if (savedIsSystemTheme !== null) {
-      setIsSystemTheme(JSON.parse(savedIsSystemTheme));
-    }
-
-    if (savedTheme && savedTheme !== 'system') {
-      setTheme(savedTheme);
-      setIsSystemTheme(false);
-    } else {
-      // If no saved theme or 'system', use system preference
-      const mediaQuery = window.matchMedia('(prefers-color-scheme: dark)');
-      setTheme(mediaQuery.matches ? 'dark' : 'light');
-      setIsSystemTheme(true);
-    }
-  }, []);
-
-  // Detect system theme preference
+  // Detect and respond to system theme changes when opted-in
   useEffect(() => {
     const mediaQuery = window.matchMedia('(prefers-color-scheme: dark)');
 
     const handleChange = (e) => {
-      if (isSystemTheme) {
-        const newTheme = e.matches ? 'dark' : 'light';
-        setTheme(newTheme);
-        localStorage.setItem('theme', newTheme);
-      }
-    };
-
-    // Only set initial theme if not loaded from localStorage
-    if (isSystemTheme) {
-      const newTheme = mediaQuery.matches ? 'dark' : 'light';
+      if (!isSystemTheme) return;
+      const newTheme = e.matches ? 'dark' : 'light';
       setTheme(newTheme);
       localStorage.setItem('theme', newTheme);
-    }
+    };
 
-    // Listen for changes
     mediaQuery.addEventListener('change', handleChange);
-
     return () => mediaQuery.removeEventListener('change', handleChange);
   }, [isSystemTheme]);
 
@@ -66,7 +61,7 @@ export const ThemeProvider = ({ children }) => {
 
   const toggleTheme = () => {
     setIsSystemTheme(false);
-    setTheme(prevTheme => {
+    setTheme((prevTheme) => {
       const newTheme = prevTheme === 'light' ? 'dark' : 'light';
       localStorage.setItem('theme', newTheme);
       localStorage.setItem('isSystemTheme', 'false');
@@ -75,9 +70,8 @@ export const ThemeProvider = ({ children }) => {
   };
 
   const resetToSystem = () => {
+    const newTheme = getSystemTheme();
     setIsSystemTheme(true);
-    const mediaQuery = window.matchMedia('(prefers-color-scheme: dark)');
-    const newTheme = mediaQuery.matches ? 'dark' : 'light';
     setTheme(newTheme);
     localStorage.setItem('theme', newTheme);
     localStorage.setItem('isSystemTheme', 'true');
@@ -87,7 +81,7 @@ export const ThemeProvider = ({ children }) => {
     theme,
     toggleTheme,
     resetToSystem,
-    isSystemTheme
+    isSystemTheme,
   };
 
   return (

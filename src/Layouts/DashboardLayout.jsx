@@ -17,15 +17,15 @@ import logoImg from "../assets/Logo.png";
 const DashboardLayout = () => {
   const { role } = useRole();
   return (
-    <div className="drawer lg:drawer-open max-w-7xl mx-auto ">
+    <div className="drawer lg:drawer-open w-full min-h-screen">
       <input id="my-drawer-4" type="checkbox" className="drawer-toggle" />
-      <div className="drawer-content">
+      <div className="drawer-content flex-1">
         {/* Navbar */}
-        <nav className="navbar w-full bg-base-300">
+        <nav className="navbar w-full bg-base-300 shadow-sm">
           <label
             htmlFor="my-drawer-4"
             aria-label="open sidebar"
-            className="btn btn-square btn-ghost"
+            className="btn btn-square btn-ghost lg:hidden"
           >
             {/* Sidebar toggle icon */}
             <svg
@@ -43,10 +43,17 @@ const DashboardLayout = () => {
               <path d="M14 10l2 2l-2 2"></path>
             </svg>
           </label>
-          <div className="px-4">Garments Order Dashboard</div>
+          <div className="flex-1 px-4">
+            <span className="text-lg font-semibold">Garments Order Dashboard</span>
+          </div>
+          <div className="hidden md:flex items-center space-x-4 px-4">
+            <span className="text-sm text-base-content/70">Welcome back!</span>
+          </div>
         </nav>
         {/* Page content here */}
-        <Outlet></Outlet>
+        <main className="flex-1 overflow-auto">
+          <Outlet />
+        </main>
       </div>
 
       <div className="drawer-side is-drawer-close:overflow-visible">

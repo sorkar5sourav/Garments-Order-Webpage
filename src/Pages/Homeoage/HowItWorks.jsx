@@ -44,8 +44,8 @@ const HowItWorks = () => {
   return (
     <div className="my-10 bg-base-300 rounded-3xl py-10 max-w-7xl mx-auto md:mb-20 px-4">
       <div className="text-center mb-12">
-        <h3 className="text-3xl font-bold text-secondary mb-4">How It Works</h3>
-        <p className="text-lg text-base-CONTENT">
+        <h2 className="text-4xl font-bold text-secondary mb-6">How It Works</h2>
+        <p className="text-lg text-base-content leading-relaxed">
           Follow these simple steps to order and track your garments
         </p>
       </div>

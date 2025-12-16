@@ -24,10 +24,10 @@ const LatestProducts = () => {
     <div className="py-12">
       <div className="max-w-8xl bg-base-200 rounded-3xl py-10 mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center mb-12">
-          <h2 className="text-3xl font-bold text-secondary mb-4">
+          <h2 className="text-4xl font-bold text-secondary mb-6">
             Latest Products
           </h2>
-          <p className="text-lg text-base-CONTENT">
+          <p className="text-lg text-base-content leading-relaxed">
             Check out our newest additions to the collection
           </p>
         </div>

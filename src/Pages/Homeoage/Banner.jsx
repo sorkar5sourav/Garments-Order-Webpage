@@ -17,7 +17,7 @@ const Banner = () => (
           <img src={bannerImg5} />
       </Carousel>
       <div className="absolute hidden md:flex top-11/20 left-6/25 lg:left-1/6 -translate-x-1/2 -translate-y-1/2 flex-wrap justify-center">
-        <Link to={"/dashboard/trackorder"} className="btn max-h-14 btn-primary rounded-full">
+        <Link to={"/dashboard/trackorder"} className="btn max-h-14 btn-primary text-base-300 rounded-full">
           Trak Your Order
         </Link>
         <Link to={"/products"} className="btn btn-outline text-white border-white ml-4 max-h-14">

@@ -66,7 +66,7 @@ const BookingForm = () => {
     };
 
     fetchProduct();
-  }, [id, axiosInstance]);
+  }, [id, axiosInstance, location.state?.quantity]);
 
   // Ensure quantity defaults to product.minimumOrder when product loads
   useEffect(() => {
@@ -275,7 +275,7 @@ const BookingForm = () => {
         </button>
 
         <div className="bg-base-100 rounded-lg shadow-lg p-8">
-          <h1 className="text-3xl font-bold text-secondary mb-8">
+          <h1 className="text-4xl font-bold text-secondary mb-8">
             Complete Your Order
           </h1>
           {status === "suspended" && (
@@ -485,7 +485,7 @@ const BookingForm = () => {
               <button
                 type="submit"
                 disabled={submitting || !!quantityError || status === "suspended"}
-                className="flex-1 bg-blue-600 hover:bg-blue-700 disabled:bg-gray-400 text-white font-bold py-3 px-6 rounded-lg transition-colors duration-200"
+                className="flex-1 btn btn-primary"
               >
                 {status === "suspended"
                   ? "Account Suspended"
@@ -497,7 +497,7 @@ const BookingForm = () => {
               <button
                 type="button"
                 onClick={() => navigate(-1)}
-                className="flex-1 bg-gray-300 hover:bg-gray-400 text-gray-800 font-bold py-3 px-6 rounded-lg transition-colors duration-200"
+                className="flex-1 btn btn-outline"
               >
                 Cancel
               </button>

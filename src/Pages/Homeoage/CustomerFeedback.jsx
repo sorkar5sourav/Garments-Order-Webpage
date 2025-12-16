@@ -12,7 +12,7 @@ import "swiper/css/pagination";
 const CustomerFeedback = () => {
   const axiosInstance = useAxios();
 
-  const { data: reviewData = { reviews: [] }, isLoading, error } = useQuery({
+  const { data: reviewData = { reviews: [] } } = useQuery({
     queryKey: ["reviews"],
     queryFn: async () => {
       const response = await axiosInstance.get("/reviews");
@@ -66,10 +66,10 @@ const CustomerFeedback = () => {
   return (
     <div className="my-24 bg-base-200 py-16">
       <div className="text-center max-w-4xl mx-auto mb-12 px-4">
-        <h3 className="text-4xl font-bold text-secondary mb-6">
+        <h2 className="text-4xl font-bold text-secondary mb-6">
           What Our Customers Are Saying
-        </h3>
-        <p className="text-lg text-base-CONTENT">
+        </h2>
+        <p className="text-lg text-base-content leading-relaxed">
           Hear from our satisfied customers about their experience with our garments ordering platform.
         </p>
       </div>
@@ -131,11 +131,11 @@ const CustomerFeedback = () => {
         </Swiper>
 
         <div className="flex justify-center items-center mt-8 mx-auto space-x-4">
-          <button className="prev-btn nav-btn bg-gray-200 hover:bg-gray-300 text-gray-700 px-4 py-2 rounded-full transition-colors">
+          <button className="prev-btn btn btn-circle btn-ghost">
             ←
           </button>
           <div className="custom-pagination"></div>
-          <button className="next-btn nav-btn bg-gray-200 hover:bg-gray-300 text-gray-700 px-4 py-2 rounded-full transition-colors">
+          <button className="next-btn btn btn-circle btn-ghost">
             →
           </button>
         </div>

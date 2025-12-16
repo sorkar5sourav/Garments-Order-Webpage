@@ -64,8 +64,8 @@ const LeaveReview = () => {
     <div className="my-24 bg-base-200 rounded-3xl py-16">
       <div className="max-w-4xl mx-auto px-4">
         <div className="text-center mb-12">
-          <h2 className="text-4xl font-bold text-secondary mb-4">Leave a Review</h2>
-          <p className="text-lg text-base-CONTENT">
+          <h2 className="text-4xl font-bold text-secondary mb-6">Leave a Review</h2>
+          <p className="text-lg text-base-content leading-relaxed">
             Share your experience with our garments ordering platform. Your feedback helps us improve!
           </p>
         </div>

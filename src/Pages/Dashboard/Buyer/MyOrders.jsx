@@ -131,123 +131,147 @@ const MyOrders = () => {
   };
 
   return (
-    <div className="p-6">
-      <h2 className="text-3xl font-bold text-secondary mb-6">
-        My Orders: {orders.length}
-      </h2>
-
-      {orders.length === 0 ? (
-        <div className="bg-base-100 rounded-lg shadow p-8 text-center">
-          <p className="text-xl text-gray-500 mb-4">You have no orders yet.</p>
-          <button
-            onClick={() => navigate("/products")}
-            className="btn btn-primary"
-          >
-            Browse Products
-          </button>
+    <div className="min-h-screen bg-base-100 p-4 sm:p-6 lg:p-8">
+      <div className="w-full">
+        <div className="mb-8">
+          <h2 className="text-2xl sm:text-3xl font-bold text-secondary mb-2">
+            My Orders
+          </h2>
+          <p className="text-base-content/70">Track and manage your garment orders</p>
         </div>
-      ) : (
-        <div className="overflow-x-auto">
-          <table className="table table-zebra w-full">
-            <thead className="bg-gray-200">
-              <tr>
-                <th>#</th>
-                <th>Product Title</th>
-                <th>Quantity</th>
-                <th>Total Price</th>
-                <th>Payment Status</th>
-                <th>Admin Approval</th>
-                <th>Order Date</th>
-                <th>Delivery Address</th>
-                <th>Actions</th>
-              </tr>
-            </thead>
-            <tbody>
-              {orders.map((order, index) => (
-                <tr key={order._id}>
-                  <th>{index + 1}</th>
-                  <td className="font-semibold">{order.productTitle}</td>
-                  <td>{order.quantity} units</td>
-                  <td className="font-bold text-blue-600">
-                    ৳{order.totalPrice}
-                  </td>
-                  <td>
-                    <span
-                      className={`px-3 py-1 rounded-full text-sm font-semibold ${
-                        order.paymentStatus === "paid"
-                          ? "bg-green-100 text-green-800"
-                          : "bg-yellow-100 text-yellow-800"
-                      }`}
-                    >
-                      {order.paymentStatus === "paid" ? "✓ Paid" : "⏳ Unpaid"}
-                    </span>
-                  </td>
-                  <td>
-                    <span
-                      className={`px-3 py-1 rounded-full text-sm font-semibold ${
-                        order.status === "pending"
-                          ? "bg-yellow-100 text-yellow-800"
-                          : order.status === "confirmed"
-                          ? "bg-blue-100 text-blue-800"
-                          : order.status === "shipped"
-                          ? "bg-purple-100 text-purple-800"
-                          : order.status === "delivered"
-                          ? "bg-green-100 text-green-800"
-                          : "bg-red-100 text-red-800"
-                      }`}
-                    >
-                      {order.status}
-                    </span>
-                  </td>
-                  <td className="text-sm">
-                    {new Date(order.orderDate).toLocaleDateString()}
-                  </td>
-                  <td className="text-sm">{order.deliveryAddress}</td>
-                  <td>
-                    <div className="flex gap-2 flex-wrap">
-                      {order.paymentStatus === "unpaid" && (
-                        <button
-                          onClick={() => handlePayment(order)}
-                          className="btn btn-sm btn-success"
-                          title="Pay Now"
+
+        {orders.length === 0 ? (
+          <div className="bg-base-100 rounded-lg shadow-lg p-8 sm:p-12 text-center">
+            <div className="text-6xl mb-4">📦</div>
+            <h3 className="text-xl font-semibold mb-4">No Orders Yet</h3>
+            <p className="text-base-content/70 mb-6">You haven't placed any orders yet. Start shopping now!</p>
+            <button
+              onClick={() => navigate("/products")}
+              className="btn btn-primary btn-lg"
+            >
+              Browse Products
+            </button>
+          </div>
+        ) : (
+          <div className="bg-base-100 rounded-lg shadow-lg overflow-hidden">
+            <div className="p-4 sm:p-6 border-b border-base-300">
+              <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+                <h3 className="text-lg font-semibold">Your Orders ({orders.length})</h3>
+                <div className="flex flex-wrap gap-2">
+                  <span className="badge badge-primary">Total: {orders.length}</span>
+                  <span className="badge badge-success">
+                    Completed: {orders.filter(order => order.status === "delivered").length}
+                  </span>
+                  <span className="badge badge-warning">
+                    Pending: {orders.filter(order => order.status === "pending").length}
+                  </span>
+                </div>
+              </div>
+            </div>
+                <div className="overflow-x-auto">
+              <table className="table table-zebra w-full">
+                <thead className="bg-base-200">
+                  <tr>
+                    <th className="text-xs">#</th>
+                    <th className="text-xs">Product</th>
+                    <th className="text-xs">Quantity</th>
+                    <th className="text-xs">Total</th>
+                    <th className="text-xs">Payment</th>
+                    <th className="text-xs">Status</th>
+                    <th className="text-xs hidden md:table-cell">Date</th>
+                    <th className="text-xs hidden lg:table-cell">Address</th>
+                    <th className="text-xs">Actions</th>
+                  </tr>
+                </thead>
+                    <tbody>
+                  {orders.map((order, index) => (
+                    <tr key={order._id} className="hover">
+                      <th className="font-medium">{index + 1}</th>
+                      <td className="font-medium max-w-xs truncate" title={order.productTitle}>
+                        {order.productTitle}
+                      </td>
+                      <td className="font-medium">{order.quantity} units</td>
+                      <td className="font-bold text-primary">৳{order.totalPrice?.toLocaleString()}</td>
+                      <td>
+                        <span
+                          className={`badge badge-sm ${
+                            order.paymentStatus === "paid"
+                              ? "badge-success"
+                              : "badge-warning"
+                          }`}
                         >
-                          <FaMoneyBill />
-                        </button>
-                      )}
-                      <button
-                        onClick={() => handleViewDetails(order._id)}
-                        className="btn btn-sm btn-info"
-                        title="View Details & Track"
-                      >
-                        <FaEye />
-                      </button>
-                      {order.status === "pending" &&
-                        order.paymentStatus === "unpaid" && (
+                          {order.paymentStatus === "paid" ? "✓ Paid" : "⏳ Unpaid"}
+                        </span>
+                      </td>
+                      <td>
+                        <span
+                          className={`badge badge-sm ${
+                            order.status === "pending"
+                              ? "badge-warning"
+                              : order.status === "confirmed"
+                              ? "badge-info"
+                              : order.status === "shipped"
+                              ? "badge-primary"
+                              : order.status === "delivered"
+                              ? "badge-success"
+                              : "badge-error"
+                          }`}
+                        >
+                          {order.status}
+                        </span>
+                      </td>
+                      <td className="text-sm hidden md:table-cell">
+                        {new Date(order.orderDate).toLocaleDateString()}
+                      </td>
+                      <td className="text-sm hidden lg:table-cell max-w-xs truncate" title={order.deliveryAddress}>
+                        {order.deliveryAddress}
+                      </td>
+                      <td>
+                        <div className="flex flex-wrap gap-1">
+                          {order.paymentStatus === "unpaid" && (
+                            <button
+                              onClick={() => handlePayment(order)}
+                              className="btn btn-xs btn-success"
+                              title="Pay Now"
+                            >
+                              <FaMoneyBill className="text-xs" />
+                            </button>
+                          )}
                           <button
-                            onClick={() =>
-                              handleCancelOrder(order._id, order.status)
-                            }
-                            className="btn btn-sm btn-error"
-                            title="Cancel Order"
+                            onClick={() => handleViewDetails(order._id)}
+                            className="btn btn-xs btn-info"
+                            title="View Details & Track"
                           >
-                            <FaTimes />
+                            <FaEye className="text-xs" />
                           </button>
-                        )}
-                      <button
-                        onClick={() => handleDeleteOrder(order._id)}
-                        className="btn btn-sm btn-error"
-                        title="Delete Order"
-                      >
-                        <FaTrashCan />
-                      </button>
-                    </div>
-                  </td>
-                </tr>
-              ))}
-            </tbody>
+                          {order.status === "pending" &&
+                            order.paymentStatus === "unpaid" && (
+                              <button
+                                onClick={() =>
+                                  handleCancelOrder(order._id, order.status)
+                                }
+                                className="btn btn-xs btn-error"
+                                title="Cancel Order"
+                              >
+                                <FaTimes className="text-xs" />
+                              </button>
+                            )}
+                          <button
+                            onClick={() => handleDeleteOrder(order._id)}
+                            className="btn btn-xs btn-error"
+                            title="Delete Order"
+                          >
+                            <FaTrashCan className="text-xs" />
+                          </button>
+                        </div>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
           </table>
         </div>
-      )}
+      </div>)}
+    </div>
     </div>
   );
 };

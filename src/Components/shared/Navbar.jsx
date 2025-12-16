@@ -1,7 +1,6 @@
 import { Link, NavLink, useLocation } from "react-router";
 import Logo from "../atoms/Logo";
 import useAuth from "../../hooks/useAuth";
-import LogoText from "../../assets/Logo-Text.png";
 import { useState, useEffect } from "react";
 import ThemeToggle from "../atoms/ThemeToggle";
 
@@ -19,7 +18,7 @@ const NavBar = () => {
   };
 
   const navLinkClass = ({ isActive }) =>
-    isActive ? "btn btn-primary rounded-full text-black" : "";
+    isActive ? "btn btn-primary rounded-full text-base-300" : "";
 
   // Intersection Observer for scroll-based active states
   useEffect(() => {
@@ -102,7 +101,7 @@ const NavBar = () => {
   // Dynamic class for homepage navigation buttons
   const getHomepageButtonClass = (section) => {
     if (location.pathname !== '/') return "";
-    return activeSection === section ? "btn btn-primary rounded-full text-black" : "";
+    return activeSection === section ? "btn btn-primary rounded-full text-base-300" : "";
   };
 
   // Before Login: Home, All-Products, About Us, Contact, Login, Register
@@ -167,7 +166,7 @@ const NavBar = () => {
 
   const links = user ? afterLoginLinks : beforeLoginLinks;
   return (
-    <div className="navbar bg-base-200 md:rounded-2xl shadow-sm p-5 sticky top-0 z-50">
+    <div className="navbar bg-base-200 md:rounded-2xl shadow-sm px-5 lg:py-5 sticky top-0 z-50">
       <div className="navbar-start">
         <div className="dropdown">
           <div tabIndex={0} role="button" className="btn btn-ghost lg:hidden">
@@ -240,7 +239,7 @@ const NavBar = () => {
             {/* Logout Button */}
             <button
               onClick={handleLogOut}
-              className="btn btn-primary rounded-lg text-black font-bold"
+              className="btn btn-primary rounded-lg text-base-300 font-bold"
             >
               Logout
             </button>
@@ -251,7 +250,7 @@ const NavBar = () => {
               Login
             </Link>
             <Link
-              className="btn btn-primary rounded-lg text-black"
+              className="btn btn-primary rounded-lg text-base-300"
               to="/register"
             >
               Register

@@ -55,8 +55,8 @@ const AboutUs = () => {
     <div id="about-us" className="my-24 bg-base-100 py-16">
       <div className="max-w-7xl mx-auto px-4">
         <div className="text-center mb-12">
-          <h2 className="text-4xl font-bold text-secondary mb-4">About Us</h2>
-          <p className="text-lg text-base-CONTENT max-w-3xl mx-auto">
+          <h2 className="text-4xl font-bold text-secondary mb-6">About Us</h2>
+          <p className="text-lg text-base-content leading-relaxed max-w-3xl mx-auto">
             Learn more about our journey, mission, and the team behind our garments ordering platform.
           </p>
         </div>

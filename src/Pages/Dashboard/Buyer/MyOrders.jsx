@@ -1,13 +1,16 @@
 import React from "react";
 import { useQuery } from "@tanstack/react-query";
 import { useNavigate } from "react-router";
-import useAuth from "../../hooks/useAuth";
-import useAxiosSecure from "../../hooks/useAxiosSecure";
+import useAuth from "../../../hooks/useAuth";
+import useAxiosSecure from "../../..//hooks/useAxiosSecure";
 import { FaEye, FaMoneyBill, FaTrashCan } from "react-icons/fa6";
 import Swal from "sweetalert2";
 import { FaTimes } from "react-icons/fa";
+import usePageTitle from "../../../hooks/usePageTitle";
 
 const MyOrders = () => {
+  usePageTitle("My Orders - Garments Order");
+
   const { user } = useAuth();
   const navigate = useNavigate();
   const axiosSecure = useAxiosSecure();
@@ -129,12 +132,12 @@ const MyOrders = () => {
 
   return (
     <div className="p-6">
-      <h2 className="text-3xl font-bold text-gray-900 mb-6">
+      <h2 className="text-3xl font-bold text-secondary mb-6">
         My Orders: {orders.length}
       </h2>
 
       {orders.length === 0 ? (
-        <div className="bg-white rounded-lg shadow p-8 text-center">
+        <div className="bg-base-100 rounded-lg shadow p-8 text-center">
           <p className="text-xl text-gray-500 mb-4">You have no orders yet.</p>
           <button
             onClick={() => navigate("/products")}

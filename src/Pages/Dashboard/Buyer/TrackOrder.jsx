@@ -1,9 +1,12 @@
 import React, { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router";
-import useAxiosSecure from "../../hooks/useAxiosSecure";
+import useAxiosSecure from "../../../hooks/useAxiosSecure";
 import Swal from "sweetalert2";
+import usePageTitle from "../../../hooks/usePageTitle";
 
 const TrackOrder = () => {
+  usePageTitle("Track Order - Garments Order");
+
   const { orderId } = useParams();
   const navigate = useNavigate();
   const axiosSecure = useAxiosSecure();
@@ -132,7 +135,7 @@ const TrackOrder = () => {
   // If no order and no error, show only search box (handled below)
 
   return (
-    <div className="min-h-screen bg-gray-50 py-12">
+    <div className="min-h-screen bg-base-200 py-12">
       <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Back Button (only when viewing an order) */}
         {(orderId || order) && (
@@ -181,54 +184,54 @@ const TrackOrder = () => {
 
         {!loading && order && (
           <>
-            <div className="bg-white rounded-lg shadow-lg p-8 mb-8">
-              <h1 className="text-3xl font-bold text-gray-900 mb-6">
+            <div className="bg-base-100 rounded-lg shadow-lg p-8 mb-8">
+              <h1 className="text-3xl font-bold text-secondary mb-6">
                 Track Order
               </h1>
 
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
                 {/* Order Info */}
                 <div>
-                  <h2 className="text-lg font-bold text-gray-900 mb-4">
+                  <h2 className="text-lg font-bold text-secondary mb-4">
                     Order Information
                   </h2>
                   <div className="space-y-3">
                     <div>
-                      <p className="text-gray-600 text-sm">Order ID</p>
-                      <p className="text-gray-900 font-mono">{order._id}</p>
+                      <p className="text-base-CONTENT text-sm">Order ID</p>
+                      <p className="text-secondary font-mono">{order._id}</p>
                     </div>
                     <div>
-                      <p className="text-gray-600 text-sm">Product</p>
-                      <p className="text-gray-900 font-semibold">
+                      <p className="text-base-CONTENT text-sm">Product</p>
+                      <p className="text-secondary font-semibold">
                         {order.productTitle}
                       </p>
                     </div>
                     <div>
-                      <p className="text-gray-600 text-sm">Quantity</p>
-                      <p className="text-gray-900">{order.quantity} units</p>
+                      <p className="text-base-CONTENT text-sm">Quantity</p>
+                      <p className="text-secondary">{order.quantity} units</p>
                     </div>
                   </div>
                 </div>
 
                 {/* Delivery Info */}
                 <div>
-                  <h2 className="text-lg font-bold text-gray-900 mb-4">
+                  <h2 className="text-lg font-bold text-secondary mb-4">
                     Delivery Details
                   </h2>
                   <div className="space-y-3">
                     <div>
-                      <p className="text-gray-600 text-sm">Recipient</p>
-                      <p className="text-gray-900 font-semibold">
+                      <p className="text-base-CONTENT text-sm">Recipient</p>
+                      <p className="text-secondary font-semibold">
                         {order.firstName} {order.lastName}
                       </p>
                     </div>
                     <div>
-                      <p className="text-gray-600 text-sm">Contact</p>
-                      <p className="text-gray-900">{order.contactNumber}</p>
+                      <p className="text-base-CONTENT text-sm">Contact</p>
+                      <p className="text-secondary">{order.contactNumber}</p>
                     </div>
                     <div>
-                      <p className="text-gray-600 text-sm">Delivery Address</p>
-                      <p className="text-gray-900">{order.deliveryAddress}</p>
+                      <p className="text-base-CONTENT text-sm">Delivery Address</p>
+                      <p className="text-secondary">{order.deliveryAddress}</p>
                     </div>
                   </div>
                 </div>
@@ -236,7 +239,7 @@ const TrackOrder = () => {
 
               {/* Status Badge */}
               <div className="mb-8 p-4 bg-blue-50 rounded-lg border border-blue-200">
-                <p className="text-sm text-gray-600 mb-2">Current Status</p>
+                <p className="text-sm text-base-CONTENT mb-2">Current Status</p>
                 <div className="flex items-center gap-3">
                   <span
                     className={`px-4 py-2 rounded-full font-bold text-white ${
@@ -261,8 +264,8 @@ const TrackOrder = () => {
             </div>
 
             {/* Timeline */}
-            <div className="bg-white rounded-lg shadow-lg p-8">
-              <h2 className="text-2xl font-bold text-gray-900 mb-8">
+            <div className="bg-base-100 rounded-lg shadow-lg p-8">
+              <h2 className="text-2xl font-bold text-secondary mb-8">
                 Production & Delivery Timeline
               </h2>
 
@@ -299,7 +302,7 @@ const TrackOrder = () => {
                         className={`text-lg font-bold ${
                           item.status === "completed"
                             ? "text-green-600"
-                            : "text-gray-600"
+                            : "text-base-CONTENT"
                         }`}
                       >
                         {item.step}
@@ -318,7 +321,7 @@ const TrackOrder = () => {
               {/* Additional Notes */}
               {order.additionalNotes && (
                 <div className="mt-8 p-4 bg-blue-50 rounded-lg border border-blue-200">
-                  <h3 className="font-bold text-gray-900 mb-2">
+                  <h3 className="font-bold text-secondary mb-2">
                     Special Notes
                   </h3>
                   <p className="text-gray-700">{order.additionalNotes}</p>
@@ -327,11 +330,11 @@ const TrackOrder = () => {
             </div>
 
             {/* Contact Support */}
-            <div className="mt-8 bg-white rounded-lg shadow-lg p-8 text-center">
-              <h3 className="text-lg font-bold text-gray-900 mb-4">
+            <div className="mt-8 bg-base-100 rounded-lg shadow-lg p-8 text-center">
+              <h3 className="text-lg font-bold text-secondary mb-4">
                 Need Help?
               </h3>
-              <p className="text-gray-600 mb-4">
+              <p className="text-base-CONTENT mb-4">
                 If you have any questions about your order, please contact our
                 support team.
               </p>

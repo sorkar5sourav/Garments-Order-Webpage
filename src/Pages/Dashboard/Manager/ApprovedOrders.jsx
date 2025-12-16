@@ -3,8 +3,11 @@ import React, { useState } from "react";
 import Swal from "sweetalert2";
 import useAxiosSecure from "../../../hooks/useAxiosSecure";
 import Loading from "../../../Components/atoms/Loading";
+import usePageTitle from "../../../hooks/usePageTitle";
 
 const ApprovedOrders = () => {
+  usePageTitle("Approved Orders - Manager Dashboard");
+
   const axiosSecure = useAxiosSecure();
   const [selected, setSelected] = useState(null);
 
@@ -63,7 +66,7 @@ const ApprovedOrders = () => {
         </p>
       </div>
 
-      <div className="overflow-x-auto bg-white rounded-box shadow">
+      <div className="overflow-x-auto bg-base-100 rounded-box shadow">
         <table className="table">
           <thead>
             <tr>
@@ -118,7 +121,7 @@ const ApprovedOrders = () => {
       </div>
 
       {selected && (
-        <div className="bg-white rounded-box shadow p-4">
+        <div className="bg-base-100 rounded-box shadow p-4">
           <div className="flex items-start justify-between">
             <div>
               <h3 className="text-xl font-bold">Tracking Timeline</h3>

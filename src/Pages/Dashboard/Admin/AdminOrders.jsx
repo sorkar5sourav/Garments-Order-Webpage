@@ -3,10 +3,13 @@ import React, { useState } from "react";
 import Swal from "sweetalert2";
 import Loading from "../../../Components/atoms/Loading";
 import useAxiosSecure from "../../../hooks/useAxiosSecure";
+import usePageTitle from "../../../hooks/usePageTitle";
 
 const statusOptions = ["all", "pending", "approved", "rejected", "shipped"];
 
 const AdminOrders = () => {
+  usePageTitle("All Orders - Admin Dashboard");
+
   const axiosSecure = useAxiosSecure();
   const [statusFilter, setStatusFilter] = useState("all");
   const [selectedOrder, setSelectedOrder] = useState(null);
@@ -86,7 +89,7 @@ const AdminOrders = () => {
         </div>
       </div>
 
-      <div className="overflow-x-auto bg-white rounded-box shadow">
+      <div className="overflow-x-auto bg-base-100 rounded-box shadow">
         <table className="table">
           <thead>
             <tr>
@@ -156,7 +159,7 @@ const AdminOrders = () => {
       </div>
 
       {selectedOrder && (
-        <div className="bg-white rounded-box shadow p-4">
+        <div className="bg-base-100 rounded-box shadow p-4">
           <div className="flex items-start justify-between">
             <div>
               <h3 className="text-xl font-bold">Order Details</h3>

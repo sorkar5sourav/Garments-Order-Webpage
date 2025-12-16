@@ -3,11 +3,14 @@ import Swal from "sweetalert2";
 import useAxiosSecure from "../../../hooks/useAxiosSecure";
 import useAuth from "../../../hooks/useAuth";
 import useRole from "../../../hooks/useRole";
+import usePageTitle from "../../../hooks/usePageTitle";
 
 const categories = ["Shirt", "Pant", "Jacket", "Accessories"];
 const paymentModes = ["Cash on Delivery", "PayFirst"];
 
 const ManagerAddProduct = () => {
+  usePageTitle("Add Product - Manager Dashboard");
+
   const axiosSecure = useAxiosSecure();
   const { user } = useAuth();
   const { status, suspendReason, suspendFeedback } = useRole();

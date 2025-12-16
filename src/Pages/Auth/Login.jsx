@@ -3,8 +3,12 @@ import { useForm } from "react-hook-form";
 import useAuth from "../../hooks/useAuth";
 import { Link, useLocation, useNavigate } from "react-router";
 import SocialLogin from "./SocialLogin";
+import Swal from "sweetalert2";
+import usePageTitle from "../../hooks/usePageTitle";
 
 const Login = () => {
+  usePageTitle("Login - Garments Order");
+
   const {
     register,
     handleSubmit,
@@ -14,67 +18,103 @@ const Login = () => {
   const location = useLocation();
   const navigate = useNavigate();
 
-  const handleLogin = (data) => {
-    console.log("form data", data);
-    signInUser(data.email, data.password)
-      .then((result) => {
-        console.log(result.user);
-        navigate(location?.state || "/");
-      })
-      .catch((error) => {
-        console.log(error);
+  const handleLogin = async (data) => {
+    try {
+      const result = await signInUser(data.email, data.password);
+      console.log("Login successful:", result.user);
+
+      // Show success alert
+      await Swal.fire({
+        icon: "success",
+        title: "Login Successful!",
+        text: "Welcome back! You have been logged in successfully.",
+        confirmButtonColor: "#3B82F6",
+        timer: 2000,
+        timerProgressBar: true,
       });
+
+      // Redirect to the intended page or home
+      navigate(location?.state?.pathname || "/");
+    } catch (error) {
+      console.error("Login error:", error);
+
+      // Show error alert
+      Swal.fire({
+        icon: "error",
+        title: "Login Failed",
+        text: error.message || "Invalid email or password. Please try again.",
+        confirmButtonColor: "#EF4444",
+      });
+    }
   };
 
   return (
-    <div className="card bg-base-100 w-full mx-auto max-w-sm shrink-0 shadow-2xl">
-      <h3 className="text-3xl text-center">Welcome back</h3>
-      <p className="text-center">Please Login</p>
+    <div className="card bg-base-100 md:w-xl lg:w-2xl shrink-0 shadow-2xl p-20">
+      <h3 className="text-3xl text-center font-bold mb-2">Welcome back</h3>
+      <p className="text-center text-base-CONTENT mb-6">Please Login</p>
       <form className="card-body" onSubmit={handleSubmit(handleLogin)}>
         <fieldset className="fieldset">
           {/* email field */}
-          <label className="label">Email</label>
+          <label className="label">
+            <span className="label-text">Email</span>
+          </label>
           <input
             type="email"
-            {...register("email", { required: true })}
-            className="input"
-            placeholder="Email"
+            {...register("email", {
+              required: "Email is required",
+              pattern: {
+                value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i,
+                message: "Invalid email address",
+              },
+            })}
+            className="input input-bordered w-full"
+            placeholder="Enter your email"
           />
-          {errors.email?.type === "required" && (
-            <p className="text-red-500">Email is required</p>
+          {errors.email && (
+            <p className="text-red-500 text-sm mt-1">{errors.email.message}</p>
           )}
 
           {/* password field */}
-          <label className="label">Password</label>
+          <label className="label">
+            <span className="label-text">Password</span>
+          </label>
           <input
             type="password"
-            {...register("password", { required: true, minLength: 6 })}
-            className="input"
-            placeholder="Password"
+            {...register("password", {
+              required: "Password is required",
+              minLength: {
+                value: 6,
+                message: "Password must be at least 6 characters",
+              },
+            })}
+            className="input input-bordered w-full"
+            placeholder="Enter your password"
           />
-          {errors.password?.type === "minLength" && (
-            <p className="text-red-500">
-              Password must be 6 characters or longer{" "}
-            </p>
+          {errors.password && (
+            <p className="text-red-500 text-sm mt-1">{errors.password.message}</p>
           )}
 
-          <div>
-            <a className="link link-hover">Forgot password?</a>
+          <div className="mt-4">
+            <a className="link link-hover text-sm">Forgot password?</a>
           </div>
-          <button className="btn btn-neutral mt-4">Login</button>
+          <button className="btn btn-neutral mt-6 w-full">Login</button>
         </fieldset>
-        <p>
-          New to Zap Shift{" "}
+
+        <div className="divider">OR</div>
+
+        <SocialLogin />
+
+        <p className="text-center mt-6">
+          New to Garments Order?{" "}
           <Link
             state={location.state}
-            className="text-blue-400 underline"
+            className="text-blue-600 hover:text-blue-800 underline font-medium"
             to="/register"
           >
-            Register
+            Register here
           </Link>
         </p>
       </form>
-      <SocialLogin></SocialLogin>
     </div>
   );
 };

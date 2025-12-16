@@ -3,7 +3,7 @@ import { Link } from "react-router";
 
 const ProductCard = ({ product }) => {
   return (
-    <div className="bg-white rounded-lg shadow-md hover:shadow-lg transition-shadow duration-300">
+    <div className="bg-base-100 rounded-lg shadow-md hover:shadow-lg transition-shadow duration-300">
       {/* Product Image */}
       <div className="relative h-64 bg-gray-200 rounded-t-lg overflow-hidden">
         <img
@@ -23,18 +23,18 @@ const ProductCard = ({ product }) => {
         </div>
 
         {/* Product Name */}
-        <h3 className="text-lg font-bold text-gray-900 mb-2 truncate">
+        <h3 className="text-lg font-bold text-secondary mb-2 truncate">
           {product.productName}
         </h3>
 
         {/* Price and Quantity */}
         <div className="flex justify-between items-center mb-4">
           <div>
-            <p className="text-sm text-gray-600">Price</p>
+            <p className="text-sm text-base-CONTENT">Price</p>
             <p className="text-2xl font-bold text-blue-600">৳{product.price}</p>
           </div>
           <div>
-            <p className="text-sm text-gray-600">In Stock</p>
+            <p className="text-sm text-base-CONTENT">In Stock</p>
             <p className="text-lg font-semibold text-green-600">
               {product.availableQuantity}
             </p>
@@ -43,7 +43,7 @@ const ProductCard = ({ product }) => {
 
         {/* Minimum Order */}
         <div className="mb-4 p-2 bg-gray-100 rounded">
-          <p className="text-xs text-gray-600">
+          <p className="text-xs text-gray-700">
             Minimum Order:{" "}
             <span className="font-semibold">{product.minimumOrder} units</span>
           </p>

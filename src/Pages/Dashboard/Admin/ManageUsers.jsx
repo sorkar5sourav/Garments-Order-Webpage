@@ -3,8 +3,11 @@ import React, { useState } from "react";
 import Swal from "sweetalert2";
 import Loading from "../../../Components/atoms/Loading";
 import useAxiosSecure from "../../../hooks/useAxiosSecure";
+import usePageTitle from "../../../hooks/usePageTitle";
 
 const ManageUsers = () => {
+  usePageTitle("Manage Users - Garments Order");
+
   const axiosSecure = useAxiosSecure();
   const [search, setSearch] = useState("");
   const [roleFilter, setRoleFilter] = useState("all");
@@ -36,7 +39,6 @@ const ManageUsers = () => {
         admin: "Admin",
         manager: "Manager",
         buyer: "Buyer",
-        user: "User",
         suspended: "Suspended",
       },
       inputValue: user.role || "user",
@@ -115,6 +117,28 @@ const ManageUsers = () => {
     refetch();
   };
 
+  const handleApproveUser = async (user) => {
+    const confirmed = await Swal.fire({
+      title: `Approve ${user.displayName || user.name || "user"}?`,
+      text: "This will activate the user's account and allow them to access the system.",
+      icon: "question",
+      showCancelButton: true,
+      confirmButtonText: "Yes, approve",
+    });
+
+    if (!confirmed.isConfirmed) return;
+
+    try {
+      await axiosSecure.patch(`/users/${user._id}/role`, {
+        status: "active",
+      });
+      Swal.fire("Approved!", "User has been approved and activated.", "success");
+      refetch();
+    } catch (error) {
+      Swal.fire("Error", "Failed to approve user. Please try again.", "error");
+    }
+  };
+
   if (isLoading) {
     return <Loading />;
   }
@@ -172,7 +196,6 @@ const ManageUsers = () => {
             <option value="admin">Admin</option>
             <option value="manager">Manager</option>
             <option value="buyer">Buyer</option>
-            <option value="user">User</option>
             <option value="suspended">Suspended</option>
           </select>
 
@@ -183,12 +206,13 @@ const ManageUsers = () => {
           >
             <option value="all">All status</option>
             <option value="active">Active</option>
+            <option value="pending">Pending</option>
             <option value="suspended">Suspended</option>
           </select>
         </div>
       </div>
 
-      <div className="overflow-x-auto bg-white rounded-box shadow">
+      <div className="overflow-x-auto bg-base-100 rounded-box shadow">
         <table className="table">
           <thead>
             <tr>
@@ -216,6 +240,8 @@ const ManageUsers = () => {
                     className={`badge ${
                       user.status === "suspended"
                         ? "badge-error"
+                        : user.status === "pending"
+                        ? "badge-warning"
                         : "badge-success"
                     }`}
                   >
@@ -223,22 +249,33 @@ const ManageUsers = () => {
                   </span>
                 </td>
                 <td className="flex justify-end gap-2">
-                  <button
-                    className="btn btn-sm btn-outline"
-                    onClick={() => handleUpdateRole(user)}
-                  >
-                    Update Role
-                  </button>
-                  <button
-                    className={`btn btn-sm ${
-                      user.status === "suspended"
-                        ? "btn-success"
-                        : "btn-warning"
-                    }`}
-                    onClick={() => handleToggleStatus(user)}
-                  >
-                    {user.status === "suspended" ? "Activate" : "Suspend"}
-                  </button>
+                  {user.status === "pending" ? (
+                    <button
+                      className="btn btn-sm btn-success"
+                      onClick={() => handleApproveUser(user)}
+                    >
+                      Approve
+                    </button>
+                  ) : (
+                    <>
+                      <button
+                        className="btn btn-sm btn-outline"
+                        onClick={() => handleUpdateRole(user)}
+                      >
+                        Update Role
+                      </button>
+                      <button
+                        className={`btn btn-sm ${
+                          user.status === "suspended"
+                            ? "btn-success"
+                            : "btn-warning"
+                        }`}
+                        onClick={() => handleToggleStatus(user)}
+                      >
+                        {user.status === "suspended" ? "Activate" : "Suspend"}
+                      </button>
+                    </>
+                  )}
                 </td>
               </tr>
             ))}

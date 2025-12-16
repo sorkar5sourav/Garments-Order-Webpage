@@ -1,9 +1,14 @@
-import { Link, NavLink } from "react-router";
+import { Link, NavLink, useLocation } from "react-router";
 import Logo from "../atoms/Logo";
 import useAuth from "../../hooks/useAuth";
 import LogoText from "../../assets/Logo-Text.png";
+import { useState, useEffect } from "react";
+import ThemeToggle from "../atoms/ThemeToggle";
+
 const NavBar = () => {
   const { user, logOut } = useAuth();
+  const location = useLocation();
+  const [activeSection, setActiveSection] = useState('home');
 
   const handleLogOut = () => {
     logOut()
@@ -16,12 +21,96 @@ const NavBar = () => {
   const navLinkClass = ({ isActive }) =>
     isActive ? "btn btn-primary rounded-full text-black" : "";
 
+  // Intersection Observer for scroll-based active states
+  useEffect(() => {
+    if (location.pathname !== '/') return;
+
+    const observerOptions = {
+      root: null,
+      rootMargin: '-50% 0px -50% 0px',
+      threshold: 0
+    };
+
+    const observerCallback = (entries) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+          setActiveSection(entry.target.id);
+        }
+      });
+    };
+
+    const observer = new IntersectionObserver(observerCallback, observerOptions);
+
+    // Observe sections
+    const aboutUsSection = document.getElementById('about-us');
+    const footerSection = document.getElementById('footer');
+
+    if (aboutUsSection) observer.observe(aboutUsSection);
+    if (footerSection) observer.observe(footerSection);
+
+    // Set default to home if no section is intersecting
+    const handleScroll = () => {
+      const aboutUsRect = aboutUsSection?.getBoundingClientRect();
+      const footerRect = footerSection?.getBoundingClientRect();
+
+      if (aboutUsRect && footerRect) {
+        const isAboutUsVisible = aboutUsRect.top < window.innerHeight / 2 && aboutUsRect.bottom > window.innerHeight / 2;
+        const isFooterVisible = footerRect.top < window.innerHeight / 2 && footerRect.bottom > window.innerHeight / 2;
+
+        if (!isAboutUsVisible && !isFooterVisible) {
+          setActiveSection('home');
+        }
+      }
+    };
+
+    window.addEventListener('scroll', handleScroll);
+    handleScroll(); // Check initial state
+
+    return () => {
+      observer.disconnect();
+      window.removeEventListener('scroll', handleScroll);
+    };
+  }, [location.pathname]);
+
+  // Smooth scroll function
+  const scrollToSection = (sectionId) => {
+    const element = document.getElementById(sectionId);
+    if (element) {
+      element.scrollIntoView({
+        behavior: 'smooth',
+        block: 'start'
+      });
+    }
+  };
+
+  // Handle About Us click
+  const handleAboutUsClick = (e) => {
+    if (location.pathname === '/') {
+      e.preventDefault();
+      scrollToSection('about-us');
+    }
+  };
+
+  // Handle Contact click
+  const handleContactClick = (e) => {
+    if (location.pathname === '/') {
+      e.preventDefault();
+      scrollToSection('footer');
+    }
+  };
+
+  // Dynamic class for homepage navigation buttons
+  const getHomepageButtonClass = (section) => {
+    if (location.pathname !== '/') return "";
+    return activeSection === section ? "btn btn-primary rounded-full text-black" : "";
+  };
+
   // Before Login: Home, All-Products, About Us, Contact, Login, Register
   // After Login: Home, All-Products, Dashboard, Logout
   const beforeLoginLinks = (
     <>
       <li>
-        <NavLink to="/" className={navLinkClass}>
+        <NavLink to="/" className={location.pathname === '/' ? getHomepageButtonClass('home') : navLinkClass}>
           Home
         </NavLink>
       </li>
@@ -33,15 +122,23 @@ const NavBar = () => {
       </li>
 
       <li>
-        <NavLink to="/about-us" className={navLinkClass}>
+        <a
+          href="#about-us"
+          onClick={handleAboutUsClick}
+          className={getHomepageButtonClass('about-us')}
+        >
           About Us
-        </NavLink>
+        </a>
       </li>
 
       <li>
-        <NavLink to="/contact" className={navLinkClass}>
+        <a
+          href="#footer"
+          onClick={handleContactClick}
+          className={getHomepageButtonClass('footer')}
+        >
           Contact
-        </NavLink>
+        </a>
       </li>
     </>
   );
@@ -49,7 +146,7 @@ const NavBar = () => {
   const afterLoginLinks = (
     <>
       <li>
-        <NavLink to="/" className={navLinkClass}>
+        <NavLink to="/" className={location.pathname === '/' ? getHomepageButtonClass('home') : navLinkClass}>
           Home
         </NavLink>
       </li>
@@ -70,7 +167,7 @@ const NavBar = () => {
 
   const links = user ? afterLoginLinks : beforeLoginLinks;
   return (
-    <div className="navbar bg-[#fbf8ec] md:rounded-2xl shadow-sm p-5 ">
+    <div className="navbar bg-base-200 md:rounded-2xl shadow-sm p-5 sticky top-0 z-50">
       <div className="navbar-start">
         <div className="dropdown">
           <div tabIndex={0} role="button" className="btn btn-ghost lg:hidden">
@@ -106,6 +203,7 @@ const NavBar = () => {
         <ul className="menu menu-horizontal items-center px-1">{links}</ul>
       </div>
       <div className="navbar-end gap-2">
+        <ThemeToggle />
         {user ? (
           <>
             {/* User Avatar with dropdown */}

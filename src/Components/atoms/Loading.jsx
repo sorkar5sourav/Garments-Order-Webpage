@@ -6,7 +6,7 @@ const Loading = () => {
       <div className="max-w-sm relative">
         <span className="loading loading-spinner loading-lg"></span>
       </div>
-      <p className="text-lg font-semibold text-gray-600">Loading...</p>
+      <p className="text-lg font-semibold text-base-CONTENT">Loading...</p>
     </div>
   );
 };

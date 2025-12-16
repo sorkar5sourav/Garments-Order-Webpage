@@ -1,4 +1,5 @@
 import RootLayout from "../Layouts/RootLayout";
+import AuthLayout from "../Layouts/AuthLayout";
 import Homepage from "../Pages/Homeoage/Homepage";
 import { createBrowserRouter } from "react-router";
 import Login from "../Pages/Auth/Login";
@@ -12,9 +13,6 @@ import AdminRoute from "./AdminRoute";
 import ManagerRoute from "./ManagerRoute";
 import DashboardHome from "../Pages/Dashboard/DashboardHome";
 import DashboardLayout from "../Layouts/DashboardLayout";
-import Payment from "../Pages/Dashboard/Payment/Payment";
-import PaymentSuccess from "../Pages/Dashboard/Payment/PaymentSuccess";
-import PaymentCancelled from "../Pages/Dashboard/Payment/PaymentCancel";
 import ManageUsers from "../Pages/Dashboard/Admin/ManageUsers";
 import AdminProducts from "../Pages/Dashboard/Admin/AdminProducts";
 import AdminOrders from "../Pages/Dashboard/Admin/AdminOrders";
@@ -23,9 +21,12 @@ import ManageProducts from "../Pages/Dashboard/Manager/ManageProducts";
 import PendingOrders from "../Pages/Dashboard/Manager/PendingOrders";
 import ApprovedOrders from "../Pages/Dashboard/Manager/ApprovedOrders";
 import ManagerProfile from "../Pages/Dashboard/Manager/ManagerProfile";
-import TrackOrder from "../Pages/Dashboard/TrackOrder";
-import MyOrders from "../Pages/Dashboard/MyOrders";
-import MyProfile from "../Pages/Dashboard/MyProfile";
+import TrackOrder from "../Pages/Dashboard/Buyer/TrackOrder";
+import MyOrders from "../Pages/Dashboard/Buyer/MyOrders";
+import MyProfile from "../Pages/Dashboard/Buyer/MyProfile";
+import PaymentSuccess from "../Pages/Dashboard/Buyer/Payment/PaymentSuccess";
+import PaymentCancelled from "../Pages/Dashboard/Buyer/Payment/PaymentCancelled";
+import PaymentHistory from "../Pages/Dashboard/Buyer/Payment/PaymentHistory";
 
 export const router = createBrowserRouter([
   {
@@ -33,14 +34,6 @@ export const router = createBrowserRouter([
     element: <RootLayout />,
     children: [
       { index: true, element: <Homepage /> },
-      {
-        path: "login",
-        element: <Login />,
-      },
-      {
-        path: "register",
-        element: <Register />,
-      },
       {
         path: "products",
         element: <AllProducts />,
@@ -60,6 +53,20 @@ export const router = createBrowserRouter([
             <BookingForm />
           </PrivateRoute>
         ),
+      },
+    ],
+  },
+  {
+    path: "/",
+    element: <AuthLayout />,
+    children: [
+      {
+        path: "login",
+        element: <Login />,
+      },
+      {
+        path: "register",
+        element: <Register />,
       },
     ],
   },
@@ -92,20 +99,16 @@ export const router = createBrowserRouter([
         element: <MyProfile />,
       },
       {
-        path: "payment/:parcelId",
-        element: <Payment />,
-      },
-      // {
-      //   path: 'payment-history',
-      //   element: <PaymentHistory />
-      // },
-      {
         path: "payment-success",
         element: <PaymentSuccess />,
       },
       {
         path: "payment-cancelled",
         element: <PaymentCancelled />,
+      },
+      {
+        path: "payment-history",
+        element: <PaymentHistory />,
       },
       {
         path: "manage-users",

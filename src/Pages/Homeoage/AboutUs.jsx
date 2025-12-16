@@ -52,11 +52,11 @@ const AboutUs = () => {
   };
 
   return (
-    <div className="my-24 bg-white py-16">
+    <div id="about-us" className="my-24 bg-base-100 py-16">
       <div className="max-w-7xl mx-auto px-4">
         <div className="text-center mb-12">
-          <h2 className="text-4xl font-bold text-gray-900 mb-4">About Us</h2>
-          <p className="text-lg text-gray-600 max-w-3xl mx-auto">
+          <h2 className="text-4xl font-bold text-secondary mb-4">About Us</h2>
+          <p className="text-lg text-base-CONTENT max-w-3xl mx-auto">
             Learn more about our journey, mission, and the team behind our garments ordering platform.
           </p>
         </div>
@@ -70,7 +70,7 @@ const AboutUs = () => {
               className={`px-6 py-3 text-lg font-medium transition-colors duration-200 ${
                 activeSection === key
                   ? "text-blue-600 border-b-2 border-blue-600 bg-blue-50"
-                  : "text-gray-600 hover:text-blue-600 hover:bg-gray-50"
+                  : "text-base-CONTENT hover:text-blue-600 hover:bg-base-200"
               }`}
             >
               {sections[key].title}
@@ -80,13 +80,13 @@ const AboutUs = () => {
 
         {/* Content Section */}
         <div className="max-w-4xl mx-auto">
-          <div className="bg-gray-50 rounded-lg p-8 shadow-sm">
-            <h3 className="text-2xl font-bold text-gray-900 mb-6 text-center">
+          <div className="bg-base-200 rounded-lg p-8 shadow-sm">
+            <h3 className="text-2xl font-bold text-secondary mb-6 text-center">
               {sections[activeSection].title}
             </h3>
             <div className="space-y-6">
               {sections[activeSection].content.map((paragraph, index) => (
-                <p key={index} className="text-gray-700 leading-relaxed text-justify">
+                <p key={index} className="text-base-content leading-relaxed text-justify">
                   {paragraph}
                 </p>
               ))}

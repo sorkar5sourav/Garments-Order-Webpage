@@ -4,8 +4,12 @@ import useAuth from "../../hooks/useAuth";
 import { Link, useLocation, useNavigate } from "react-router";
 import SocialLogin from "./SocialLogin";
 import useAxiosSecure from "../../hooks/useAxiosSecure";
+import Swal from "sweetalert2";
+import usePageTitle from "../../hooks/usePageTitle";
 
 const Register = () => {
+  usePageTitle("Register - Garments Order");
+
   const {
     register,
     handleSubmit,
@@ -24,86 +28,119 @@ const Register = () => {
       // 2. Update user profile in Firebase
       const userProfile = {
         displayName: data.name,
+        photoURL: data.photoURL,
       };
       await updateUserProfile(userProfile);
 
-      // 3. Save user info to database
+      // 3. Save user info to database with default role "buyer" and status "pending"
       const userInfo = {
         email: data.email,
         name: data.name,
-        role: data.role,
-        status: "pending",
+        photoURL: data.photoURL,
+        role: data.role || "buyer", // Default to buyer if not selected
+        status: "pending", // Default status
       };
-      axiosSecure
-        .post("/users", userInfo)
-        .then((res) => {
-          if (res.data.insertedId) {
-            console.log("user created in the database");
-          }
-        })
-        .catch((error) => console.log("Database save error:", error));
 
-      // 4. Redirect user after successful registration and profile update
-      navigate(location.state?.pathname || "/");
+      const response = await axiosSecure.post("/users", userInfo);
+
+      if (response.data.insertedId) {
+        console.log("user created in the database");
+
+        // Show success alert
+        await Swal.fire({
+          icon: "success",
+          title: "Registration Successful!",
+          text: "Your account has been created successfully. Please wait for admin approval to access full features.",
+          confirmButtonColor: "#3B82F6",
+          timer: 3000,
+          timerProgressBar: true,
+        });
+
+        // 4. Redirect user after successful registration
+        navigate(location.state?.pathname || "/");
+      }
     } catch (error) {
-      console.log("Registration error:", error.message);
+      console.error("Registration error:", error);
+
+      // Show error alert
+      Swal.fire({
+        icon: "error",
+        title: "Registration Failed",
+        text: error.message || "Failed to create account. Please try again.",
+        confirmButtonColor: "#EF4444",
+      });
     }
   };
 
   return (
-    <div className="card bg-base-100 w-full mx-auto max-w-sm shrink-0 shadow-2xl">
-      <h3 className="text-3xl text-center">Welcome to Zap Shift</h3>
-      <p className="text-center">Please Register</p>
+    <div className="card bg-base-100 w-full md:w-xl lg:w-2xl shrink-0 shadow-2xl md:px-10 py-10 md:py-20">
+      <h3 className="text-3xl text-center font-bold mb-2">Welcome to Garments Order</h3>
+      <p className="text-center text-base-CONTENT mb-6">Please Register</p>
       <form className="card-body" onSubmit={handleSubmit(handleRegistration)}>
         <fieldset className="fieldset">
           {/* name field */}
-          <label className="label">Name</label>
+          <label className="label">
+            <span className="label-text">Name</span>
+          </label>
           <input
             type="text"
             {...register("name", { required: "Name is required" })}
-            className="input"
-            placeholder="Your Name"
+            className="input w-full input-bordered"
+            placeholder="Enter your full name"
           />
-          {errors.name && <p className="text-red-500">{errors.name.message}</p>}
+          {errors.name && <p className="text-red-500 text-sm mt-1">{errors.name.message}</p>}
 
           {/* photo url field */}
-          <label className="label">Photo URL</label>
+          <label className="label">
+            <span className="label-text">Photo URL</span>
+          </label>
           <input
-            type="text"
+            type="url"
             {...register("photoURL", { required: "Photo URL is required" })}
-            className="input"
+            className="input w-full input-bordered"
             placeholder="Enter photo URL"
           />
           {errors.photoURL && (
-            <p className="text-red-500">{errors.photoURL.message}</p>
+            <p className="text-red-500 text-sm mt-1">{errors.photoURL.message}</p>
           )}
 
           {/* email field */}
-          <label className="label">Email</label>
+          <label className="label">
+            <span className="label-text">Email</span>
+          </label>
           <input
             type="email"
-            {...register("email", { required: "Email is required" })}
-            className="input"
-            placeholder="Email"
+            {...register("email", {
+              required: "Email is required",
+              pattern: {
+                value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i,
+                message: "Invalid email address",
+              },
+            })}
+            className="input w-full input-bordered"
+            placeholder="Enter your email"
           />
           {errors.email && (
-            <p className="text-red-500">{errors.email.message}</p>
+            <p className="text-red-500 text-sm mt-1">{errors.email.message}</p>
           )}
 
           {/* role dropdown */}
-          <label className="label">Role</label>
+          <label className="label">
+            <span className="label-text">Role</span>
+          </label>
           <select
-            {...register("role", { required: "Role is required" })}
-            className="select select-bordered"
+            {...register("role")}
+            className="select w-full select-bordered"
+            defaultValue="buyer"
           >
-            <option value="">Select Role</option>
             <option value="buyer">Buyer</option>
             <option value="manager">Manager</option>
           </select>
-          {errors.role && <p className="text-red-500">{errors.role.message}</p>}
 
           {/* password */}
-          <label className="label">Password</label>
+          <label className="label">
+            <span className="label-text">Password</span>
+          </label>
           <input
             type="password"
             {...register("password", {
@@ -121,27 +158,31 @@ const Register = () => {
                   "Password must have at least one lowercase letter",
               },
             })}
-            className="input"
-            placeholder="Password"
+            className="input w-full input-bordered"
+            placeholder="Create a password"
           />
           {errors.password && (
-            <p className="text-red-500 text-sm">{errors.password.message}</p>
+            <p className="text-red-500 text-sm mt-1">{errors.password.message}</p>
           )}
 
-          <button className="btn btn-neutral mt-4">Register</button>
+          <button className="btn btn-neutral mt-6 w-full">Register</button>
         </fieldset>
-        <p>
-          Already have an account{" "}
+
+        <div className="divider">OR</div>
+
+        <SocialLogin />
+
+        <p className="text-center mt-6">
+          Already have an account?{" "}
           <Link
             state={location.state}
-            className="text-blue-400 underline"
+            className="text-blue-600 hover:text-blue-800 underline font-medium"
             to="/login"
           >
-            Login
+            Login here
           </Link>
         </p>
       </form>
-      <SocialLogin></SocialLogin>
     </div>
   );
 };

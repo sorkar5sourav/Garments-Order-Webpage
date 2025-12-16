@@ -16,11 +16,11 @@ const Banner = () => (
          <img src={bannerImg4} />
           <img src={bannerImg5} />
       </Carousel>
-      <div className="absolute hidden md:flex top-12/20 left-6/25 lg:left-1/6 -translate-x-1/2 -translate-y-1/2 flex-wrap justify-center">
-        <Link to={"/track"} className="btn max-h-14 btn-primary rounded-full">
+      <div className="absolute hidden md:flex top-11/20 left-6/25 lg:left-1/6 -translate-x-1/2 -translate-y-1/2 flex-wrap justify-center">
+        <Link to={"/dashboard/trackorder"} className="btn max-h-14 btn-primary rounded-full">
           Trak Your Order
         </Link>
-        <Link to={"/rider-apply"} className="btn btn-outline text-white border-white ml-4 max-h-14">
+        <Link to={"/products"} className="btn btn-outline text-white border-white ml-4 max-h-14">
           Explore Products
         </Link>
       </div>

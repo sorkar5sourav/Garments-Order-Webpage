@@ -1,14 +1,25 @@
 @import url("https://fonts.googleapis.com/css2?family=Urbanist:ital,wght@0,100..900;1,100..900&display=swap");
 @import "tailwindcss";
 @plugin "daisyui" {
-  themes: light --default;
+  themes: light, dark;
 }
 
 @plugin "daisyui/theme" {
   name: "light";
   default: true;
+  --color-primary: #572424;
+  --color-secondary: #031517;
+}
+
+@plugin "daisyui/theme" {
+  name: "dark";
+  default: false;
   --color-primary: #caeb66;
-  --color-secondary: #03373d;
+  --color-secondary: #aff1f9;
+  --color-base-100: #1f2937;
+  --color-base-200: #374151;
+  --color-base-300: #4b5563;
+  --color-base-content: #d9d9d9;
 }
 
 body {
@@ -20,8 +31,12 @@ body {
   @apply text-black;
 }
 .black8 {
-  color: #606060;
+  @apply text-base-content;
 }
 .black5 {
-  color: #dadada;
+  @apply text-base-content/60;
+}
+
+.lol{
+  background-color: #572424;
 }

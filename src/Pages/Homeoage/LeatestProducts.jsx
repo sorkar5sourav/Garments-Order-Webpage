@@ -22,12 +22,12 @@ const LatestProducts = () => {
 
   return (
     <div className="py-12">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div className="max-w-8xl bg-base-200 rounded-3xl py-10 mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center mb-12">
-          <h2 className="text-3xl font-bold text-gray-900 mb-4">
+          <h2 className="text-3xl font-bold text-secondary mb-4">
             Latest Products
           </h2>
-          <p className="text-lg text-gray-600">
+          <p className="text-lg text-base-CONTENT">
             Check out our newest additions to the collection
           </p>
         </div>

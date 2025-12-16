@@ -42,10 +42,10 @@ const HowItWorks = () => {
   ];
 
   return (
-    <div className="my-10 max-w-7xl mx-auto md:mb-20 px-4">
+    <div className="my-10 bg-base-300 rounded-3xl py-10 max-w-7xl mx-auto md:mb-20 px-4">
       <div className="text-center mb-12">
-        <h3 className="text-3xl font-bold text-gray-900 mb-4">How It Works</h3>
-        <p className="text-lg text-gray-600">
+        <h3 className="text-3xl font-bold text-secondary mb-4">How It Works</h3>
+        <p className="text-lg text-base-CONTENT">
           Follow these simple steps to order and track your garments
         </p>
       </div>
@@ -62,7 +62,7 @@ const HowItWorks = () => {
                 Step {step.id}
               </div>
               <h4 className="card-title text-xl mb-2">{step.title}</h4>
-              <p className="text-gray-600">{step.description}</p>
+              <p className="text-base-CONTENT">{step.description}</p>
             </div>
           </div>
         ))}

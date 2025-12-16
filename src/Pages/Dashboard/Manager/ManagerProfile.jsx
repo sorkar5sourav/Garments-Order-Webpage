@@ -1,8 +1,11 @@
 import React from "react";
 import useAuth from "../../../hooks/useAuth";
 import useRole from "../../../hooks/useRole";
+import usePageTitle from "../../../hooks/usePageTitle";
 
 const ManagerProfile = () => {
+  usePageTitle("My Profile - Manager Dashboard");
+
   const { user, logOut } = useAuth();
   const { status, suspendReason, suspendFeedback } = useRole();
 
@@ -15,7 +18,7 @@ const ManagerProfile = () => {
         </p>
       </div>
 
-      <div className="card bg-white shadow">
+      <div className="card bg-base-100 shadow">
         <div className="card-body space-y-2">
           <div className="flex items-center gap-4">
             <div className="avatar">
@@ -28,7 +31,7 @@ const ManagerProfile = () => {
             </div>
             <div>
               <h3 className="text-xl font-semibold">{user?.displayName}</h3>
-              <p className="text-sm text-gray-600">{user?.email}</p>
+              <p className="text-sm text-base-CONTENT">{user?.email}</p>
             </div>
           </div>
           <div className="divider"></div>

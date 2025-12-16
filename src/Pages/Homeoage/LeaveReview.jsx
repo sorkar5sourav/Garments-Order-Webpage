@@ -61,16 +61,16 @@ const LeaveReview = () => {
   };
 
   return (
-    <div className="my-24 bg-linear-to-r from-blue-50 to-indigo-50 py-16">
+    <div className="my-24 bg-base-200 rounded-3xl py-16">
       <div className="max-w-4xl mx-auto px-4">
         <div className="text-center mb-12">
-          <h2 className="text-4xl font-bold text-gray-900 mb-4">Leave a Review</h2>
-          <p className="text-lg text-gray-600">
+          <h2 className="text-4xl font-bold text-secondary mb-4">Leave a Review</h2>
+          <p className="text-lg text-base-CONTENT">
             Share your experience with our garments ordering platform. Your feedback helps us improve!
           </p>
         </div>
 
-        <div className="bg-white rounded-lg shadow-lg p-8">
+        <div className="bg-base-100 rounded-lg shadow-lg p-8">
           <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               <div>

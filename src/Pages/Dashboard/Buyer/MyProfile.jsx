@@ -1,11 +1,13 @@
 import React from "react";
 import { useNavigate } from "react-router";
-import useAuth from "../../hooks/useAuth";
-import useRole from "../../hooks/useRole";
-// import useAxiosSecure from "../../hooks/useAxiosSecure";
+import useAuth from "../../../hooks/useAuth";
+import useRole from "../../../hooks/useRole";
 import Swal from "sweetalert2";
+import usePageTitle from "../../../hooks/usePageTitle";
 
 const MyProfile = () => {
+  usePageTitle("My Profile - Garments Order");
+
   const { user, logOut } = useAuth();
   const navigate = useNavigate();
   const { role, status, suspendReason, suspendFeedback } = useRole();
@@ -54,13 +56,13 @@ const MyProfile = () => {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50 py-12">
+    <div className="min-h-screen bg-base-200 py-12">
       <div className="max-w-2xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="bg-white rounded-lg shadow-lg overflow-hidden">
+        <div className="bg-base-100 rounded-lg shadow-lg overflow-hidden">
           {/* Header */}
           <div className="bg-linear-to-r from-blue-600 to-blue-800 p-8 text-white">
             <div className="flex items-center gap-4">
-              <div className="w-20 h-20 bg-white rounded-full flex items-center justify-center">
+              <div className="w-20 h-20 bg-base-100 rounded-full flex items-center justify-center">
                 <div className="w-16 h-16 bg-blue-200 rounded-full flex items-center justify-center text-2xl font-bold text-blue-600">
                   {user.email?.charAt(0).toUpperCase()}
                 </div>
@@ -76,45 +78,45 @@ const MyProfile = () => {
 
           {/* Profile Information */}
           <div className="p-8">
-            <h2 className="text-2xl font-bold text-gray-900 mb-6">
+            <h2 className="text-2xl font-bold text-secondary mb-6">
               Profile Information
             </h2>
 
             <div className="space-y-6">
               {/* Display Name */}
-              <div className="bg-gray-50 p-4 rounded-lg">
+              <div className="bg-base-200 p-4 rounded-lg">
                 <label className="block text-sm font-semibold text-gray-700 mb-2">
                   Full Name
                 </label>
-                <p className="text-lg text-gray-900">
+                <p className="text-lg text-secondary">
                   {user.displayName || "Not set"}
                 </p>
               </div>
 
               {/* Email */}
-              <div className="bg-gray-50 p-4 rounded-lg">
+              <div className="bg-base-200 p-4 rounded-lg">
                 <label className="block text-sm font-semibold text-gray-700 mb-2">
                   Email Address
                 </label>
-                <p className="text-lg text-gray-900">{user.email}</p>
+                <p className="text-lg text-secondary">{user.email}</p>
               </div>
 
               {/* UID */}
-              <div className="bg-gray-50 p-4 rounded-lg">
+              <div className="bg-base-200 p-4 rounded-lg">
                 <label className="block text-sm font-semibold text-gray-700 mb-2">
                   User ID
                 </label>
-                <p className="text-lg text-gray-900 font-mono break-all">
+                <p className="text-lg text-secondary font-mono break-all">
                   {user.uid}
                 </p>
               </div>
 
               {/* Account Status */}
-              <div className="bg-gray-50 p-4 rounded-lg">
+              <div className="bg-base-200 p-4 rounded-lg">
                 <label className="block text-sm font-semibold text-gray-700 mb-2">
                   Account Status
                 </label>
-                <p className="text-lg text-gray-900">
+                <p className="text-lg text-secondary">
                   <span
                     className={`inline-block px-3 py-1 rounded-full text-sm font-semibold ${
                       status === "suspended"
@@ -128,11 +130,11 @@ const MyProfile = () => {
               </div>
 
               {/* Role */}
-              <div className="bg-gray-50 p-4 rounded-lg">
+              <div className="bg-base-200 p-4 rounded-lg">
                 <label className="block text-sm font-semibold text-gray-700 mb-2">
                   Role
                 </label>
-                <p className="text-lg text-gray-900">
+                <p className="text-lg text-secondary">
                   {role || user.role || "user"}
                 </p>
               </div>
@@ -150,11 +152,11 @@ const MyProfile = () => {
                 </div>
               )}
               {/* Last Sign In */}
-              <div className="bg-gray-50 p-4 rounded-lg">
+              <div className="bg-base-200 p-4 rounded-lg">
                 <label className="block text-sm font-semibold text-gray-700 mb-2">
                   Last Sign In
                 </label>
-                <p className="text-lg text-gray-900">
+                <p className="text-lg text-secondary">
                   {user.metadata?.lastSignInTime
                     ? new Date(user.metadata.lastSignInTime).toLocaleString()
                     : "Not available"}

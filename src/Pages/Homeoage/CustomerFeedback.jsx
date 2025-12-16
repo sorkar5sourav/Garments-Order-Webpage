@@ -64,12 +64,12 @@ const CustomerFeedback = () => {
   const displayReviews = reviews.length > 0 ? reviews : fallbackReviews;
 
   return (
-    <div className="my-24 bg-gray-50 py-16">
+    <div className="my-24 bg-base-200 py-16">
       <div className="text-center max-w-4xl mx-auto mb-12 px-4">
-        <h3 className="text-4xl font-bold text-gray-900 mb-6">
+        <h3 className="text-4xl font-bold text-secondary mb-6">
           What Our Customers Are Saying
         </h3>
-        <p className="text-lg text-gray-600">
+        <p className="text-lg text-base-CONTENT">
           Hear from our satisfied customers about their experience with our garments ordering platform.
         </p>
       </div>
@@ -98,17 +98,17 @@ const CustomerFeedback = () => {
           className="feedback-swiper"
         >
           {displayReviews.map((review) => (
-            <SwiperSlide key={review._id || review.id}>
+            <SwiperSlide key={review.id}>
               {({ isActive }) => (
                 <div
-                  className={`card bg-white shadow-lg p-6 h-64 flex flex-col justify-between transition-all duration-300 ${
+                  className={`card bg-base-100 shadow-lg p-6 h-64 flex flex-col justify-between transition-all duration-300 ${
                     isActive ? "scale-110 opacity-100" : "scale-90 opacity-50"
                   }`}
                 >
                   <div className="flex items-center mb-4">
                     <div className="text-3xl mr-3">{review.avatar}</div>
                     <div>
-                      <h4 className="font-semibold text-gray-900">{review.name}</h4>
+                      <h4 className="font-semibold text-secondary">{review.name}</h4>
                       <div className="flex">
                         {[...Array(5)].map((_, i) => (
                           <span

@@ -3,8 +3,12 @@ import { useParams, useNavigate, useLocation } from "react-router";
 import useAxiosSecure from "../../hooks/useAxiosSecure";
 import useAuth from "../../hooks/useAuth";
 import useRole from "../../hooks/useRole";
+import Swal from "sweetalert2";
+import usePageTitle from "../../hooks/usePageTitle";
 
 const BookingForm = () => {
+  usePageTitle("Complete Your Order - Garments Order");
+
   const { id } = useParams();
   const navigate = useNavigate();
   const location = useLocation();
@@ -148,25 +152,39 @@ const BookingForm = () => {
       !formData.contactNumber.trim() ||
       !formData.deliveryAddress.trim()
     ) {
-      alert("Please fill in all required fields");
+      await Swal.fire({
+        icon: "warning",
+        title: "Missing Information",
+        text: "Please fill in all required fields",
+        confirmButtonColor: "#F59E0B",
+      });
       return;
     }
 
     // Ensure user is authenticated before submitting
     if (!user) {
-      alert("You must be logged in to place an order");
-      navigate("/login");
+      await Swal.fire({
+        icon: "warning",
+        title: "Authentication Required",
+        text: "You must be logged in to place an order",
+        confirmButtonColor: "#F59E0B",
+      }).then(() => {
+        navigate("/login");
+      });
       return;
     }
 
     if (status === "suspended") {
-      alert(
-        `Your account is suspended. ${
+      await Swal.fire({
+        icon: "error",
+        title: "Account Suspended",
+        text: `Your account is suspended. ${
           suspendFeedback || suspendReason
             ? `Feedback: ${suspendFeedback || suspendReason}`
             : "You cannot place new orders."
-        }`
-      );
+        }`,
+        confirmButtonColor: "#EF4444",
+      });
       return;
     }
 
@@ -192,20 +210,35 @@ const BookingForm = () => {
       const response = await axiosInstance.post("/orders", orderData);
 
       if (response.status === 201) {
-        alert("Order placed successfully!");
+        await Swal.fire({
+          icon: "success",
+          title: "Order Placed Successfully!",
+          text: "Your order has been submitted and is being processed.",
+          confirmButtonColor: "#3B82F6",
+          timer: 3000,
+          timerProgressBar: true,
+        });
         navigate("/dashboard/my-orders", { replace: true });
       }
     } catch (err) {
       console.error("Error placing order:", err);
       if (err.response?.data?.code === "SUSPENDED") {
-        alert(
-          err.response?.data?.suspendFeedback ||
+        await Swal.fire({
+          icon: "error",
+          title: "Account Suspended",
+          text: err.response?.data?.suspendFeedback ||
             err.response?.data?.suspendReason ||
             err.response?.data?.message ||
-            "Your account is suspended."
-        );
+            "Your account is suspended.",
+          confirmButtonColor: "#EF4444",
+        });
       } else {
-        alert("Failed to place order. Please try again.");
+        await Swal.fire({
+          icon: "error",
+          title: "Order Failed",
+          text: "Failed to place order. Please try again.",
+          confirmButtonColor: "#EF4444",
+        });
       }
     } finally {
       setSubmitting(false);
@@ -231,7 +264,7 @@ const BookingForm = () => {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50 py-12">
+    <div className="min-h-screen bg-base-200 py-12">
       <div className="max-w-2xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Back Button */}
         <button
@@ -241,8 +274,8 @@ const BookingForm = () => {
           ← Back
         </button>
 
-        <div className="bg-white rounded-lg shadow-lg p-8">
-          <h1 className="text-3xl font-bold text-gray-900 mb-8">
+        <div className="bg-base-100 rounded-lg shadow-lg p-8">
+          <h1 className="text-3xl font-bold text-secondary mb-8">
             Complete Your Order
           </h1>
           {status === "suspended" && (
@@ -258,18 +291,18 @@ const BookingForm = () => {
 
           <form onSubmit={handleSubmit} className="space-y-6">
             {/* Product Information Section */}
-            <div className="bg-gray-50 p-6 rounded-lg border border-gray-200">
-              <h2 className="text-xl font-bold text-gray-900 mb-4">
+            <div className="bg-base-200 p-6 rounded-lg border border-gray-200">
+              <h2 className="text-xl font-bold text-secondary mb-4">
                 Product Information
               </h2>
 
               <div className="space-y-4">
                 {/* Product Title */}
                 <div>
-                  <p className="text-gray-600 text-sm font-semibold mb-1">
+                  <p className="text-base-CONTENT text-sm font-semibold mb-1">
                     Product Title
                   </p>
-                  <p className="text-gray-900 text-lg font-semibold">
+                  <p className="text-secondary text-lg font-semibold">
                     {formData.productTitle}
                   </p>
                 </div>
@@ -277,19 +310,19 @@ const BookingForm = () => {
                 {/* Price and Quantity Info */}
                 <div className="grid grid-cols-2 gap-4">
                   <div>
-                    <p className="text-gray-600 text-sm font-semibold mb-1">
+                    <p className="text-base-CONTENT text-sm font-semibold mb-1">
                       Price per Unit
                     </p>
-                    <p className="text-gray-900 text-lg font-bold">
+                    <p className="text-secondary text-lg font-bold">
                       ৳{formData.price}
                     </p>
                   </div>
 
                   <div>
-                    <p className="text-gray-600 text-sm font-semibold mb-1">
+                    <p className="text-base-CONTENT text-sm font-semibold mb-1">
                       Available Quantity
                     </p>
-                    <p className="text-gray-900 text-lg font-bold">
+                    <p className="text-secondary text-lg font-bold">
                       {product.availableQuantity} units
                     </p>
                   </div>
@@ -298,8 +331,8 @@ const BookingForm = () => {
             </div>
 
             {/* Order Quantity Section */}
-            <div className="bg-gray-50 p-6 rounded-lg border border-gray-200">
-              <h2 className="text-xl font-bold text-gray-900 mb-4">
+            <div className="bg-base-200 p-6 rounded-lg border border-gray-200">
+              <h2 className="text-xl font-bold text-secondary mb-4">
                 Order Details
               </h2>
 
@@ -342,7 +375,7 @@ const BookingForm = () => {
                     formData.price * formData.quantity
                   ).toLocaleString()}`}
                   readOnly
-                  className="input input-bordered w-full bg-gray-100 text-gray-600 text-lg font-bold"
+                  className="input input-bordered w-full bg-gray-100 text-base-CONTENT text-lg font-bold"
                 />
                 <p className="text-sm text-gray-500 mt-1">
                   Auto-calculated based on quantity
@@ -351,17 +384,17 @@ const BookingForm = () => {
             </div>
 
             {/* Customer Information Section */}
-            <div className="bg-gray-50 p-6 rounded-lg border border-gray-200">
-              <h2 className="text-xl font-bold text-gray-900 mb-4">
+            <div className="bg-base-200 p-6 rounded-lg border border-gray-200">
+              <h2 className="text-xl font-bold text-secondary mb-4">
                 Customer Information
               </h2>
 
               {/* Email (Auto-filled, Display only) */}
               <div className="mb-4 pb-4 border-b border-gray-300">
-                <p className="text-gray-600 text-sm font-semibold mb-1">
+                <p className="text-base-CONTENT text-sm font-semibold mb-1">
                   Email
                 </p>
-                <p className="text-gray-900 text-lg font-semibold">
+                <p className="text-secondary text-lg font-semibold">
                   {formData.email}
                 </p>
               </div>

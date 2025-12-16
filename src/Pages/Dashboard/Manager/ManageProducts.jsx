@@ -4,8 +4,11 @@ import Swal from "sweetalert2";
 import useAxiosSecure from "../../../hooks/useAxiosSecure";
 import useAuth from "../../../hooks/useAuth";
 import Loading from "../../../Components/atoms/Loading";
+import usePageTitle from "../../../hooks/usePageTitle";
 
 const ManageProducts = () => {
+  usePageTitle("Manage Products - Manager Dashboard");
+
   const axiosSecure = useAxiosSecure();
   const { user } = useAuth();
   const [search, setSearch] = useState("");
@@ -95,7 +98,7 @@ const ManageProducts = () => {
         />
       </div>
 
-      <div className="overflow-x-auto bg-white rounded-box shadow">
+      <div className="overflow-x-auto bg-base-100 rounded-box shadow">
         <table className="table">
           <thead>
             <tr>

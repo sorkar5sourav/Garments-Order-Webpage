@@ -3,8 +3,11 @@ import React, { useState } from "react";
 import Swal from "sweetalert2";
 import Loading from "../../../Components/atoms/Loading";
 import useAxiosSecure from "../../../hooks/useAxiosSecure";
+import usePageTitle from "../../../hooks/usePageTitle";
 
 const AdminProducts = () => {
+  usePageTitle("All Products - Admin Dashboard");
+
   const axiosSecure = useAxiosSecure();
   const [currentPage, setCurrentPage] = useState(1);
   const ITEMS_PER_PAGE = 12;
@@ -99,7 +102,7 @@ const AdminProducts = () => {
         </div>
       </div>
 
-      <div className="overflow-x-auto bg-white rounded-box shadow">
+      <div className="overflow-x-auto bg-base-100 rounded-box shadow">
         <table className="table">
           <thead>
             <tr>

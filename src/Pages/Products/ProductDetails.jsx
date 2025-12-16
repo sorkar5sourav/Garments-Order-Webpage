@@ -3,6 +3,7 @@ import { useParams, useNavigate } from "react-router";
 import useAxios from "../../hooks/useAxios";
 import useAuth from "../../hooks/useAuth";
 import useRole from "../../hooks/useRole";
+import usePageTitle from "../../hooks/usePageTitle";
 
 const ProductDetails = () => {
   const { id } = useParams();
@@ -14,6 +15,8 @@ const ProductDetails = () => {
   const [error, setError] = useState(null);
   const [quantity, setQuantity] = useState(1);
   const axiosInstance = useAxios();
+
+  usePageTitle(product ? `${product.productName} - Product Details` : "Product Details");
 
   useEffect(() => {
     const fetchProduct = async () => {
@@ -104,7 +107,7 @@ const ProductDetails = () => {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50 py-12">
+    <div className="min-h-screen bg-base-200 rounded-3xl py-12">
       <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Back Button */}
         <button
@@ -114,7 +117,7 @@ const ProductDetails = () => {
           ← Back to Products
         </button>
 
-        <div className="bg-white rounded-lg shadow-lg overflow-hidden">
+        <div className="bg-base-100 rounded-lg shadow-lg overflow-hidden">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8 p-8">
             {/* Product Image */}
             <div className="flex items-center justify-center">
@@ -137,13 +140,13 @@ const ProductDetails = () => {
               </div>
 
               {/* Product Name */}
-              <h1 className="text-4xl font-bold text-gray-900 mb-4">
+              <h1 className="text-4xl font-bold text-secondary mb-4">
                 {product.productName}
               </h1>
 
               {/* Price */}
               <div className="mb-6 pb-6 border-b-2 border-gray-200">
-                <p className="text-gray-600 text-sm mb-2">Price per unit</p>
+                <p className="text-base-CONTENT text-sm mb-2">Price per unit</p>
                 <p className="text-4xl font-bold text-blue-600">
                   ৳{product.price}
                 </p>
@@ -152,7 +155,7 @@ const ProductDetails = () => {
               {/* Availability */}
               <div className="grid grid-cols-2 gap-4 mb-6">
                 <div>
-                  <p className="text-gray-600 text-sm mb-1">
+                  <p className="text-base-CONTENT text-sm mb-1">
                     Available Quantity
                   </p>
                   <p className="text-2xl font-bold text-green-600">
@@ -160,7 +163,7 @@ const ProductDetails = () => {
                   </p>
                 </div>
                 <div>
-                  <p className="text-gray-600 text-sm mb-1">Minimum Order</p>
+                  <p className="text-base-CONTENT text-sm mb-1">Minimum Order</p>
                   <p className="text-2xl font-bold text-orange-600">
                     {product.minimumOrder} units
                   </p>
@@ -218,43 +221,43 @@ const ProductDetails = () => {
 
           {/* Product Description */}
           <div className="border-t border-gray-200 p-8">
-            <h2 className="text-2xl font-bold text-gray-900 mb-4">
+            <h2 className="text-2xl font-bold text-secondary mb-4">
               Product Description
             </h2>
-            <p className="text-gray-700 leading-relaxed text-lg">
+            <p className="text-base-content leading-relaxed text-lg">
               {product.productDescription}
             </p>
           </div>
 
           {/* Product Specifications */}
-          <div className="border-t border-gray-200 p-8 bg-gray-50">
-            <h2 className="text-2xl font-bold text-gray-900 mb-6">
+          <div className="border-t border-gray-200 p-8 bg-base-200">
+            <h2 className="text-2xl font-bold text-secondary mb-6">
               Product Specifications
             </h2>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              <div className="bg-white p-4 rounded-lg">
-                <h3 className="font-semibold text-gray-900 mb-2">Category</h3>
-                <p className="text-gray-700">{product.category}</p>
+              <div className="bg-base-100 p-4 rounded-lg">
+                <h3 className="font-semibold text-secondary mb-2">Category</h3>
+                <p className="text-base-content">{product.category}</p>
               </div>
-              <div className="bg-white p-4 rounded-lg">
-                <h3 className="font-semibold text-gray-900 mb-2">
+              <div className="bg-base-100 p-4 rounded-lg">
+                <h3 className="font-semibold text-secondary mb-2">
                   Price per Unit
                 </h3>
-                <p className="text-gray-700">৳{product.price}</p>
+                <p className="text-base-content">৳{product.price}</p>
               </div>
-              <div className="bg-white p-4 rounded-lg">
-                <h3 className="font-semibold text-gray-900 mb-2">
+              <div className="bg-base-100 p-4 rounded-lg">
+                <h3 className="font-semibold text-secondary mb-2">
                   Available Quantity
                 </h3>
-                <p className="text-gray-700">
+                <p className="text-base-content">
                   {product.availableQuantity} units
                 </p>
               </div>
-              <div className="bg-white p-4 rounded-lg">
-                <h3 className="font-semibold text-gray-900 mb-2">
+              <div className="bg-base-100 p-4 rounded-lg">
+                <h3 className="font-semibold text-secondary mb-2">
                   Minimum Order
                 </h3>
-                <p className="text-gray-700">{product.minimumOrder} units</p>
+                <p className="text-base-content">{product.minimumOrder} units</p>
               </div>
             </div>
           </div>

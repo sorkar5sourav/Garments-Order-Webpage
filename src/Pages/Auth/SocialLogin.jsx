@@ -2,6 +2,7 @@ import React from "react";
 import useAuth from "../../hooks/useAuth";
 import { useLocation, useNavigate } from "react-router";
 import useAxiosSecure from "../../hooks/useAxiosSecure";
+import Swal from "sweetalert2";
 
 const SocialLogin = () => {
   const { signInGoogle } = useAuth();
@@ -9,34 +10,50 @@ const SocialLogin = () => {
   const location = useLocation();
   const navigate = useNavigate();
 
-  const handleGoogleSignIn = () => {
-    signInGoogle()
-      .then((result) => {
-        console.log(result.user);
+  const handleGoogleSignIn = async () => {
+    try {
+      const result = await signInGoogle();
+      console.log(result.user);
 
-        // create user in the database
-        const userInfo = {
-          email: result.user.email,
-          displayName: result.user.displayName,
-          photoURL: result.user.photoURL,
-        };
+      // create user in the database
+      const userInfo = {
+        email: result.user.email,
+        displayName: result.user.displayName,
+        photoURL: result.user.photoURL,
+      };
 
-        axiosSecure.post("/users", userInfo).then((res) => {
-          console.log("user data has been stored", res.data);
-          navigate(location.state || "/");
-        });
-      })
-      .catch((error) => {
-        console.log(error);
+      const res = await axiosSecure.post("/users", userInfo);
+      console.log("user data has been stored", res.data);
+
+      // Show success notification
+      await Swal.fire({
+        icon: "success",
+        title: "Login Successful!",
+        text: "Welcome back! You have been logged in successfully.",
+        confirmButtonColor: "#3B82F6",
+        timer: 2000,
+        timerProgressBar: true,
       });
+
+      navigate(location.state || "/");
+    } catch (error) {
+      console.log(error);
+
+      // Show error notification
+      Swal.fire({
+        icon: "error",
+        title: "Login Failed",
+        text: error.message || "Failed to login with Google. Please try again.",
+        confirmButtonColor: "#EF4444",
+      });
+    }
   };
 
   return (
     <div className="text-center pb-8">
-      <p className="mb-2">OR</p>
       <button
         onClick={handleGoogleSignIn}
-        className="btn bg-white text-black border-[#e5e5e5]"
+        className="btn bg-base-100 text-base-content border-base-300"
       >
         <svg
           aria-label="Google logo"

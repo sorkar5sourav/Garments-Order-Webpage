@@ -1,8 +1,5 @@
-import React from "react";
-import { CiDeliveryTruck } from "react-icons/ci";
+
 import {
-  FaRegCreditCard,
-  FaTasks,
   FaUsers,
   FaBoxOpen,
   FaPlus,
@@ -10,11 +7,11 @@ import {
   FaCheckSquare,
   FaUserCircle,
   FaSearch,
+  FaMoneyBill,
 } from "react-icons/fa";
 import { FaClipboardList } from "react-icons/fa6";
 import { Link, NavLink, Outlet } from "react-router";
 import useRole from "../hooks/useRole";
-import { SiGoogletasks } from "react-icons/si";
 import logoImg from "../assets/Logo.png";
 
 const DashboardLayout = () => {
@@ -46,7 +43,7 @@ const DashboardLayout = () => {
               <path d="M14 10l2 2l-2 2"></path>
             </svg>
           </label>
-          <div className="px-4">Zap Shift Dashboard</div>
+          <div className="px-4">Garments Order Dashboard</div>
         </nav>
         {/* Page content here */}
         <Outlet></Outlet>
@@ -92,60 +89,47 @@ const DashboardLayout = () => {
             </li>
 
             {/* our dashboard links */}
-            <li>
-              <NavLink
-                className="is-drawer-close:tooltip is-drawer-close:tooltip-right"
-                data-tip="MyOrders"
-                to="/dashboard/my-orders"
-              >
-                <FaClipboardList />
-                <span className="is-drawer-close:hidden">My Orders</span>
-              </NavLink>
-            </li>
-            <li>
-              <NavLink
-                className="is-drawer-close:tooltip is-drawer-close:tooltip-right"
-                data-tip="Track Order"
-                to="/dashboard/track-order"
-              >
-                <FaSearch />
-                <span className="is-drawer-close:hidden">Track Order</span>
-              </NavLink>
-            </li>
-            <li>
-              <NavLink
-                className="is-drawer-close:tooltip is-drawer-close:tooltip-right"
-                data-tip="My Profile"
-                to="/dashboard/profile"
-              >
-                <FaUserCircle />
-                <span className="is-drawer-close:hidden">My Profile</span>
-              </NavLink>
-            </li>
-            {role === "rider" && (
+            {/* buyer only links */}
+            {role === "buyer" && (
               <>
                 <li>
                   <NavLink
                     className="is-drawer-close:tooltip is-drawer-close:tooltip-right"
-                    data-tip="Assigned Deliveries"
-                    to="/dashboard/assigned-deliveries"
+                    data-tip="My Orders"
+                    to="/dashboard/my-orders"
                   >
-                    <FaTasks />
-                    <span className="is-drawer-close:hidden">
-                      Assigned Deliveries
-                    </span>
+                    <FaClipboardList />
+                    <span className="is-drawer-close:hidden">My Orders</span>
                   </NavLink>
                 </li>
                 <li>
                   <NavLink
                     className="is-drawer-close:tooltip is-drawer-close:tooltip-right"
-                    data-tip="Completed Deliveries"
-                    to="/dashboard/completed-deliveries"
+                    data-tip="Track Order"
+                    to="/dashboard/track-order"
                   >
-                    <SiGoogletasks />
-                    <span className="is-drawer-close:hidden">
-                      Completed Deliveries
-                    </span>
+                    <FaSearch />
+                    <span className="is-drawer-close:hidden">Track Order</span>
+                  </NavLink>
+                </li>
+                <li>
+                  <NavLink
+                    className="is-drawer-close:tooltip is-drawer-close:tooltip-right"
+                    data-tip="Payment History"
+                    to="/dashboard/payment-history"
+                  >
+                    <FaMoneyBill />
+                    <span className="is-drawer-close:hidden">Payment History</span>
+                  </NavLink>
+                </li>
+                <li>
+                  <NavLink
+                    className="is-drawer-close:tooltip is-drawer-close:tooltip-right"
+                    data-tip="My Profile"
+                    to="/dashboard/profile"
+                  >
+                    <FaUserCircle />
+                    <span className="is-drawer-close:hidden">My Profile</span>
                   </NavLink>
                 </li>
               </>
@@ -227,12 +211,12 @@ const DashboardLayout = () => {
                 <li>
                   <NavLink
                     className="is-drawer-close:tooltip is-drawer-close:tooltip-right"
-                    data-tip="Approved Orders"
+                    data-tip="Approve Orders"
                     to="/dashboard/approved-orders"
                   >
                     <FaCheckSquare />
                     <span className="is-drawer-close:hidden">
-                      Approved Orders
+                      Approve Orders
                     </span>
                   </NavLink>
                 </li>
@@ -248,32 +232,6 @@ const DashboardLayout = () => {
                 </li>
               </>
             )}
-
-            {/* List item */}
-            <li>
-              <button
-                className="is-drawer-close:tooltip is-drawer-close:tooltip-right"
-                data-tip="Settings"
-              >
-                {/* Settings icon */}
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  viewBox="0 0 24 24"
-                  strokeLinejoin="round"
-                  strokeLinecap="round"
-                  strokeWidth="2"
-                  fill="none"
-                  stroke="currentColor"
-                  className="my-1.5 inline-block size-4"
-                >
-                  <path d="M20 7h-9"></path>
-                  <path d="M14 17H5"></path>
-                  <circle cx="17" cy="17" r="3"></circle>
-                  <circle cx="7" cy="7" r="3"></circle>
-                </svg>
-                <span className="is-drawer-close:hidden">Settings</span>
-              </button>
-            </li>
           </ul>
         </div>
       </div>

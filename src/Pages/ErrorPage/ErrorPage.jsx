@@ -1,26 +1,24 @@
 import { Link } from "react-router";
-import NavBar from "../../Components/shared/Navbar";
-import Footer from "../../Components/shared/Footer";
+import ErrorIMG from "../../assets/404.png";
+import usePageTitle from "../../hooks/usePageTitle";
 
 const ErrorPage = () => {
+  usePageTitle("Page Not Found - Garments Order");
+
   return (
-    <div className="flex flex-col min-h-screen gap-6 justify-between px-5 items-center max-w-[1440px] mx-auto">
-      <NavBar />
-      <div className="text-center relative md:rounded-xl overflow-hidden">
+      <div className="relative min-h-screen">
         <img
-          src="https://syhzhuelbxgnhopnwjgc.supabase.co/storage/v1/object/public/media/blog/404_page_cover.jpg"
-          className="w-full"
+          src={ErrorIMG}
+          className="absolute top-0 left-0 w-full min-h-screen object-left object-cover"
           alt="Error Logo"
         />
         <Link
           to="/"
-          className="btn btn-primary absolute hidden md:flex md:bottom-6 left-1/2 transform -translate-x-1/2 rounded-lg"
+          className="btn w-60 h-20 absolute top-80 md:top-120 left-20 lg:left-40 text-3xl bg-blue-900 text-white rounded-3xl z-10"
         >
-          Go Home
+       ⬅️ Go Home
         </Link>
       </div>
-      <Footer />
-    </div>
   );
 };
 

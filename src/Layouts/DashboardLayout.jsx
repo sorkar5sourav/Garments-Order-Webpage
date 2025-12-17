@@ -13,8 +13,11 @@ import { FaClipboardList } from "react-icons/fa6";
 import { Link, NavLink, Outlet } from "react-router";
 import useRole from "../hooks/useRole";
 import logoImg from "../assets/Logo.png";
+import useAuth from "../hooks/useAuth";
+import ThemeToggle from "../Components/atoms/ThemeToggle";
 
 const DashboardLayout = () => {
+ const { user } = useAuth();
   const { role } = useRole();
   return (
     <div className="drawer lg:drawer-open w-full min-h-screen">
@@ -46,11 +49,35 @@ const DashboardLayout = () => {
           <div className="flex-1 px-4">
             <span className="text-lg font-semibold">Garments Order Dashboard</span>
           </div>
-          <div className="hidden md:flex items-center space-x-4 px-4">
-            <span className="text-sm text-base-content/70">Welcome back!</span>
-          </div>
+          <ThemeToggle />
+          <div className="dropdown dropdown-end flex items-center">
+             
+              <div
+                tabIndex={0}
+                role="button"
+                className="btn btn-ghost btn-circle avatar"
+              >
+                <div className="w-10 rounded-full">
+                  <img
+                    src={user?.photoURL || "https://via.placeholder.com/150"}
+                    alt={user?.displayName || "User"}
+                    title={user?.displayName || "User"}
+                  />
+                </div>
+              </div>
+              <ul
+                tabIndex={0}
+                className="dropdown-content z-1 menu p-2 shadow bg-base-100 rounded-box w-52"
+              >
+                <li>
+                  <a>{user?.email}</a>
+                </li>
+              </ul>
+               <p className="ml-2 font-semibold">
+                  {user?.displayName || "User"}
+                </p>
+            </div>
         </nav>
-        {/* Page content here */}
         <main className="flex-1 overflow-auto">
           <Outlet />
         </main>
@@ -63,7 +90,6 @@ const DashboardLayout = () => {
           className="drawer-overlay"
         ></label>
         <div className="flex min-h-full flex-col items-start bg-base-200 is-drawer-close:w-14 is-drawer-open:w-64">
-          {/* Sidebar content here */}
           <ul className="menu w-full grow">
             {/* List item */}
             <li>
@@ -95,7 +121,6 @@ const DashboardLayout = () => {
               </Link>
             </li>
 
-            {/* our dashboard links */}
             {/* buyer only links */}
             {role === "buyer" && (
               <>

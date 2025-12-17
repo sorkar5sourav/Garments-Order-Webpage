@@ -1,16 +1,75 @@
-# React + Vite
+**Garments Order — Web Frontend**
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Professional React frontend for the Garments Order application. Built with Vite and React, this repository contains the single-page application used by buyers, managers, and admins to browse products, place bookings, and manage orders.
 
-Currently, two official plugins are available:
+**Highlights**
+- **Framework:** React (Vite) with modern tooling and fast HMR
+- **Auth:** Firebase authentication (see `src/Firebase/firebase.init.js`)
+- **Layouts & Routing:** Role-based routes and dashboard layout
+- **Components:** Modular components in `src/Components` for reuse
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+**Project Features**
+- Browse latest products, view product details, and book orders
+- Role-based dashboards for Admin, Manager, Buyer
+- Client-side form validation and responsive UI
+- Social login and protected routes
 
-## React Compiler
+**Tech Stack**
+- React + Vite
+- Firebase (Auth + optional Firestore/Storage)
+- Axios (custom hooks for secure requests)
+- Tailwind / CSS (project styles in `src`) — adjust as needed
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+Repository structure (key folders)
+- `src/Components` — UI components and atoms
+- `src/Pages` — route pages (Home, Products, Dashboard)
+- `src/Layouts` — App and Dashboard layouts
+- `src/Context` — Auth and Theme providers
+- `src/Firebase` — Firebase initialization
+- `public/` — static assets
 
-## Expanding the ESLint configuration
+Getting started
+1. Prerequisites: Node.js (14+), npm or yarn
+2. Install dependencies:
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+```bash
+npm install
+# or
+yarn
+```
+
+3. Start dev server:
+
+```bash
+npm run dev
+# or
+yarn dev
+```
+
+4. Build for production:
+
+```bash
+npm run build
+# or
+yarn build
+```
+
+Environment & Firebase
+- The project expects a Firebase config in `src/Firebase/firebase.init.js`. Do not commit sensitive keys.
+- If you use environment variables, prefix them with `VITE_` for Vite to expose them to the client.
+
+Deployment
+- This site can be deployed to Vercel, Netlify, or any static host that supports SPA routing. Example: push to Vercel and set the build command to `npm run build` and output directory to `dist`.
+
+Contributing
+- Open an issue or submit a PR. Follow existing code style and keep changes focused.
+
+License & Contact
+- This project inherits the license of the parent repository. For questions, contact the maintainer listed in the main repo.
+
+Files to check first
+- `src/Firebase/firebase.init.js` — Firebase setup
+- `src/Context/AuthProvider.jsx` — authentication flow
+- `src/Pages/Homeoage/Homepage.jsx` — main landing page
+
+Thank you for reviewing the frontend — ask if you want a README tailored for contributors, deployment scripts, or environment examples.

@@ -123,7 +123,7 @@ const CustomerFeedback = () => {
                       </div>
                     </div>
                   </div>
-                  <p className="text-gray-700 grow">{review.comment}</p>
+                  <p className="text-base-content grow">{review.comment}</p>
                 </div>
               )}
             </SwiperSlide>

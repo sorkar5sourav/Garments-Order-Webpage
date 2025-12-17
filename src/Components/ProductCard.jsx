@@ -52,7 +52,7 @@ const ProductCard = ({ product }) => {
         {/* View Details Button */}
         <Link
           to={`/products/${product._id}`}
-          className="btn btn-primary w-full"
+          className="btn btn-primary text-base-300 font-bold w-full"
         >
           View Details
         </Link>

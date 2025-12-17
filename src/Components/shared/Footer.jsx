@@ -15,7 +15,7 @@ const Footer = () => {
     <footer id="footer" className="bg-base-300 w-full p-10 md:rounded-2xl">
          <div className="flex justify-center lg:justify-start items-center flex-col mb-6">
             <img src={logo} className="w-40" alt="" />
-            <h1 className="text-3xl font-bold text-[#105e91] text-center lg:text-left mt-4">
+            <h1 className="text-3xl font-bold text-[#105e91] text-center mt-4">
               Garments Order & <br />
               <span className="text-[#F08024]">Production Tracker System</span>
             </h1>

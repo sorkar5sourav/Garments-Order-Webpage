@@ -58,7 +58,7 @@ const HowItWorks = () => {
           >
             <div className="card-body text-center">
               <div className="text-4xl mb-4">{step.icon}</div>
-              <div className="badge badge-primary mb-4 text-lg font-bold">
+              <div className="badge badge-primary text-base-300 mb-4 text-lg font-bold">
                 Step {step.id}
               </div>
               <h4 className="card-title text-xl mb-2">{step.title}</h4>

@@ -227,7 +227,7 @@ const MyOrders = () => {
                         {order.deliveryAddress}
                       </td>
                       <td>
-                        <div className="flex flex-wrap gap-1">
+                        <div className="flex gap-1">
                           {order.paymentStatus === "unpaid" && (
                             <button
                               onClick={() => handlePayment(order)}

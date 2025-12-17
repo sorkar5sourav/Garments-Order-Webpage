@@ -69,7 +69,7 @@ const AboutUs = () => {
               onClick={() => setActiveSection(key)}
               className={`px-6 py-3 text-lg font-medium transition-colors duration-200 ${
                 activeSection === key
-                  ? "text-blue-600 border-b-2 border-blue-600 bg-blue-50"
+                  ? "text-blue-600 border-b-2 border-blue-600 rounded-t-xl bg-blue-50"
                   : "text-base-CONTENT hover:text-blue-600 hover:bg-base-200"
               }`}
             >

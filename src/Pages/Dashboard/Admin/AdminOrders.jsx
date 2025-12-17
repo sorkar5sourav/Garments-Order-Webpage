@@ -85,7 +85,7 @@ const AdminOrders = () => {
               </option>
             ))}
           </select>
-          <div className="badge badge-outline">Total: {filtered.length}</div>
+          <div className="">Total: {filtered.length}</div>
         </div>
       </div>
 

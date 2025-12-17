@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { useForm } from "react-hook-form";
 import useAuth from "../../hooks/useAuth";
 import { Link, useLocation, useNavigate } from "react-router";
@@ -15,12 +15,14 @@ const Register = () => {
     handleSubmit,
     formState: { errors },
   } = useForm();
+  const [submitting, setSubmitting] = useState(false);
   const { registerUser, updateUserProfile } = useAuth();
   const location = useLocation();
   const navigate = useNavigate();
   const axiosSecure = useAxiosSecure();
 
   const handleRegistration = async (data) => {
+    setSubmitting(true);
     try {
       // 1. Register user with Firebase
       await registerUser(data.email, data.password);
@@ -43,9 +45,19 @@ const Register = () => {
 
       const response = await axiosSecure.post("/users", userInfo);
 
-      if (response.data.insertedId) {
-        console.log("user created in the database");
+      const respStatus = response?.status;
+      const respData = response?.data || {};
 
+      const created =
+        respStatus === 201 ||
+        respData.insertedId ||
+        respData.userId ||
+        respData.upsertedId ||
+        respData.message === "user created";
+
+      const exists = respStatus === 200 && respData.message === "user exists";
+
+      if (created || exists) {
         // Show success alert
         await Swal.fire({
           icon: "success",
@@ -58,7 +70,10 @@ const Register = () => {
 
         // 4. Redirect user after successful registration
         navigate(location.state?.pathname || "/");
+        return;
       }
+
+      throw new Error(respData.message || "Failed to create account on server");
     } catch (error) {
       console.error("Registration error:", error);
 
@@ -69,6 +84,8 @@ const Register = () => {
         text: error.message || "Failed to create account. Please try again.",
         confirmButtonColor: "#EF4444",
       });
+    } finally {
+      setSubmitting(false);
     }
   };
 
@@ -165,7 +182,9 @@ const Register = () => {
             <p className="text-red-500 text-sm mt-1">{errors.password.message}</p>
           )}
 
-          <button className="btn btn-neutral mt-6 w-full">Register</button>
+          <button disabled={submitting} className="btn btn-neutral mt-6 w-full">
+            {submitting ? "Registering..." : "Register"}
+          </button>
         </fieldset>
 
         <div className="divider">OR</div>

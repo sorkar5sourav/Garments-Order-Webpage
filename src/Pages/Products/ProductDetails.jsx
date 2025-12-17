@@ -63,16 +63,23 @@ const ProductDetails = () => {
       return;
     }
 
-    // Check account status
-    if (status === "suspended") {
-      alert(
-        `Your account is suspended. ${
-          suspendFeedback || suspendReason
-            ? `Feedback: ${suspendFeedback || suspendReason}`
-            : "You cannot place new bookings."
-        }`
-      );
-      return;
+    // Check account status for buyers
+    if (role === "buyer") {
+      if (status === "suspended") {
+        alert(
+          `Your account is suspended. ${
+            suspendFeedback || suspendReason
+              ? `Feedback: ${suspendFeedback || suspendReason}`
+              : "You cannot place new bookings."
+          }`
+        );
+        return;
+      }
+
+      if (status !== "active") {
+        alert("Admin approval required to place orders.");
+        return;
+      }
     }
 
     // Navigate to booking form
@@ -195,20 +202,23 @@ const ProductDetails = () => {
               <button
                 onClick={handleOrder}
                 disabled={
-                  product.availableQuantity < product.minimumOrder ||
-                  role === "admin" ||
-                  role === "manager" ||
-                  status === "suspended"
+                    product.availableQuantity < product.minimumOrder ||
+                    role === "admin" ||
+                    role === "manager" ||
+                    (role === "buyer" && status !== "active") ||
+                    status === "suspended"
                 }
-                className="btn btn-primary w-full mb-4"
+                className="btn btn-primary text-gray-500 w-full mb-4"
               >
-                {!user
-                  ? "Login to Order"
-                  : role === "admin" || role === "manager"
-                  ? "Admins Cannot Order"
-                  : status === "suspended"
-                  ? "Account Suspended"
-                  : "Place Order"}
+                  {!user
+                    ? "Login to Order"
+                    : role === "admin" || role === "manager"
+                    ? "Admins Cannot Order"
+                    : status === "suspended"
+                    ? "Account Suspended"
+                    : role === "buyer" && status !== "active"
+                    ? "Admin approval required to place orders"
+                    : "Place Order"}
               </button>
 
               {product.availableQuantity < product.minimumOrder && (

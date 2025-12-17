@@ -263,71 +263,94 @@ const TrackOrder = () => {
               </div>
             </div>
 
-            {/* Timeline */}
-            <div className="bg-base-100 rounded-lg shadow-lg p-8">
-              <h2 className="text-2xl font-bold text-secondary mb-8">
-                Production & Delivery Timeline
-              </h2>
+              {/* Timeline: use trackingUpdates if present, otherwise fallback to static steps */}
+              <div className="bg-base-100 rounded-lg shadow-lg p-8">
+                <h2 className="text-2xl font-bold text-secondary mb-8">
+                  Production & Delivery Timeline
+                </h2>
 
-              <div className="space-y-6">
-                {timelineSteps.map((item, index) => (
-                  <div key={index} className="flex gap-4">
-                    {/* Timeline Dot and Line */}
-                    <div className="flex flex-col items-center">
-                      <div
-                        className={`w-12 h-12 rounded-full flex items-center justify-center text-2xl font-bold border-4 ${
-                          item.status === "completed"
-                            ? "bg-green-100 border-green-500 text-green-600"
-                            : item.status === "pending"
-                            ? "bg-gray-100 border-gray-300 text-gray-400"
-                            : "bg-blue-100 border-blue-500 text-blue-600"
-                        }`}
-                      >
-                        {item.icon}
+                <div className="space-y-6">
+                  {order.trackingUpdates && order.trackingUpdates.length > 0 ? (
+                    // show tracking updates in chronological order
+                    order.trackingUpdates
+                      .slice()
+                      .sort((a, b) => new Date(a.time) - new Date(b.time))
+                      .map((log, idx) => (
+                        <div key={idx} className="flex gap-4">
+                          <div className="flex flex-col items-center">
+                            <div className="w-12 h-12 rounded-full flex items-center justify-center text-2xl font-bold border-4 bg-blue-100 border-blue-500 text-blue-600">
+                              {String(log.status || "").charAt(0) || "•"}
+                            </div>
+                            {idx < order.trackingUpdates.length - 1 && (
+                              <div className="w-1 h-12 bg-gray-300"></div>
+                            )}
+                          </div>
+
+                          <div className="pb-6">
+                            <h3 className="text-lg font-bold text-base-CONTENT">{log.status || "Update"}</h3>
+                            <div className="text-sm text-gray-500 mt-1">{log.location}</div>
+                            <div className="text-sm mt-2">{log.note}</div>
+                            <div className="text-xs text-gray-400 mt-1">{log.time ? new Date(log.time).toLocaleString() : ""}</div>
+                          </div>
+                        </div>
+                      ))
+                  ) : (
+                    // fallback static timeline
+                    timelineSteps.map((item, index) => (
+                      <div key={index} className="flex gap-4">
+                        <div className="flex flex-col items-center">
+                          <div
+                            className={`w-12 h-12 rounded-full flex items-center justify-center text-2xl font-bold border-4 ${
+                              item.status === "completed"
+                                ? "bg-green-100 border-green-500 text-green-600"
+                                : item.status === "pending"
+                                ? "bg-gray-100 border-gray-300 text-gray-400"
+                                : "bg-blue-100 border-blue-500 text-blue-600"
+                            }`}
+                          >
+                            {item.icon}
+                          </div>
+                          {index < timelineSteps.length - 1 && (
+                            <div
+                              className={`w-1 h-12 ${
+                                item.status === "completed"
+                                  ? "bg-green-500"
+                                  : "bg-gray-300"
+                              }`}
+                            ></div>
+                          )}
+                        </div>
+
+                        <div className="pb-6">
+                          <h3
+                            className={`text-lg font-bold ${
+                              item.status === "completed"
+                                ? "text-green-600"
+                                : "text-base-CONTENT"
+                            }`}
+                          >
+                            {item.step}
+                          </h3>
+                          <p className="text-gray-700 mt-1">{item.description}</p>
+                          <p className="text-sm text-gray-500 mt-2">
+                            {item.status === "completed"
+                              ? "✓ Completed"
+                              : "⏳ In Progress or Pending"}
+                          </p>
+                        </div>
                       </div>
-                      {index < timelineSteps.length - 1 && (
-                        <div
-                          className={`w-1 h-12 ${
-                            item.status === "completed"
-                              ? "bg-green-500"
-                              : "bg-gray-300"
-                          }`}
-                        ></div>
-                      )}
-                    </div>
-
-                    {/* Timeline Content */}
-                    <div className="pb-6">
-                      <h3
-                        className={`text-lg font-bold ${
-                          item.status === "completed"
-                            ? "text-green-600"
-                            : "text-base-CONTENT"
-                        }`}
-                      >
-                        {item.step}
-                      </h3>
-                      <p className="text-gray-700 mt-1">{item.description}</p>
-                      <p className="text-sm text-gray-500 mt-2">
-                        {item.status === "completed"
-                          ? "✓ Completed"
-                          : "⏳ In Progress or Pending"}
-                      </p>
-                    </div>
-                  </div>
-                ))}
-              </div>
-
-              {/* Additional Notes */}
-              {order.additionalNotes && (
-                <div className="mt-8 p-4 bg-blue-50 rounded-lg border border-blue-200">
-                  <h3 className="font-bold text-secondary mb-2">
-                    Special Notes
-                  </h3>
-                  <p className="text-gray-700">{order.additionalNotes}</p>
+                    ))
+                  )}
                 </div>
-              )}
-            </div>
+
+                {/* Additional Notes */}
+                {order.additionalNotes && (
+                  <div className="mt-8 p-4 bg-blue-50 rounded-lg border border-blue-200">
+                    <h3 className="font-bold text-secondary mb-2">Special Notes</h3>
+                    <p className="text-gray-700">{order.additionalNotes}</p>
+                  </div>
+                )}
+              </div>
 
             {/* Contact Support */}
             <div className="mt-8 bg-base-100 rounded-lg shadow-lg p-8 text-center">

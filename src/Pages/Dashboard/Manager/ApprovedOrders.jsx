@@ -134,25 +134,34 @@ const ApprovedOrders = () => {
               ✕
             </button>
           </div>
-          <div className="mt-4 space-y-3">
-            {(selected.trackingUpdates || []).length === 0 && (
+
+          <div className="mt-4">
+            {(!selected.trackingUpdates || selected.trackingUpdates.length === 0) && (
               <p className="text-gray-500">No tracking updates yet.</p>
             )}
-            {(selected.trackingUpdates || []).map((log, idx) => (
-              <div
-                key={idx}
-                className="border-l-4 border-primary pl-3 py-1 space-y-1"
-              >
-                <div className="flex items-center justify-between text-sm">
-                  <span className="font-semibold">{log.status}</span>
-                  <span className="text-gray-500">
-                    {log.time ? new Date(log.time).toLocaleString() : ""}
-                  </span>
+
+            {(selected.trackingUpdates || [])
+              .slice()
+              .sort((a, b) => new Date(a.time) - new Date(b.time))
+              .map((log, idx, arr) => (
+                <div key={idx} className="flex gap-4 mb-4">
+                  <div className="flex flex-col items-center">
+                    <div className="w-12 h-12 rounded-full flex items-center justify-center text-2xl font-bold border-4 bg-blue-100 border-blue-500 text-blue-600">
+                      {String(log.status || "").charAt(0) || "•"}
+                    </div>
+                    {idx < arr.length - 1 && <div className="w-1 h-12 bg-gray-300 mt-2"></div>}
+                  </div>
+
+                  <div className="flex-1 pb-2">
+                    <div className="flex items-center justify-between">
+                      <h4 className="font-semibold">{log.status || "Update"}</h4>
+                      <span className="text-xs text-gray-500">{log.time ? new Date(log.time).toLocaleString() : ""}</span>
+                    </div>
+                    <div className="text-sm text-gray-700 mt-1">{log.location}</div>
+                    <div className="text-sm text-gray-600 mt-1">{log.note}</div>
+                  </div>
                 </div>
-                <div className="text-sm">{log.location}</div>
-                <div className="text-xs text-gray-500">{log.note}</div>
-              </div>
-            ))}
+              ))}
           </div>
         </div>
       )}

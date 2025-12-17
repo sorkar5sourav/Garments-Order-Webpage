@@ -119,7 +119,7 @@ const DashboardLayout = () => {
                     <span className="is-drawer-close:hidden">Track Order</span>
                   </NavLink>
                 </li>
-                <li>
+                {/* <li>
                   <NavLink
                     className="is-drawer-close:tooltip is-drawer-close:tooltip-right"
                     data-tip="Payment History"
@@ -128,7 +128,7 @@ const DashboardLayout = () => {
                     <FaMoneyBill />
                     <span className="is-drawer-close:hidden">Payment History</span>
                   </NavLink>
-                </li>
+                </li> */}
                 <li>
                   <NavLink
                     className="is-drawer-close:tooltip is-drawer-close:tooltip-right"

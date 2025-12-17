@@ -26,7 +26,7 @@ import MyOrders from "../Pages/Dashboard/Buyer/MyOrders";
 import MyProfile from "../Pages/Dashboard/Buyer/MyProfile";
 import PaymentSuccess from "../Pages/Dashboard/Buyer/Payment/PaymentSuccess";
 import PaymentCancelled from "../Pages/Dashboard/Buyer/Payment/PaymentCancelled";
-import PaymentHistory from "../Pages/Dashboard/Buyer/Payment/PaymentHistory";
+// import PaymentHistory from "../Pages/Dashboard/Buyer/Payment/PaymentHistory";
 
 export const router = createBrowserRouter([
   {
@@ -106,10 +106,10 @@ export const router = createBrowserRouter([
         path: "payment-cancelled",
         element: <PaymentCancelled />,
       },
-      {
-        path: "payment-history",
-        element: <PaymentHistory />,
-      },
+      // {
+      //   path: "payment-history",
+      //   element: <PaymentHistory />,
+      // },
       {
         path: "manage-users",
         element: (

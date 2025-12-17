@@ -13,6 +13,7 @@ const PaymentSuccess = () => {
 
   const [loading, setLoading] = useState(true);
   const [paymentDetails, setPaymentDetails] = useState(null);
+  // console.log(paymentDetails);
   const [error, setError] = useState(null);
 
   const sessionId = searchParams.get("session_id");
@@ -114,13 +115,13 @@ const PaymentSuccess = () => {
                   <span className="font-medium">Order ID:</span>{" "}
                   {paymentDetails.orderId}
                 </p>
-                <p>
+                {/* <p>
                   <span className="font-medium">Amount Paid:</span>{" "}
                   ৳{paymentDetails.amount}
-                </p>
+                </p> */}
                 <p>
                   <span className="font-medium">Payment ID:</span>{" "}
-                  {paymentDetails.paymentId}
+                  {paymentDetails.transactionId}
                 </p>
                 <p>
                   <span className="font-medium">Status:</span>{" "}
@@ -138,7 +139,7 @@ const PaymentSuccess = () => {
               View My Orders
             </button>
             <button
-              onClick={() => navigate("/dashboard/track-order")}
+              onClick={() => navigate(`/dashboard/track-order/${paymentDetails.orderId}`)}
               className="btn btn-outline"
             >
               Track Order

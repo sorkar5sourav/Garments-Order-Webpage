@@ -1,5 +1,6 @@
 import axios from "axios";
 import React, { useEffect } from "react";
+import Swal from "sweetalert2";
 import useAuth from "./useAuth";
 import { useNavigate } from "react-router";
 import { auth } from "../Firebase/firebase.init";
@@ -68,7 +69,6 @@ const useAxiosSecure = () => {
         console.log("Error status:", error.response?.status);
 
         const statusCode = error.response?.status;
-        const errorCode = error.response?.data?.code;
         const originalRequest = error.config;
 
         // If 401 and we haven't retried yet, try to refresh token and retry
@@ -108,16 +108,33 @@ const useAxiosSecure = () => {
           }
         }
 
-        // If 401/403 after retry, or 403 directly, log out
-        if (statusCode === 403 && errorCode === "SUSPENDED") {
-          // Keep user logged in so they can view suspension details
+        // Handle final 401: show warning, do not log out
+        if (statusCode === 401) {
+          Swal.fire({
+            icon: "warning",
+            title: "Access Restricted",
+            text:
+              error.response?.data?.message ||
+              "Your account is pending approval. Please wait for activation.",
+            confirmButtonColor: "#F59E0B",
+          });
+          navigate("/dashboard");
           return Promise.reject(error);
         }
 
-        if ((statusCode === 401 && originalRequest._retry) || statusCode === 403) {
-          console.error("Unauthorized access after retry - logging out");
+        // Handle 403: show alert then log out
+        if (statusCode === 403) {
+          await Swal.fire({
+            icon: "error",
+            title: "Access Denied",
+            text:
+              error.response?.data?.message ||
+              "Your account cannot perform this action.",
+            confirmButtonColor: "#EF4444",
+          });
           await logOut();
           navigate("/login");
+          return Promise.reject(error);
         }
 
         return Promise.reject(error);

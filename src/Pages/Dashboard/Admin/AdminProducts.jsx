@@ -56,26 +56,26 @@ const AdminProducts = () => {
       title: "Update Product",
       html: `
       
-        <input id="swal-name" class="input input-bordered w-full my-2" placeholder="Name" value="${
+        <p class="text-[10px] text-left text-gray-400"> Name</p>
+        <input id="swal-name" class="input input-bordered text-base-content w-full my-2" placeholder="Name" value="${
           product.productName || "Product Name"
         }" />
-        <p class="text-[10px] text-left text-gray-400"> Name</p>
-        <input id="swal-price" type="number" class="input input-bordered w-full my-2" placeholder="Price" value="${
+        <p class="text-[10px] text-left text-gray-400"> Price</p>
+        <input id="swal-price" type="number" class="input input-bordered text-base-content w-full my-2" placeholder="Price" value="${
           product.price || "Price"
         }" />
-        <p class="text-[10px] text-left text-gray-400"> Price</p>
-        <input id="swal-availableQ" type="number" class="input input-bordered w-full my-2" placeholder="Available Quantity" value="${
+        <p class="text-[10px] text-left text-gray-400"> Available Quantity</p>
+        <input id="swal-availableQ" type="number" class="input input-bordered text-base-content w-full my-2" placeholder="Available Quantity" value="${
           product.availableQuantity || "Available Quantity"
         }" />
-        <p class="text-[10px] text-left text-gray-400"> Available Quantity</p>
-        <input id="swal-category" class="input input-bordered w-full my-2" placeholder="Category" value="${
+        <p class="text-[10px] text-left text-gray-400"> Category</p>
+        <input id="swal-category" class="input input-bordered text-base-content w-full my-2" placeholder="Category" value="${
           product.category || "Category"
         }" />
-        <p class="text-[10px] text-left text-gray-400"> Category</p>
-        <input id="swal-image" class="input input-bordered w-full my-2" placeholder="Image URL" value="${
+        <p class="text-[10px] text-left text-gray-400"> Photo</p>
+        <input id="swal-image" class="input input-bordered text-base-content w-full my-2" placeholder="Image URL" value="${
           product.productImage || "Image URL"
         }" />
-        <p class="text-[10px] text-left text-gray-400"> Photo</p>
       `,
       showCancelButton: true,
       focusConfirm: false,
@@ -87,7 +87,13 @@ const AdminProducts = () => {
         );
         const category = document.getElementById("swal-category").value;
         const productImage = document.getElementById("swal-image").value;
-        return { productName: name, price, availableQuantity, category, productImage };
+        return {
+          productName: name,
+          price,
+          availableQuantity,
+          category,
+          productImage,
+        };
       },
     });
 

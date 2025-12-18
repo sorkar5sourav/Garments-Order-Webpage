@@ -1,4 +1,4 @@
-import React, { createContext, useContext, useEffect, useState } from 'react';
+import React, { createContext, useContext, useEffect, useState } from "react";
 
 const ThemeContext = createContext();
 
@@ -6,22 +6,22 @@ const ThemeContext = createContext();
 export const useTheme = () => {
   const context = useContext(ThemeContext);
   if (!context) {
-    throw new Error('useTheme must be used within a ThemeProvider');
+    throw new Error("useTheme must be used within a ThemeProvider");
   }
   return context;
 };
 
 const getSystemTheme = () =>
-  window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+  window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
 
 const getInitialThemeState = () => {
-  const savedTheme = localStorage.getItem('theme');
-  const savedIsSystemTheme = localStorage.getItem('isSystemTheme');
+  const savedTheme = localStorage.getItem("theme");
+  const savedIsSystemTheme = localStorage.getItem("isSystemTheme");
 
   const initialIsSystemTheme =
-    savedIsSystemTheme !== null ? savedIsSystemTheme === 'true' : true;
+    savedIsSystemTheme !== null ? savedIsSystemTheme === "true" : true;
 
-  if (savedTheme && savedTheme !== 'system') {
+  if (savedTheme && savedTheme !== "system") {
     return {
       theme: savedTheme,
       isSystemTheme: false,
@@ -39,32 +39,30 @@ export const ThemeProvider = ({ children }) => {
   const [theme, setTheme] = useState(initial.theme);
   const [isSystemTheme, setIsSystemTheme] = useState(initial.isSystemTheme);
 
-  // Detect and respond to system theme changes when opted-in
   useEffect(() => {
-    const mediaQuery = window.matchMedia('(prefers-color-scheme: dark)');
+    const mediaQuery = window.matchMedia("(prefers-color-scheme: dark)");
 
     const handleChange = (e) => {
       if (!isSystemTheme) return;
-      const newTheme = e.matches ? 'dark' : 'light';
+      const newTheme = e.matches ? "dark" : "light";
       setTheme(newTheme);
-      localStorage.setItem('theme', newTheme);
+      localStorage.setItem("theme", newTheme);
     };
 
-    mediaQuery.addEventListener('change', handleChange);
-    return () => mediaQuery.removeEventListener('change', handleChange);
+    mediaQuery.addEventListener("change", handleChange);
+    return () => mediaQuery.removeEventListener("change", handleChange);
   }, [isSystemTheme]);
 
-  // Apply theme to document
   useEffect(() => {
-    document.documentElement.setAttribute('data-theme', theme);
+    document.documentElement.setAttribute("data-theme", theme);
   }, [theme]);
 
   const toggleTheme = () => {
     setIsSystemTheme(false);
     setTheme((prevTheme) => {
-      const newTheme = prevTheme === 'light' ? 'dark' : 'light';
-      localStorage.setItem('theme', newTheme);
-      localStorage.setItem('isSystemTheme', 'false');
+      const newTheme = prevTheme === "light" ? "dark" : "light";
+      localStorage.setItem("theme", newTheme);
+      localStorage.setItem("isSystemTheme", "false");
       return newTheme;
     });
   };
@@ -73,8 +71,8 @@ export const ThemeProvider = ({ children }) => {
     const newTheme = getSystemTheme();
     setIsSystemTheme(true);
     setTheme(newTheme);
-    localStorage.setItem('theme', newTheme);
-    localStorage.setItem('isSystemTheme', 'true');
+    localStorage.setItem("theme", newTheme);
+    localStorage.setItem("isSystemTheme", "true");
   };
 
   const value = {
@@ -85,8 +83,6 @@ export const ThemeProvider = ({ children }) => {
   };
 
   return (
-    <ThemeContext.Provider value={value}>
-      {children}
-    </ThemeContext.Provider>
+    <ThemeContext.Provider value={value}>{children}</ThemeContext.Provider>
   );
 };

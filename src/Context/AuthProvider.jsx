@@ -9,7 +9,7 @@ import {
   signOut,
   updateProfile,
   setPersistence,
-  browserLocalPersistence
+  browserLocalPersistence,
 } from "firebase/auth";
 import { auth } from "../Firebase/firebase.init.js";
 
@@ -19,7 +19,6 @@ const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
 
-  // Ensure persistence so auth survives redirects
   useEffect(() => {
     setPersistence(auth, browserLocalPersistence).catch((err) => {
       console.error("Failed to set auth persistence:", err);
@@ -43,7 +42,6 @@ const AuthProvider = ({ children }) => {
 
   const logOut = () => {
     setLoading(true);
-    // Clear token cookie if you use it
     document.cookie = "token=; path=/; expires=Thu, 01 Jan 1970 00:00:00 UTC;";
     return signOut(auth);
   };
@@ -56,7 +54,6 @@ const AuthProvider = ({ children }) => {
     const expirationDate = new Date();
     expirationDate.setTime(expirationDate.getTime() + 7 * 24 * 60 * 60 * 1000);
     const expires = "expires=" + expirationDate.toUTCString();
-    // If your site is HTTPS in production consider adding `; Secure; SameSite=None`
     document.cookie = `token=${token}; ${expires}; path=/; SameSite=Strict`;
   };
 
@@ -69,12 +66,12 @@ const AuthProvider = ({ children }) => {
         try {
           const token = await currentUser.getIdToken();
           setTokenInCookie(token);
-          console.log("Token stored in cookie");
         } catch (err) {
           console.error("Error getting token:", err);
         }
       } else {
-        document.cookie = "token=; path=/; expires=Thu, 01 Jan 1970 00:00:00 UTC;";
+        document.cookie =
+          "token=; path=/; expires=Thu, 01 Jan 1970 00:00:00 UTC;";
       }
     });
     return () => unSubscribe();
@@ -90,7 +87,9 @@ const AuthProvider = ({ children }) => {
     updateUserProfile,
   };
 
-  return <AuthContext.Provider value={authInfo}>{children}</AuthContext.Provider>;
+  return (
+    <AuthContext.Provider value={authInfo}>{children}</AuthContext.Provider>
+  );
 };
 
 export default AuthProvider;

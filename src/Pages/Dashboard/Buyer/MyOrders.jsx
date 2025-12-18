@@ -106,18 +106,18 @@ const MyOrders = () => {
         parcelName: order.productTitle || order.parcelName || "Order",
       };
 
-      console.log("Creating checkout session with:", orderInfo);
+      // console.log("Creating checkout session with:", orderInfo);
 
       const res = await axiosSecure.post(
         "/payment-checkout-session",
         orderInfo
       );
 
-      console.log("Checkout session response:", res?.data);
+      // console.log("Checkout session response:", res?.data);
 
       const url = res?.data?.url;
       if (!url) {
-        console.error("No checkout URL returned from server", res?.data);
+        // console.error("No checkout URL returned from server", res?.data);
         alert("Failed to create checkout session. See console for details.");
         return;
       }
@@ -137,14 +137,18 @@ const MyOrders = () => {
           <h2 className="text-2xl sm:text-3xl font-bold text-secondary mb-2">
             My Orders
           </h2>
-          <p className="text-base-content/70">Track and manage your garment orders</p>
+          <p className="text-base-content/70">
+            Track and manage your garment orders
+          </p>
         </div>
 
         {orders.length === 0 ? (
           <div className="bg-base-100 rounded-lg shadow-lg p-8 sm:p-12 text-center">
             <div className="text-6xl mb-4">📦</div>
             <h3 className="text-xl font-semibold mb-4">No Orders Yet</h3>
-            <p className="text-base-content/70 mb-6">You haven't placed any orders yet. Start shopping now!</p>
+            <p className="text-base-content/70 mb-6">
+              You haven't placed any orders yet. Start shopping now!
+            </p>
             <button
               onClick={() => navigate("/products")}
               className="btn btn-primary btn-lg"
@@ -156,19 +160,31 @@ const MyOrders = () => {
           <div className="bg-base-100 rounded-lg shadow-lg overflow-hidden">
             <div className="p-4 sm:p-6 border-b border-base-300">
               <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
-                <h3 className="text-lg font-semibold">Your Orders ({orders.length})</h3>
+                <h3 className="text-lg font-semibold">
+                  Your Orders ({orders.length})
+                </h3>
                 <div className="flex flex-wrap gap-2">
-                  <span className="badge badge-primary">Total: {orders.length}</span>
+                  <span className="badge badge-primary">
+                    Total: {orders.length}
+                  </span>
                   <span className="badge badge-success">
-                    Completed: {orders.filter(order => order.status === "delivered").length}
+                    Completed:{" "}
+                    {
+                      orders.filter((order) => order.status === "delivered")
+                        .length
+                    }
                   </span>
                   <span className="badge badge-warning">
-                    Pending: {orders.filter(order => order.status === "pending").length}
+                    Pending:{" "}
+                    {
+                      orders.filter((order) => order.status === "pending")
+                        .length
+                    }
                   </span>
                 </div>
               </div>
             </div>
-                <div className="overflow-x-auto">
+            <div className="overflow-x-auto">
               <table className="table table-zebra w-full">
                 <thead className="bg-base-200">
                   <tr>
@@ -183,15 +199,20 @@ const MyOrders = () => {
                     <th className="text-xs">Actions</th>
                   </tr>
                 </thead>
-                    <tbody>
+                <tbody>
                   {orders.map((order, index) => (
                     <tr key={order._id} className="hover">
                       <th className="font-medium">{index + 1}</th>
-                      <td className="font-medium max-w-xs truncate" title={order.productTitle}>
+                      <td
+                        className="font-medium max-w-xs truncate"
+                        title={order.productTitle}
+                      >
                         {order.productTitle}
                       </td>
                       <td className="font-medium">{order.quantity} units</td>
-                      <td className="font-bold text-primary">৳{order.totalPrice?.toLocaleString()}</td>
+                      <td className="font-bold text-primary">
+                        ৳{order.totalPrice?.toLocaleString()}
+                      </td>
                       <td>
                         <span
                           className={`badge badge-sm ${
@@ -200,7 +221,9 @@ const MyOrders = () => {
                               : "badge-warning"
                           }`}
                         >
-                          {order.paymentStatus === "paid" ? "✓ Paid" : "⏳ Unpaid"}
+                          {order.paymentStatus === "paid"
+                            ? "✓ Paid"
+                            : "⏳ Unpaid"}
                         </span>
                       </td>
                       <td>
@@ -223,7 +246,10 @@ const MyOrders = () => {
                       <td className="text-sm hidden md:table-cell">
                         {new Date(order.orderDate).toLocaleDateString()}
                       </td>
-                      <td className="text-sm hidden lg:table-cell max-w-xs truncate" title={order.deliveryAddress}>
+                      <td
+                        className="text-sm hidden lg:table-cell max-w-xs truncate"
+                        title={order.deliveryAddress}
+                      >
                         {order.deliveryAddress}
                       </td>
                       <td>
@@ -268,10 +294,11 @@ const MyOrders = () => {
                     </tr>
                   ))}
                 </tbody>
-          </table>
-        </div>
-      </div>)}
-    </div>
+              </table>
+            </div>
+          </div>
+        )}
+      </div>
     </div>
   );
 };

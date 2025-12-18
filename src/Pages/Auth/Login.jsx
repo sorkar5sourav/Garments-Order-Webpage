@@ -20,8 +20,7 @@ const Login = () => {
 
   const handleLogin = async (data) => {
     try {
-      const result = await signInUser(data.email, data.password);
-      console.log("Login successful:", result.user);
+      await signInUser(data.email, data.password);
 
       // Show success alert
       await Swal.fire({
@@ -33,7 +32,6 @@ const Login = () => {
         timerProgressBar: true,
       });
 
-      // Redirect to the intended page or home
       navigate(location?.state?.pathname || "/");
     } catch (error) {
       console.error("Login error:", error);
@@ -49,7 +47,7 @@ const Login = () => {
   };
 
   return (
-    <div className="card bg-base-100 md:w-xl lg:w-2xl shrink-0 shadow-2xl p-20">
+    <div className="card bg-base-100 md:w-xl lg:w-2xl shrink-0 shadow-2xl md:p-20 py-10">
       <h3 className="text-3xl text-center font-bold mb-2">Welcome back</h3>
       <p className="text-center text-base-CONTENT mb-6">Please Login</p>
       <form className="card-body" onSubmit={handleSubmit(handleLogin)}>
@@ -91,7 +89,9 @@ const Login = () => {
             placeholder="Enter your password"
           />
           {errors.password && (
-            <p className="text-red-500 text-sm mt-1">{errors.password.message}</p>
+            <p className="text-red-500 text-sm mt-1">
+              {errors.password.message}
+            </p>
           )}
 
           <div className="mt-4">

@@ -58,24 +58,51 @@ const ManageProducts = () => {
     const { value: formValues } = await Swal.fire({
       title: "Update Product",
       html: `
-        <input id="swal-name" class="input input-bordered w-full my-2" placeholder="Name" value="${product.productName || ""}" />
-        <input id="swal-price" type="number" class="input input-bordered w-full my-2" placeholder="Price" value="${product.price || ""}" />
-        <input id="swal-payment" class="input input-bordered w-full my-2" placeholder="Payment Mode" value="${product.paymentMode || ""}" />
+        <p class="text-[10px] text-left text-gray-400"> Name</p>
+        <input id="swal-name" class="input input-bordered text-base-content w-full my-2" placeholder="Name" value="${
+          product.productName || "Product Name"
+        }" />
+        <p class="text-[10px] text-left text-gray-400"> Price</p>
+        <input id="swal-price" type="number" class="input input-bordered text-base-content w-full my-2" placeholder="Price" value="${
+          product.price || "Price"
+        }" />
+        <p class="text-[10px] text-left text-gray-400"> Available Quantity</p>
+        <input id="swal-availableQ" type="number" class="input input-bordered text-base-content w-full my-2" placeholder="Available Quantity" value="${
+          product.availableQuantity || "Available Quantity"
+        }" />
+        <p class="text-[10px] text-left text-gray-400"> Category</p>
+        <input id="swal-category" class="input input-bordered text-base-content w-full my-2" placeholder="Category" value="${
+          product.category || "Category"
+        }" />
+        <p class="text-[10px] text-left text-gray-400"> Photo</p>
+        <input id="swal-image" class="input input-bordered text-base-content w-full my-2" placeholder="Image URL" value="${
+          product.productImage || "Image URL"
+        }" />
       `,
       showCancelButton: true,
       focusConfirm: false,
       preConfirm: () => {
+        const name = document.getElementById("swal-name").value;
+        const price = Number(document.getElementById("swal-price").value);
+        const availableQuantity = Number(
+          document.getElementById("swal-availableQ").value
+        );
+        const category = document.getElementById("swal-category").value;
+        const productImage = document.getElementById("swal-image").value;
         return {
-          productName: document.getElementById("swal-name").value,
-          price: Number(document.getElementById("swal-price").value),
-          paymentMode: document.getElementById("swal-payment").value,
+          productName: name,
+          price,
+          availableQuantity,
+          category,
+          productImage,
         };
       },
     });
 
     if (!formValues) return;
+
     await axiosSecure.patch(`/products/${product._id}`, formValues);
-    Swal.fire("Updated", "Product updated", "success");
+    Swal.fire("Saved", "Product information updated.", "success");
     refetch();
   };
 
@@ -159,4 +186,3 @@ const ManageProducts = () => {
 };
 
 export default ManageProducts;
-

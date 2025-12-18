@@ -24,34 +24,22 @@ const ManagerAddProduct = () => {
     demoVideo: "",
     paymentMode: paymentModes[0],
     showOnHome: false,
+    photoUrl: "",
   });
-  const [images, setImages] = useState([]);
-  const [previews, setPreviews] = useState([]);
   const [submitting, setSubmitting] = useState(false);
 
   const updateField = (key, value) => {
     setForm((prev) => ({ ...prev, [key]: value }));
   };
 
-  const handleImages = (e) => {
-    const files = Array.from(e.target.files || []);
-    setImages(files);
-    const readers = files.map(
-      (file) =>
-        new Promise((resolve) => {
-          const reader = new FileReader();
-          reader.onload = (ev) => resolve(ev.target.result);
-          reader.readAsDataURL(file);
-        })
-    );
-    Promise.all(readers).then(setPreviews);
-  };
-
   const validate = () => {
-    if (!form.productName || !form.productDescription || !form.category) return false;
+    if (!form.productName || !form.productDescription || !form.category)
+      return false;
     if (!form.price || Number(form.price) <= 0) return false;
-    if (!form.availableQuantity || Number(form.availableQuantity) <= 0) return false;
+    if (!form.availableQuantity || Number(form.availableQuantity) <= 0)
+      return false;
     if (!form.minimumOrder || Number(form.minimumOrder) <= 0) return false;
+    if (!form.photoUrl) return false;
     return true;
   };
 
@@ -68,30 +56,24 @@ const ManagerAddProduct = () => {
       return;
     }
     if (!validate()) {
-      Swal.fire("Validation", "Please fill all required fields correctly.", "warning");
+      Swal.fire(
+        "Validation",
+        "Please fill all required fields correctly.",
+        "warning"
+      );
       return;
     }
 
     try {
       setSubmitting(true);
-      const imageData = await Promise.all(
-        images.map(
-          (file) =>
-            new Promise((resolve) => {
-              const reader = new FileReader();
-              reader.onload = (ev) => resolve(ev.target.result);
-              reader.readAsDataURL(file);
-            })
-        )
-      );
 
       const payload = {
         ...form,
         price: Number(form.price),
         availableQuantity: Number(form.availableQuantity),
         minimumOrder: Number(form.minimumOrder),
-        productImage: imageData[0] || "",
-        gallery: imageData,
+        productImage: form.photoUrl,
+        gallery: form.photoUrl ? [form.photoUrl] : [],
         createdBy: user?.email,
       };
 
@@ -107,9 +89,8 @@ const ManagerAddProduct = () => {
         demoVideo: "",
         paymentMode: paymentModes[0],
         showOnHome: false,
+        photoUrl: "",
       });
-      setImages([]);
-      setPreviews([]);
     } catch (err) {
       if (err.response?.data?.code === "SUSPENDED") {
         Swal.fire(
@@ -253,30 +234,28 @@ const ManagerAddProduct = () => {
         </div>
 
         <div>
-          <label className="label">Images (multiple)</label>
+          <label className="label">Product Photo URL*</label>
           <input
-            type="file"
-            accept="image/*"
-            multiple
-            className="file-input file-input-bordered w-full"
-            onChange={handleImages}
+            type="url"
+            className="input input-bordered w-full"
+            value={form.photoUrl}
+            onChange={(e) => updateField("photoUrl", e.target.value)}
+            placeholder="https://example.com/image.jpg"
+            required
           />
-          {previews.length > 0 && (
-            <div className="flex gap-3 flex-wrap mt-3">
-              {previews.map((src, idx) => (
-                <img
-                  key={idx}
-                  src={src}
-                  alt="preview"
-                  className="w-24 h-24 object-cover rounded border"
-                />
-              ))}
+          {form.photoUrl && (
+            <div className="mt-3">
+              <img
+                src={form.photoUrl}
+                alt="preview"
+                className="w-24 h-24 object-cover rounded border"
+              />
             </div>
           )}
         </div>
 
         <button
-          className="btn btn-primary"
+          className="btn btn-primary text-base-300"
           type="submit"
           disabled={submitting || status === "suspended"}
         >
@@ -292,4 +271,3 @@ const ManagerAddProduct = () => {
 };
 
 export default ManagerAddProduct;
-

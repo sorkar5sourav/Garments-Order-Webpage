@@ -13,7 +13,7 @@ const SocialLogin = () => {
   const handleGoogleSignIn = async () => {
     try {
       const result = await signInGoogle();
-      console.log(result.user);
+      // console.log(result.user);
 
       // create user in the database
       const userInfo = {
@@ -22,8 +22,8 @@ const SocialLogin = () => {
         photoURL: result.user.photoURL,
       };
 
-      const res = await axiosSecure.post("/users", userInfo);
-      console.log("user data has been stored", res.data);
+      await axiosSecure.post("/users", userInfo);
+      // console.log("user data has been stored", res.data);
 
       // Show success notification
       await Swal.fire({

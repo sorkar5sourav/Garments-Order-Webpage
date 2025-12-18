@@ -1,4 +1,3 @@
-
 import {
   FaUsers,
   FaBoxOpen,
@@ -17,8 +16,15 @@ import useAuth from "../hooks/useAuth";
 import ThemeToggle from "../Components/atoms/ThemeToggle";
 
 const DashboardLayout = () => {
- const { user } = useAuth();
+  const { user, logOut } = useAuth();
   const { role } = useRole();
+  const handleLogOut = () => {
+    logOut()
+      .then()
+      .catch((error) => {
+        console.log(error);
+      });
+  };
   return (
     <div className="drawer lg:drawer-open w-full min-h-screen">
       <input id="my-drawer-4" type="checkbox" className="drawer-toggle" />
@@ -47,36 +53,38 @@ const DashboardLayout = () => {
             </svg>
           </label>
           <div className="flex-1 px-4">
-            <span className="text-lg font-semibold">Garments Order Dashboard</span>
+            <span className="text-lg font-semibold">
+              Garments Order Dashboard
+            </span>
           </div>
           <ThemeToggle />
           <div className="dropdown dropdown-end flex items-center">
-             
-              <div
-                tabIndex={0}
-                role="button"
-                className="btn btn-ghost btn-circle avatar"
-              >
-                <div className="w-10 rounded-full">
-                  <img
-                    src={user?.photoURL || "https://via.placeholder.com/150"}
-                    alt={user?.displayName || "User"}
-                    title={user?.displayName || "User"}
-                  />
-                </div>
+            <div
+              tabIndex={0}
+              role="button"
+              className="btn btn-ghost btn-circle avatar"
+            >
+              <div className="w-10 rounded-full">
+                <img
+                  src={user?.photoURL || "https://via.placeholder.com/150"}
+                  alt={user?.displayName || "User"}
+                  title={user?.displayName || "User"}
+                />
               </div>
-              <ul
-                tabIndex={0}
-                className="dropdown-content z-1 menu p-2 shadow bg-base-100 rounded-box w-52"
-              >
-                <li>
-                  <a>{user?.email}</a>
-                </li>
-              </ul>
-               <p className="ml-2 font-semibold">
-                  {user?.displayName || "User"}
-                </p>
             </div>
+            <ul
+              tabIndex={0}
+              className="dropdown-content z-1 menu p-2 shadow bg-base-100 rounded-box w-52"
+            >
+              <li>
+                <a>{user?.email}</a>
+              </li>
+              <li>
+                <a onClick={handleLogOut}>Logout</a>
+              </li>
+            </ul>
+            <p className="ml-2 font-semibold">{user?.displayName || "User"}</p>
+          </div>
         </nav>
         <main className="flex-1 overflow-auto">
           <Outlet />

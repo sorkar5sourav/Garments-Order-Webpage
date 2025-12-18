@@ -7,7 +7,7 @@ import ThemeToggle from "../atoms/ThemeToggle";
 const NavBar = () => {
   const { user, logOut } = useAuth();
   const location = useLocation();
-  const [activeSection, setActiveSection] = useState('home');
+  const [activeSection, setActiveSection] = useState("home");
 
   const handleLogOut = () => {
     logOut()
@@ -20,14 +20,13 @@ const NavBar = () => {
   const navLinkClass = ({ isActive }) =>
     isActive ? "btn btn-primary rounded-full text-base-300" : "";
 
-  // Intersection Observer for scroll-based active states
   useEffect(() => {
-    if (location.pathname !== '/') return;
+    if (location.pathname !== "/") return;
 
     const observerOptions = {
       root: null,
-      rootMargin: '-50% 0px -50% 0px',
-      threshold: 0
+      rootMargin: "-50% 0px -50% 0px",
+      threshold: 0,
     };
 
     const observerCallback = (entries) => {
@@ -38,78 +37,86 @@ const NavBar = () => {
       });
     };
 
-    const observer = new IntersectionObserver(observerCallback, observerOptions);
+    const observer = new IntersectionObserver(
+      observerCallback,
+      observerOptions
+    );
 
-    // Observe sections
-    const aboutUsSection = document.getElementById('about-us');
-    const footerSection = document.getElementById('footer');
+    const aboutUsSection = document.getElementById("about-us");
+    const footerSection = document.getElementById("footer");
 
     if (aboutUsSection) observer.observe(aboutUsSection);
     if (footerSection) observer.observe(footerSection);
 
-    // Set default to home if no section is intersecting
     const handleScroll = () => {
       const aboutUsRect = aboutUsSection?.getBoundingClientRect();
       const footerRect = footerSection?.getBoundingClientRect();
 
       if (aboutUsRect && footerRect) {
-        const isAboutUsVisible = aboutUsRect.top < window.innerHeight / 2 && aboutUsRect.bottom > window.innerHeight / 2;
-        const isFooterVisible = footerRect.top < window.innerHeight / 2 && footerRect.bottom > window.innerHeight / 2;
+        const isAboutUsVisible =
+          aboutUsRect.top < window.innerHeight / 2 &&
+          aboutUsRect.bottom > window.innerHeight / 2;
+        const isFooterVisible =
+          footerRect.top < window.innerHeight / 2 &&
+          footerRect.bottom > window.innerHeight / 2;
 
         if (!isAboutUsVisible && !isFooterVisible) {
-          setActiveSection('home');
+          setActiveSection("home");
         }
       }
     };
 
-    window.addEventListener('scroll', handleScroll);
+    window.addEventListener("scroll", handleScroll);
     handleScroll(); // Check initial state
 
     return () => {
       observer.disconnect();
-      window.removeEventListener('scroll', handleScroll);
+      window.removeEventListener("scroll", handleScroll);
     };
   }, [location.pathname]);
 
-  // Smooth scroll function
   const scrollToSection = (sectionId) => {
     const element = document.getElementById(sectionId);
     if (element) {
       element.scrollIntoView({
-        behavior: 'smooth',
-        block: 'start'
+        behavior: "smooth",
+        block: "start",
       });
     }
   };
 
-  // Handle About Us click
   const handleAboutUsClick = (e) => {
-    if (location.pathname === '/') {
+    if (location.pathname === "/") {
       e.preventDefault();
-      scrollToSection('about-us');
+      scrollToSection("about-us");
     }
   };
 
-  // Handle Contact click
   const handleContactClick = (e) => {
-    if (location.pathname === '/') {
+    if (location.pathname === "/") {
       e.preventDefault();
-      scrollToSection('footer');
+      scrollToSection("footer");
     }
   };
 
-  // Dynamic class for homepage navigation buttons
   const getHomepageButtonClass = (section) => {
-    if (location.pathname !== '/') return "";
-    return activeSection === section ? "btn btn-primary rounded-full text-base-300" : "";
+    if (location.pathname !== "/") return "";
+    return activeSection === section
+      ? "btn btn-primary rounded-full text-base-300"
+      : "";
   };
 
-  // Before Login: Home, All-Products, About Us, Contact, Login, Register
-  // After Login: Home, All-Products, Dashboard, Logout
   const beforeLoginLinks = (
     <>
       <li>
-        <NavLink to="/" className={location.pathname === '/' ? getHomepageButtonClass('home') : navLinkClass}>
+        <NavLink
+          to="/"
+          className={
+            location.pathname === "/"
+              ? getHomepageButtonClass("home")
+              : navLinkClass
+          }
+        >
           Home
         </NavLink>
       </li>
@@ -124,7 +131,7 @@ const NavBar = () => {
         <a
           href="#about-us"
           onClick={handleAboutUsClick}
-          className={getHomepageButtonClass('about-us')}
+          className={getHomepageButtonClass("about-us")}
         >
           About Us
         </a>
@@ -134,7 +141,7 @@ const NavBar = () => {
         <a
           href="#footer"
           onClick={handleContactClick}
-          className={getHomepageButtonClass('footer')}
+          className={getHomepageButtonClass("footer")}
         >
           Contact
         </a>
@@ -145,7 +152,14 @@ const NavBar = () => {
   const afterLoginLinks = (
     <>
       <li>
-        <NavLink to="/" className={location.pathname === '/' ? getHomepageButtonClass('home') : navLinkClass}>
+        <NavLink
+          to="/"
+          className={
+            location.pathname === "/"
+              ? getHomepageButtonClass("home")
+              : navLinkClass
+          }
+        >
           Home
         </NavLink>
       </li>

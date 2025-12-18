@@ -32,7 +32,7 @@ const AllProducts = () => {
           params: {
             page: currentPage,
             limit: ITEMS_PER_PAGE,
-            search: debouncedSearchTerm
+            search: debouncedSearchTerm,
           },
         });
         return response.data || { products: [], pagination: {} };
@@ -105,9 +105,10 @@ const AllProducts = () => {
           <div className="text-center mb-6">
             <p className="text-base-CONTENT">
               {pagination.totalProducts > 0
-                ? `Found ${pagination.totalProducts} product${pagination.totalProducts !== 1 ? 's' : ''} for "${debouncedSearchTerm}"`
-                : `No products found for "${debouncedSearchTerm}"`
-              }
+                ? `Found ${pagination.totalProducts} product${
+                    pagination.totalProducts !== 1 ? "s" : ""
+                  } for "${debouncedSearchTerm}"`
+                : `No products found for "${debouncedSearchTerm}"`}
             </p>
           </div>
         )}
@@ -117,7 +118,9 @@ const AllProducts = () => {
         ) : products.length === 0 ? (
           <div className="text-center py-12">
             <p className="text-xl text-gray-500">
-              {debouncedSearchTerm ? "No products found matching your search" : "No products available"}
+              {debouncedSearchTerm
+                ? "No products found matching your search"
+                : "No products available"}
             </p>
           </div>
         ) : (

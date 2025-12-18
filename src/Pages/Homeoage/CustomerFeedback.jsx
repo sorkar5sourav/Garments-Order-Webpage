@@ -1,5 +1,3 @@
-
-
 import React from "react";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Navigation, Pagination, Autoplay } from "swiper/modules";
@@ -28,40 +26,50 @@ const CustomerFeedback = () => {
       _id: "fallback-1",
       name: "Sarah Johnson",
       rating: 5,
-      comment: "Amazing quality garments! The tracking system made it so easy to follow my order.",
+      comment:
+        "Amazing quality garments! The tracking system made it so easy to follow my order.",
       avatar: "👩‍💼",
     },
     {
       _id: "fallback-2",
       name: "Mike Chen",
       rating: 5,
-      comment: "Fast delivery and excellent customer service. Will definitely order again!",
+      comment:
+        "Fast delivery and excellent customer service. Will definitely order again!",
       avatar: "👨‍💻",
     },
     {
       _id: "fallback-3",
       name: "Emily Davis",
       rating: 4,
-      comment: "Love the variety of products. The payment process was smooth and secure.",
+      comment:
+        "Love the variety of products. The payment process was smooth and secure.",
       avatar: "👩‍🎨",
     },
     {
       _id: "fallback-4",
       name: "David Wilson",
       rating: 5,
-      comment: "Professional service from start to finish. Highly recommend this platform!",
+      comment:
+        "Professional service from start to finish. Highly recommend this platform!",
       avatar: "👨‍🔬",
     },
     {
       _id: "fallback-5",
       name: "Lisa Brown",
       rating: 5,
-      comment: "The garments exceeded my expectations. Great attention to detail!",
+      comment:
+        "The garments exceeded my expectations. Great attention to detail!",
       avatar: "👩‍🏫",
     },
   ];
 
   const displayReviews = reviews.length > 0 ? reviews : fallbackReviews;
+
+  // Only enable loop if we have enough slides (at least 2x slidesPerView for proper looping)
+  // For mobile (1 slide), need at least 2; for tablet (3 slides), need at least 6; for desktop (5 slides), need at least 10
+  const minSlidesForLoop = 10; // Based on desktop slidesPerView of 5
+  const shouldLoop = displayReviews.length >= minSlidesForLoop;
 
   return (
     <div className="my-24 bg-base-200 py-16">
@@ -70,7 +78,8 @@ const CustomerFeedback = () => {
           What Our Customers Are Saying
         </h2>
         <p className="text-lg text-base-content leading-relaxed">
-          Hear from our satisfied customers about their experience with our garments ordering platform.
+          Hear from our satisfied customers about their experience with our
+          garments ordering platform.
         </p>
       </div>
 
@@ -80,11 +89,15 @@ const CustomerFeedback = () => {
           centeredSlides={true}
           slidesPerView={5}
           spaceBetween={20}
-          autoplay={{
-            delay: 2500,
-            disableOnInteraction: false,
-          }}
-          loop={true}
+          autoplay={
+            shouldLoop
+              ? {
+                  delay: 2500,
+                  disableOnInteraction: false,
+                }
+              : false
+          }
+          loop={shouldLoop}
           pagination={{ clickable: true, el: ".custom-pagination" }}
           navigation={{
             nextEl: ".next-btn",
@@ -108,13 +121,17 @@ const CustomerFeedback = () => {
                   <div className="flex items-center mb-4">
                     <div className="text-3xl mr-3">{review.avatar}</div>
                     <div>
-                      <h4 className="font-semibold text-secondary">{review.name}</h4>
+                      <h4 className="font-semibold text-secondary">
+                        {review.name}
+                      </h4>
                       <div className="flex">
                         {[...Array(5)].map((_, i) => (
                           <span
                             key={i}
                             className={`text-lg ${
-                              i < review.rating ? "text-yellow-400" : "text-gray-300"
+                              i < review.rating
+                                ? "text-yellow-400"
+                                : "text-gray-300"
                             }`}
                           >
                             ★
@@ -131,13 +148,9 @@ const CustomerFeedback = () => {
         </Swiper>
 
         <div className="flex justify-center items-center mt-8 mx-auto space-x-4">
-          <button className="prev-btn btn btn-circle btn-ghost">
-            ←
-          </button>
+          <button className="prev-btn btn btn-circle btn-ghost">←</button>
           <div className="custom-pagination"></div>
-          <button className="next-btn btn btn-circle btn-ghost">
-            →
-          </button>
+          <button className="next-btn btn btn-circle btn-ghost">→</button>
         </div>
       </div>
     </div>

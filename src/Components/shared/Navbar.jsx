@@ -1,5 +1,6 @@
 import { Link, NavLink, useLocation } from "react-router";
-import Logo from "../atoms/Logo";
+import LogoPNG from "../../assets/Logo.png";
+import LogoText from "../../assets/Logo-Text.png";
 import useAuth from "../../hooks/useAuth";
 import { useState, useEffect } from "react";
 import ThemeToggle from "../atoms/ThemeToggle";
@@ -8,6 +9,14 @@ const NavBar = () => {
   const { user, logOut } = useAuth();
   const location = useLocation();
   const [activeSection, setActiveSection] = useState("home");
+  const [isScrolled, setIsScrolled] = useState(false);
+  useEffect(() => {
+    const handleScroll = () => {
+      setIsScrolled(window.scrollY > 20);
+    };
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
 
   const handleLogOut = () => {
     logOut()
@@ -180,99 +189,109 @@ const NavBar = () => {
 
   const links = user ? afterLoginLinks : beforeLoginLinks;
   return (
-    <div className="navbar bg-base-200 md:rounded-2xl shadow-sm px-5 lg:py-5 sticky top-0 z-50">
-      <div className="navbar-start">
-        <div className="dropdown">
-          <div tabIndex={0} role="button" className="btn btn-ghost lg:hidden">
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              className="h-5 w-5"
-              fill="none"
-              viewBox="0 0 24 24"
-              stroke="currentColor"
-            >
-              {" "}
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth="2"
-                d="M4 6h16M4 12h8m-8 6h16"
-              />{" "}
-            </svg>
-          </div>
-          <ul
-            tabIndex="-1"
-            className="menu menu-sm dropdown-content bg-base-100 rounded-box z-1 mt-3 w-52 p-2 shadow"
-          >
-            {links}
-          </ul>
-        </div>
-        <Link to="/" className="ml-2 flex items-center">
-          <Logo></Logo>
-          {/* <img src={LogoText} alt="" /> */}
-        </Link>
-      </div>
-      <div className="navbar-center hidden lg:flex">
-        <ul className="menu menu-horizontal items-center px-1">{links}</ul>
-      </div>
-      <div className="navbar-end gap-2">
-        <ThemeToggle />
-        {user ? (
-          <>
-            {/* User Avatar with dropdown */}
-            <div className="dropdown dropdown-end">
-              <div
-                tabIndex={0}
-                role="button"
-                className="btn btn-ghost btn-circle avatar"
+    <nav
+      className={`fixed top-0 left-0 right-0 z-50 h-20 navbar mx-auto transition-all duration-300 ${
+        isScrolled ? " backdrop-blur-md shadow-md" : "bg-transparent"
+      }`}
+    >
+      <div
+        className={`fixed top-0 left-0 right-0 z-50 max-w-390 h-20 rounded-2xl navbar mx-auto transition-all md:px-10 duration-300 ${
+          isScrolled ? " backdrop-blur-md shadow-md" : "bg-transparent"
+        }`}
+      >
+        <div className="navbar-start">
+          <div className="dropdown">
+            <div tabIndex={0} role="button" className="btn btn-ghost lg:hidden">
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                className="h-5 w-5"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
               >
-                <div className="w-10 rounded-full">
-                  <img
-                    src={user?.photoURL || "https://via.placeholder.com/150"}
-                    alt={user?.displayName || "User"}
-                    title={user?.displayName || "User"}
-                  />
-                </div>
-              </div>
-              <ul
-                tabIndex={0}
-                className="dropdown-content z-1 menu p-2 shadow bg-base-100 rounded-box w-52"
-              >
-                <li>
-                  <a>{user?.displayName || "User"}</a>
-                </li>
-                <li>
-                  <a>{user?.email}</a>
-                </li>
-                <li>
-                  <a onClick={handleLogOut}>Logout</a>
-                </li>
-              </ul>
+                {" "}
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth="2"
+                  d="M4 6h16M4 12h8m-8 6h16"
+                />{" "}
+              </svg>
             </div>
-
-            {/* Logout Button */}
-            <button
-              onClick={handleLogOut}
-              className="btn btn-primary rounded-lg text-base-300 font-bold"
+            <ul
+              tabIndex="-1"
+              className="menu menu-sm dropdown-content bg-base-100 rounded-box z-1 mt-3 w-52 p-2 shadow"
             >
-              Logout
-            </button>
-          </>
-        ) : (
-          <div className="flex items-center gap-2">
-            <Link className="btn rounded-lg" to="/login">
-              Login
-            </Link>
-            <Link
-              className="btn btn-primary rounded-lg text-base-300"
-              to="/register"
-            >
-              Register
-            </Link>
+              {links}
+            </ul>
           </div>
-        )}
+          <Link to="/" className="ml-2 flex items-center">
+            <img src={LogoPNG} className="h-15 w-15" alt="" />
+            <img src={LogoText} alt="" className="h-10" />
+          </Link>
+        </div>
+        <div className="navbar-center hidden lg:flex">
+          <ul className="menu menu-horizontal items-center px-1">{links}</ul>
+        </div>
+        <div className="navbar-end gap-2">
+          <ThemeToggle />
+          {user ? (
+            <>
+              {/* User Avatar with dropdown */}
+              <div className="dropdown dropdown-end">
+                <div
+                  tabIndex={0}
+                  role="button"
+                  className="btn btn-ghost btn-circle avatar"
+                >
+                  <div className="w-10 rounded-full">
+                    <img
+                      src={user?.photoURL || "https://via.placeholder.com/150"}
+                      alt={user?.displayName || "User"}
+                      title={user?.displayName || "User"}
+                    />
+                  </div>
+                </div>
+                <ul
+                  tabIndex={0}
+                  className="dropdown-content z-1 menu p-2 shadow bg-base-100 rounded-box w-52"
+                >
+                  <li>
+                    <a>{user?.displayName || "User"}</a>
+                  </li>
+                  <li>
+                    <a>{user?.email}</a>
+                  </li>
+                  <li>
+                    <a onClick={handleLogOut}>Logout</a>
+                  </li>
+                </ul>
+              </div>
+
+              {/* Logout Button */}
+              <button
+                onClick={handleLogOut}
+                className="btn btn-primary rounded-lg text-base-300 font-bold"
+              >
+                Logout
+              </button>
+            </>
+          ) : (
+            <div className="flex items-center gap-2">
+              <Link className="btn rounded-lg" to="/login">
+                Login
+              </Link>
+              <Link
+                className="btn btn-primary rounded-lg text-base-300"
+                to="/register"
+              >
+                Register
+              </Link>
+            </div>
+          )}
+        </div>
       </div>
-    </div>
+    </nav>
   );
 };
 

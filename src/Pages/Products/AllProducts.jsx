@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import useAxios from "../../hooks/useAxios";
 import ProductCard from "../../Components/ProductCard";
@@ -11,8 +11,19 @@ const AllProducts = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [searchTerm, setSearchTerm] = useState("");
   const [debouncedSearchTerm, setDebouncedSearchTerm] = useState("");
-  const ITEMS_PER_PAGE = 12;
   const axiosInstance = useAxios();
+  const [itemsPerPage, setItemsPerPage] = useState(16);
+
+  // Reduce the number of cards on medium screens and below to 6
+  useEffect(() => {
+    const handleResize = () => {
+      setItemsPerPage(window.innerWidth < 1024 ? 12 : 16);
+    };
+
+    handleResize();
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
 
   // Debounce search term
   React.useEffect(() => {
@@ -31,7 +42,7 @@ const AllProducts = () => {
         const response = await axiosInstance.get("/products", {
           params: {
             page: currentPage,
-            limit: ITEMS_PER_PAGE,
+            limit: itemsPerPage,
             search: debouncedSearchTerm,
           },
         });
@@ -125,7 +136,7 @@ const AllProducts = () => {
           </div>
         ) : (
           <>
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
               {products.map((product) => (
                 <ProductCard key={product._id} product={product} />
               ))}

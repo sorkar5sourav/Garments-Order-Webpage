@@ -8,23 +8,29 @@ import bannerImg4 from "../../assets/4.png";
 import bannerImg5 from "../../assets/5.png";
 
 const Banner = () => (
-    <div className="relative lg:h-150 overflow-hidden">
-      <Carousel autoPlay={true} infiniteLoop={true} className="w-full mx-auto">
-        <img src={bannerImg1} />
-        <img src={bannerImg2} />
-        <img src={bannerImg3} />
-         <img src={bannerImg4} />
-          <img src={bannerImg5} />
-      </Carousel>
-      <div className="absolute hidden md:flex top-11/20 lg:top-16/20 left-6/25 lg:left-1/6 -translate-x-1/2 -translate-y-1/2 flex-wrap justify-center">
-        <Link to={"/dashboard/trackorder"} className="btn max-h-14 btn-primary text-base-300 rounded-full">
-          Trak Your Order
-        </Link>
-        <Link to={"/products"} className="btn btn-outline text-white border-white ml-4 max-h-14">
-          Explore Products
-        </Link>
-      </div>
+  <div className="relative lg:h-150 overflow-hidden max-w-390 mx-auto rounded-4xl">
+    <Carousel autoPlay={true} infiniteLoop={true} className="w-full mx-auto">
+      <img src={bannerImg1} />
+      <img src={bannerImg2} />
+      <img src={bannerImg3} />
+      <img src={bannerImg4} />
+      <img src={bannerImg5} />
+    </Carousel>
+    <div className="absolute hidden md:flex top-11/20 lg:top-16/20 left-6/25 lg:left-1/6 -translate-x-1/2 -translate-y-1/2 flex-wrap justify-center">
+      <Link
+        to={"/dashboard/trackorder"}
+        className="btn max-h-14 btn-primary text-base-300 rounded-full"
+      >
+        Trak Your Order
+      </Link>
+      <Link
+        to={"/products"}
+        className="btn btn-outline text-white border-white ml-4 max-h-14"
+      >
+        Explore Products
+      </Link>
     </div>
+  </div>
 );
 
 export default Banner;

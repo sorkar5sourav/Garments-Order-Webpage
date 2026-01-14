@@ -11,14 +11,14 @@ const Homepage = () => {
   usePageTitle("Garments Order - Premium Fashion & Textiles");
 
   return (
-    <div className="">
-      <Banner/>
-      <LatestProducts/>
-      <HowItWorks/>
-      <CustomerFeedback/>
-      <AboutUs/>
-      <LeaveReview/>
-    </div>
+    <>
+      <Banner />
+      <LatestProducts />
+      <HowItWorks />
+      <CustomerFeedback />
+      <AboutUs />
+      <LeaveReview />
+    </>
   );
 };
 

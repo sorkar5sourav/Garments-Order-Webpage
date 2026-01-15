@@ -5,6 +5,7 @@ import { Link, useLocation, useNavigate } from "react-router";
 import SocialLogin from "./SocialLogin";
 import Swal from "sweetalert2";
 import usePageTitle from "../../hooks/usePageTitle";
+import FbLogin from "./FbLogin";
 
 const Login = () => {
   usePageTitle("Login - Garments Order");
@@ -103,6 +104,7 @@ const Login = () => {
         <div className="divider">OR</div>
 
         <SocialLogin />
+        <FbLogin />
 
         <p className="text-center mt-6">
           New to Garments Order?{" "}

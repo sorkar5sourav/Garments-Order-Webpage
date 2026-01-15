@@ -142,7 +142,7 @@ const AdminProducts = () => {
                       <img
                         src={
                           product.productImage ||
-                          "https://via.placeholder.com/150"
+                          "https://ui-avatars.com/api/?name="+encodeURIComponent(product.productName || 'Product')
                         }
                         alt={product.productName}
                       />

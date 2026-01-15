@@ -7,6 +7,8 @@ import {
   FaUserCircle,
   FaSearch,
   FaMoneyBill,
+  FaNewspaper,
+  FaQuestion,
 } from "react-icons/fa";
 import { FaClipboardList } from "react-icons/fa6";
 import { Link, NavLink, Outlet } from "react-router";
@@ -66,7 +68,7 @@ const DashboardLayout = () => {
             >
               <div className="w-10 rounded-full">
                 <img
-                  src={user?.photoURL || "https://via.placeholder.com/150"}
+                  src={user?.photoURL || "https://ui-avatars.com/api/?name="+(user?.displayName || 'User')}
                   alt={user?.displayName || "User"}
                   title={user?.displayName || "User"}
                 />
@@ -206,6 +208,26 @@ const DashboardLayout = () => {
                   >
                     <FaClipboardList />
                     <span className="is-drawer-close:hidden">All Orders</span>
+                  </NavLink>
+                </li>
+                <li>
+                  <NavLink
+                    className="is-drawer-close:tooltip is-drawer-close:tooltip-right"
+                    data-tip="Post FAQ"
+                    to="/dashboard/post-faq"
+                  >
+                    <FaQuestion />
+                    <span className="is-drawer-close:hidden">Post FAQ</span>
+                  </NavLink>
+                </li>
+                <li>
+                  <NavLink
+                    className="is-drawer-close:tooltip is-drawer-close:tooltip-right"
+                    data-tip="Post Blog"
+                    to="/dashboard/post-blog"
+                  >
+                    <FaNewspaper />
+                    <span className="is-drawer-close:hidden">Post Blog</span>
                   </NavLink>
                 </li>
               </>

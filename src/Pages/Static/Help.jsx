@@ -1,47 +1,57 @@
 import React from "react";
+import { useQuery } from "@tanstack/react-query";
+import useAxios from "../../hooks/useAxios";
 import Section from "../../Components/ui/Section";
+import ProductCardSkeleton from "../../Components/ui/ProductCardSkeleton";
 
 const Help = () => {
+  const axiosInstance = useAxios();
+
+  const { data, isLoading } = useQuery({
+    queryKey: ["faqs"],
+    queryFn: async () => {
+      const res = await axiosInstance.get("/faqs");
+      return res.data.faqs || [];
+    },
+  });
+
+  const faqs = data || [];
+
   return (
     <Section
       id="help-page"
       title="Help & Support"
       subtitle="Answers to common questions about using the Garments Order & Production Tracker."
     >
-      <div className="space-y-6 max-w-3xl mx-auto text-base-content/80">
-        <div>
-          <h3 className="text-lg font-semibold text-secondary mb-1">
-            How do buyers place an order?
-          </h3>
-          <p>
-            Buyers can browse products, view detailed specifications, and then
-            use the booking flow. The system enforces minimum order quantities
-            and only allows active, approved buyer accounts to confirm orders.
-          </p>
+      {isLoading ? (
+        <div className="space-y-4">
+          {Array.from({ length: 5 }).map((_, i) => (
+            <div key={i} className="skeleton h-24"></div>
+          ))}
         </div>
-        <div>
-          <h3 className="text-lg font-semibold text-secondary mb-1">
-            What can managers and admins do?
-          </h3>
-          <p>
-            Managers can add and manage products, approve orders, and update
-            tracking information. Admins can manage users, roles, and account
-            status to keep the system safe and production-ready.
-          </p>
+      ) : faqs.length === 0 ? (
+        <div className="text-center py-12 text-base-content/60">
+          <p>No FAQs available yet.</p>
         </div>
-        <div>
-          <h3 className="text-lg font-semibold text-secondary mb-1">
-            Who should I contact for technical issues?
-          </h3>
-          <p>
-            For deployment, configuration, or integration questions, use the
-            contact information on the Contact page. For day-to-day order or
-            production questions, your manager or admin should be the first
-            point of contact.
-          </p>
+      ) : (
+        <div className="max-w-3xl mx-auto space-y-4">
+          {faqs.map((faq, index) => (
+            <div
+              key={faq._id}
+              className="collapse collapse-plus border border-base-300 rounded"
+            >
+              <input type="radio" name="faqs-accordion" defaultChecked={index === 0} />
+              <div className="collapse-title text-lg font-semibold text-secondary">
+                {faq.question}
+              </div>
+              <div className="collapse-content text-base-content/80">
+                <p>{faq.answer}</p>
+              </div>
+            </div>
+          ))}
         </div>
-      </div>
-    </Section>
+      )}
+      </Section>
   );
 };
 

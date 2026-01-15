@@ -1,17 +1,80 @@
-import React from "react";
+import React, { useState } from "react";
 import { useNavigate } from "react-router";
 import useAuth from "../../../hooks/useAuth";
 import useRole from "../../../hooks/useRole";
+import useAxiosSecure from "../../../hooks/useAxiosSecure";
 import Swal from "sweetalert2";
 import usePageTitle from "../../../hooks/usePageTitle";
 
 const MyProfile = () => {
   usePageTitle("My Profile - Garments Order");
 
-  const { user, logOut } = useAuth();
+  const { user, logOut, updateUserProfile } = useAuth();
   const navigate = useNavigate();
   const { role, status, suspendReason, suspendFeedback } = useRole();
-  //   const axiosSecure = useAxiosSecure();
+  const axiosSecure = useAxiosSecure();
+  const [isEditing, setIsEditing] = useState(false);
+  const [isSaving, setIsSaving] = useState(false);
+  const [formData, setFormData] = useState({
+    name: user?.displayName || "",
+    photoURL: user?.photoURL || "",
+  });
+
+  const handleEdit = () => {
+    setIsEditing(true);
+    setFormData({
+      name: user?.displayName || "",
+      photoURL: user?.photoURL || "",
+    });
+  };
+
+  const handleCancel = () => {
+    setIsEditing(false);
+    setFormData({
+      name: user?.displayName || "",
+      photoURL: user?.photoURL || "",
+    });
+  };
+
+  const handleSave = async () => {
+    setIsSaving(true);
+    try {
+      // Update Firebase profile
+      if (formData.name !== user?.displayName || formData.photoURL !== user?.photoURL) {
+        await updateUserProfile({
+          displayName: formData.name,
+          photoURL: formData.photoURL,
+        });
+      }
+
+      // Update backend database
+      await axiosSecure.patch("/users/profile", {
+        name: formData.name,
+        photoURL: formData.photoURL,
+      });
+
+      await Swal.fire({
+        icon: "success",
+        title: "Profile Updated!",
+        text: "Your profile has been updated successfully.",
+        timer: 2000,
+        timerProgressBar: true,
+      });
+
+      setIsEditing(false);
+      // Reload page to reflect changes
+      window.location.reload();
+    } catch (error) {
+      console.error("Error updating profile:", error);
+      Swal.fire({
+        icon: "error",
+        title: "Update Failed",
+        text: error.message || "Failed to update profile. Please try again.",
+      });
+    } finally {
+      setIsSaving(false);
+    }
+  };
 
   const handleLogout = async () => {
     Swal.fire({
@@ -78,9 +141,19 @@ const MyProfile = () => {
 
           {/* Profile Information */}
           <div className="p-8">
-            <h2 className="text-2xl font-bold text-secondary mb-6">
-              Profile Information
-            </h2>
+            <div className="flex items-center justify-between mb-6">
+              <h2 className="text-2xl font-bold text-secondary">
+                Profile Information
+              </h2>
+              {!isEditing && (
+                <button
+                  onClick={handleEdit}
+                  className="btn btn-primary btn-sm"
+                >
+                  Edit Profile
+                </button>
+              )}
+            </div>
 
             <div className="space-y-6">
               {/* Display Name */}
@@ -88,10 +161,52 @@ const MyProfile = () => {
                 <label className="block text-sm font-semibold text-gray-700 mb-2">
                   Full Name
                 </label>
-                <p className="text-lg text-secondary">
-                  {user.displayName || "Not set"}
-                </p>
+                {isEditing ? (
+                  <input
+                    type="text"
+                    value={formData.name}
+                    onChange={(e) =>
+                      setFormData({ ...formData, name: e.target.value })
+                    }
+                    className="input input-bordered w-full"
+                    placeholder="Enter your full name"
+                  />
+                ) : (
+                  <p className="text-lg text-secondary">
+                    {user.displayName || "Not set"}
+                  </p>
+                )}
               </div>
+
+              {/* Photo URL */}
+              {isEditing && (
+                <div className="bg-base-200 p-4 rounded-lg">
+                  <label className="block text-sm font-semibold text-gray-700 mb-2">
+                    Photo URL
+                  </label>
+                  <input
+                    type="url"
+                    value={formData.photoURL}
+                    onChange={(e) =>
+                      setFormData({ ...formData, photoURL: e.target.value })
+                    }
+                    className="input input-bordered w-full"
+                    placeholder="Enter photo URL"
+                  />
+                  {formData.photoURL && (
+                    <div className="mt-2">
+                      <img
+                        src={formData.photoURL}
+                        alt="Preview"
+                        className="w-20 h-20 rounded-full object-cover"
+                        onError={(e) => {
+                          e.target.style.display = "none";
+                        }}
+                      />
+                    </div>
+                  )}
+                </div>
+              )}
 
               {/* Email */}
               <div className="bg-base-200 p-4 rounded-lg">
@@ -99,6 +214,9 @@ const MyProfile = () => {
                   Email Address
                 </label>
                 <p className="text-lg text-secondary">{user.email}</p>
+                <p className="text-xs text-gray-500 mt-1">
+                  Email cannot be changed
+                </p>
               </div>
 
               {/* UID */}
@@ -164,14 +282,40 @@ const MyProfile = () => {
               </div>
             </div>
 
-            {/* Logout Button */}
-            <div className="mt-8 pt-8 border-t border-gray-200">
-              <button
-                onClick={handleLogout}
-                className="w-full bg-red-600 hover:bg-red-700 text-white font-bold py-3 px-6 rounded-lg transition-colors duration-200"
-              >
-                Logout
-              </button>
+            {/* Action Buttons */}
+            <div className="mt-8 pt-8 border-t border-gray-200 space-y-3">
+              {isEditing ? (
+                <div className="flex gap-3">
+                  <button
+                    onClick={handleSave}
+                    disabled={isSaving}
+                    className="flex-1 btn btn-primary"
+                  >
+                    {isSaving ? (
+                      <>
+                        <span className="loading loading-spinner loading-sm"></span>
+                        Saving...
+                      </>
+                    ) : (
+                      "Save Changes"
+                    )}
+                  </button>
+                  <button
+                    onClick={handleCancel}
+                    disabled={isSaving}
+                    className="flex-1 btn btn-outline"
+                  >
+                    Cancel
+                  </button>
+                </div>
+              ) : (
+                <button
+                  onClick={handleLogout}
+                  className="w-full bg-red-600 hover:bg-red-700 text-white font-bold py-3 px-6 rounded-lg transition-colors duration-200"
+                >
+                  Logout
+                </button>
+              )}
             </div>
           </div>
         </div>

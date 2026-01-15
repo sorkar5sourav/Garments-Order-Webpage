@@ -1,4 +1,6 @@
 import React from "react";
+import { useQuery } from "@tanstack/react-query";
+import useAxiosSecure from "../../../hooks/useAxiosSecure";
 import {
   ResponsiveContainer,
   LineChart,
@@ -12,28 +14,77 @@ import {
 } from "recharts";
 
 const ManagerHome = () => {
+  const axiosSecure = useAxiosSecure();
+
+  const { data: overviewData, isLoading } = useQuery({
+    queryKey: ["manager-overview"],
+    queryFn: async () => {
+      const res = await axiosSecure.get("/dashboard/manager/overview");
+      return res.data;
+    },
+  });
+
+  const stats = overviewData || {
+    counts: {
+      productsManaged: 0,
+      pendingOrders: 0,
+      approvedOrders: 0,
+      lowStockItems: 0,
+    },
+    weeklyApprovals: [],
+    stockHealth: [],
+  };
+
   const inventoryStats = [
-    { label: "Products Managed", value: 142, color: "#10b981" },
-    { label: "Pending Orders", value: 58, color: "#f59e0b" },
-    { label: "Approved Orders", value: 312, color: "#3b82f6" },
-    { label: "Low Stock Items", value: 12, color: "#ef4444" },
+    {
+      label: "Products Managed",
+      value: stats.counts.productsManaged,
+      color: "#10b981",
+    },
+    {
+      label: "Pending Orders",
+      value: stats.counts.pendingOrders,
+      color: "#f59e0b",
+    },
+    {
+      label: "Approved Orders",
+      value: stats.counts.approvedOrders,
+      color: "#3b82f6",
+    },
+    {
+      label: "Low Stock Items",
+      value: stats.counts.lowStockItems,
+      color: "#ef4444",
+    },
   ];
 
-  const stockHealth = [
-    { name: "Jan", stock: 92, backorder: 4 },
-    { name: "Feb", stock: 96, backorder: 3 },
-    { name: "Mar", stock: 88, backorder: 6 },
-    { name: "Apr", stock: 90, backorder: 5 },
-    { name: "May", stock: 94, backorder: 3 },
-    { name: "Jun", stock: 97, backorder: 2 },
-  ];
+  const stockHealth = stats.stockHealth.length > 0
+    ? stats.stockHealth
+    : [
+        { name: "Jan", stock: 0, backorder: 0 },
+        { name: "Feb", stock: 0, backorder: 0 },
+        { name: "Mar", stock: 0, backorder: 0 },
+        { name: "Apr", stock: 0, backorder: 0 },
+        { name: "May", stock: 0, backorder: 0 },
+        { name: "Jun", stock: 0, backorder: 0 },
+      ];
 
-  const approvalTrend = [
-    { name: "Week 1", approvals: 42 },
-    { name: "Week 2", approvals: 55 },
-    { name: "Week 3", approvals: 61 },
-    { name: "Week 4", approvals: 68 },
-  ];
+  const approvalTrend = stats.weeklyApprovals.length > 0
+    ? stats.weeklyApprovals
+    : [
+        { name: "Week 1", approvals: 0 },
+        { name: "Week 2", approvals: 0 },
+        { name: "Week 3", approvals: 0 },
+        { name: "Week 4", approvals: 0 },
+      ];
+
+  if (isLoading) {
+    return (
+      <div className="flex justify-center items-center min-h-[400px]">
+        <span className="loading loading-spinner loading-lg"></span>
+      </div>
+    );
+  }
 
   return (
     <div className="space-y-6">

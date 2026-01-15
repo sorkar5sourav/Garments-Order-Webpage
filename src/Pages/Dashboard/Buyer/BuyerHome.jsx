@@ -1,4 +1,6 @@
 import React from "react";
+import { useQuery } from "@tanstack/react-query";
+import useAxiosSecure from "../../../hooks/useAxiosSecure";
 import {
   ResponsiveContainer,
   AreaChart,
@@ -15,27 +17,89 @@ import {
 import { FaShoppingCart, FaClock, FaCheckSquare, FaDollarSign } from "react-icons/fa";
 
 const BuyerHome = () => {
+  const axiosSecure = useAxiosSecure();
+
+  const { data: overviewData, isLoading } = useQuery({
+    queryKey: ["buyer-overview"],
+    queryFn: async () => {
+      const res = await axiosSecure.get("/dashboard/buyer/overview");
+      return res.data;
+    },
+  });
+
+  const stats = overviewData || {
+    counts: {
+      totalOrders: 0,
+      pendingOrders: 0,
+      completedOrders: 0,
+      totalSpent: 0,
+    },
+    orderStatusData: [],
+    spendingTrend: [],
+  };
+
   const quickStats = [
-    { label: "Total Orders", value: 24, icon: FaShoppingCart, color: "#3b82f6" },
-    { label: "Pending Orders", value: 3, icon: FaClock, color: "#f59e0b" },
-    { label: "Completed Orders", value: 18, icon: FaCheckSquare, color: "#10b981" },
-    { label: "Total Spent", value: "৳82,400", icon: FaDollarSign, color: "#8b5cf6" },
+    {
+      label: "Total Orders",
+      value: stats.counts.totalOrders,
+      icon: FaShoppingCart,
+      color: "#3b82f6",
+    },
+    {
+      label: "Pending Orders",
+      value: stats.counts.pendingOrders,
+      icon: FaClock,
+      color: "#f59e0b",
+    },
+    {
+      label: "Completed Orders",
+      value: stats.counts.completedOrders,
+      icon: FaCheckSquare,
+      color: "#10b981",
+    },
+    {
+      label: "Total Spent",
+      value: `৳${stats.counts.totalSpent.toLocaleString()}`,
+      icon: FaDollarSign,
+      color: "#8b5cf6",
+    },
   ];
 
-  const orderStatusData = [
-    { name: "Pending", value: 3, color: "#f59e0b" },
-    { name: "Processing", value: 3, color: "#3b82f6" },
-    { name: "Delivered", value: 18, color: "#10b981" },
-  ];
+  const orderStatusData = stats.orderStatusData.length > 0
+    ? stats.orderStatusData.map((item) => ({
+        name: item.name,
+        value: item.value,
+        color:
+          item.name.toLowerCase() === "pending"
+            ? "#f59e0b"
+            : item.name.toLowerCase() === "delivered"
+            ? "#10b981"
+            : "#3b82f6",
+      }))
+    : [
+        { name: "Pending", value: 0, color: "#f59e0b" },
+        { name: "Processing", value: 0, color: "#3b82f6" },
+        { name: "Delivered", value: 0, color: "#10b981" },
+      ];
 
-  const spendingTrend = [
-    { month: "Jan", amount: 8200 },
-    { month: "Feb", amount: 9400 },
-    { month: "Mar", amount: 7600 },
-    { month: "Apr", amount: 11200 },
-    { month: "May", amount: 9800 },
-    { month: "Jun", amount: 12300 },
-  ];
+  const spendingTrend = stats.spendingTrend.length > 0
+    ? stats.spendingTrend
+    : [
+        { month: "Jan", amount: 0 },
+        { month: "Feb", amount: 0 },
+        { month: "Mar", amount: 0 },
+        { month: "Apr", amount: 0 },
+        { month: "May", amount: 0 },
+        { month: "Jun", amount: 0 },
+      ];
+
+  if (isLoading) {
+    return (
+      <div className="flex justify-center items-center min-h-[400px]">
+        <span className="loading loading-spinner loading-lg"></span>
+      </div>
+    );
+  }
 
   return (
     <div className="space-y-6">

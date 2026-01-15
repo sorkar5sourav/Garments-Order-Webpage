@@ -16,6 +16,8 @@ import DashboardLayout from "../Layouts/DashboardLayout";
 import ManageUsers from "../Pages/Dashboard/Admin/ManageUsers";
 import AdminProducts from "../Pages/Dashboard/Admin/AdminProducts";
 import AdminOrders from "../Pages/Dashboard/Admin/AdminOrders";
+import PostFAQ from "../Pages/Dashboard/Admin/PostFAQ";
+import PostBlog from "../Pages/Dashboard/Admin/PostBlog";
 import ManagerAddProduct from "../Pages/Dashboard/Manager/ManagerAddProduct";
 import ManageProducts from "../Pages/Dashboard/Manager/ManageProducts";
 import PendingOrders from "../Pages/Dashboard/Manager/PendingOrders";
@@ -32,7 +34,6 @@ import Blog from "../Pages/Static/Blog";
 import Help from "../Pages/Static/Help";
 import Privacy from "../Pages/Static/Privacy";
 import Terms from "../Pages/Static/Terms";
-// import PaymentHistory from "../Pages/Dashboard/Buyer/Payment/PaymentHistory";
 
 export const router = createBrowserRouter([
   {
@@ -157,6 +158,22 @@ export const router = createBrowserRouter([
         element: (
           <AdminRoute>
             <AdminOrders />
+          </AdminRoute>
+        ),
+      },
+      {
+        path: "post-faq",
+        element: (
+          <AdminRoute>
+            <PostFAQ />
+          </AdminRoute>
+        ),
+      },
+      {
+        path: "post-blog",
+        element: (
+          <AdminRoute>
+            <PostBlog />
           </AdminRoute>
         ),
       },

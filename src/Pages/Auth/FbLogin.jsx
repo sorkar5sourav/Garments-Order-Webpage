@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import useAuth from "../../hooks/useAuth";
 import { useLocation, useNavigate } from "react-router";
 import useAxiosSecure from "../../hooks/useAxiosSecure";
@@ -9,8 +9,10 @@ const FbLogin = () => {
   const axiosSecure = useAxiosSecure();
   const location = useLocation();
   const navigate = useNavigate();
+  const [isLoading, setIsLoading] = useState(false);
 
   const handleFacebookSignIn = async () => {
+    setIsLoading(true);
     try {
       const result = await signInFacebook();
       // console.log(result.user);
@@ -35,7 +37,7 @@ const FbLogin = () => {
         timerProgressBar: true,
       });
 
-      navigate(location.state || "/");
+      navigate(location?.state?.pathname || location?.state || "/");
     } catch (error) {
       console.log(error);
 
@@ -46,6 +48,8 @@ const FbLogin = () => {
         text: error.message || "Failed to login with Facebook. Please try again.",
         confirmButtonColor: "#EF4444",
       });
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -53,10 +57,24 @@ const FbLogin = () => {
     <div className="text-center pb-8">
       <button
         onClick={handleFacebookSignIn}
-        className="btn bg-blue-400 text-white border-blue-600"
+        disabled={isLoading}
+        className="btn bg-blue-500 text-white border-blue-600 hover:bg-blue-600 w-full"
       >
-        <img src={facebookLogo} alt="Facebook logo" className="w-4 h-4" />
-        Login with Facebook
+        {isLoading ? (
+          <>
+            <span className="loading loading-spinner loading-sm"></span>
+            Signing in...
+          </>
+        ) : (
+          <>
+            <img
+              src={facebookLogo}
+              alt="Facebook logo"
+              className="w-4 h-4 mr-2 invert"
+            />
+            Login with Facebook
+          </>
+        )}
       </button>
     </div>
   );

@@ -5,10 +5,17 @@ import LD from "../../assets/LD.png";
 import twitter from "../../assets/twitter.png";
 import YT from "../../assets/YT.png";
 const Footer = () => {
-  const fLInks = ["Services", "Dashboard", "About Us", "Login"];
+  const footerLinks = [
+    { label: "About", to: "/about" },
+    { label: "Contact", to: "/contact" },
+    { label: "Blog", to: "/blog" },
+    { label: "Help & Support", to: "/help" },
+    { label: "Privacy Policy", to: "/privacy" },
+    { label: "Terms of Use", to: "/terms" },
+  ];
   return (
     <footer id="footer" className="bg-base-300 w-full p-10">
-      <div className="max-w-360 mx-auto">
+      <div className="max-w-340 mx-auto">
         <div className="flex justify-center lg:justify-start items-center flex-col mb-6">
           <img src={logo} className="w-40" alt="" />
           <h1 className="text-3xl font-bold text-[#105e91] text-center mt-4">
@@ -25,14 +32,14 @@ const Footer = () => {
               platform designed to help small and medium-sized garment factories
               manage their production workflow.
             </p>
-            <div className="grid grid-cols-2 md:grid-cols-4 black5 my-6 justify-around lg:justify-start items-center">
-              {fLInks.map((link, index) => (
+            <div className="grid grid-cols-2 md:grid-cols-3 black5 my-6 gap-3 justify-around lg:justify-start items-center">
+              {footerLinks.map((item) => (
                 <Link
-                  key={index}
+                  key={item.to}
                   className="hover:text-primary text-center"
-                  to={`/${link.toLowerCase().replace(" ", "-")}`}
+                  to={item.to}
                 >
-                  {link}
+                  {item.label}
                 </Link>
               ))}
             </div>
@@ -110,10 +117,38 @@ const Footer = () => {
             Copyright © {new Date().getFullYear()} - All right reserved
           </p>
           <nav className="flex items-center gap-4">
-            <img src={LD} alt="LinkedIn" className="w-6 h-6" />
-            <img src={twitter} alt="Twitter" className="w-6 h-6" />
-            <img src={FB} alt="Facebook" className="w-6 h-6" />
-            <img src={YT} alt="YouTube" className="w-6 h-6" />
+            <a
+              href="https://www.linkedin.com"
+              target="_blank"
+              rel="noreferrer"
+              aria-label="LinkedIn"
+            >
+              <img src={LD} alt="LinkedIn" className="w-6 h-6" />
+            </a>
+            <a
+              href="https://twitter.com"
+              target="_blank"
+              rel="noreferrer"
+              aria-label="Twitter"
+            >
+              <img src={twitter} alt="Twitter" className="w-6 h-6" />
+            </a>
+            <a
+              href="https://facebook.com"
+              target="_blank"
+              rel="noreferrer"
+              aria-label="Facebook"
+            >
+              <img src={FB} alt="Facebook" className="w-6 h-6" />
+            </a>
+            <a
+              href="https://youtube.com"
+              target="_blank"
+              rel="noreferrer"
+              aria-label="YouTube"
+            >
+              <img src={YT} alt="YouTube" className="w-6 h-6" />
+            </a>
           </nav>
         </div>
       </div>

@@ -2,8 +2,8 @@ import React, { useEffect, useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import useAxios from "../../hooks/useAxios";
 import ProductCard from "../../Components/ProductCard";
-import Loading from "../../Components/atoms/Loading";
 import usePageTitle from "../../hooks/usePageTitle";
+import ProductCardSkeleton from "../../Components/ui/ProductCardSkeleton";
 
 const AllProducts = () => {
   usePageTitle("All Products - Garments Order");
@@ -13,6 +13,10 @@ const AllProducts = () => {
   const [debouncedSearchTerm, setDebouncedSearchTerm] = useState("");
   const axiosInstance = useAxios();
   const [itemsPerPage, setItemsPerPage] = useState(16);
+  const [category, setCategory] = useState("all");
+  const [minPrice, setMinPrice] = useState("");
+  const [maxPrice, setMaxPrice] = useState("");
+  const [sortBy, setSortBy] = useState("createdAt-desc");
 
   // Reduce the number of cards on medium screens and below to 6
   useEffect(() => {
@@ -37,13 +41,28 @@ const AllProducts = () => {
 
   const { data: productData = { products: [], pagination: {} }, isLoading } =
     useQuery({
-      queryKey: ["all-products", currentPage, debouncedSearchTerm],
+      queryKey: [
+        "all-products",
+        currentPage,
+        debouncedSearchTerm,
+        category,
+        minPrice,
+        maxPrice,
+        sortBy,
+        itemsPerPage,
+      ],
       queryFn: async () => {
+        const [sortField, sortOrder] = sortBy.split("-");
         const response = await axiosInstance.get("/products", {
           params: {
             page: currentPage,
             limit: itemsPerPage,
             search: debouncedSearchTerm,
+            category: category === "all" ? undefined : category,
+            minPrice: minPrice || undefined,
+            maxPrice: maxPrice || undefined,
+            sortBy: sortField,
+            order: sortOrder,
           },
         });
         return response.data || { products: [], pagination: {} };
@@ -62,6 +81,11 @@ const AllProducts = () => {
     setCurrentPage(1);
   };
 
+  const handleFilterChange = (setter) => (e) => {
+    setter(e.target.value);
+    setCurrentPage(1);
+  };
+
   return (
     <div className="min-h-screen bg-base-200 py-12">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -74,39 +98,107 @@ const AllProducts = () => {
           </p>
         </div>
 
-        {/* Search Bar */}
-        <div className="mb-8 flex justify-center">
-          <div className="relative w-full max-w-md">
-            <input
-              type="text"
-              placeholder="Search products..."
-              value={searchTerm}
-              onChange={handleSearchChange}
-              className="input input-bordered w-full pr-10"
-            />
-            {searchTerm && (
-              <button
-                onClick={clearSearch}
-                className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-500 hover:text-gray-700"
+        {/* Search + Filters */}
+        <div className="mb-8 space-y-4">
+          {/* Search Bar */}
+          <div className="flex justify-center">
+            <div className="relative w-full max-w-md">
+              <input
+                type="text"
+                placeholder="Search products..."
+                value={searchTerm}
+                onChange={handleSearchChange}
+                className="input input-bordered w-full pr-10"
+              />
+              {searchTerm && (
+                <button
+                  onClick={clearSearch}
+                  className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-500 hover:text-gray-700"
+                >
+                  ✕
+                </button>
+              )}
+              <div className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 pointer-events-none">
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  className="h-5 w-5"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
+                  />
+                </svg>
+              </div>
+            </div>
+          </div>
+
+          {/* Filters Row */}
+          <div className="grid grid-cols-1 md:grid-cols-4 gap-4 items-end">
+            <div>
+              <label className="block text-sm font-medium mb-1">
+                Category
+              </label>
+              <select
+                className="select select-bordered w-full"
+                value={category}
+                onChange={handleFilterChange(setCategory)}
               >
-                ✕
-              </button>
-            )}
-            <div className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400">
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                className="h-5 w-5"
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke="currentColor"
+                <option value="all">All categories</option>
+                <option value="Shirt">Shirt</option>
+                <option value="Pant">Pant</option>
+                <option value="Jacket">Jacket</option>
+                <option value="Accessories">Accessories</option>
+              </select>
+            </div>
+
+            <div>
+              <label className="block text-sm font-medium mb-1">
+                Min price
+              </label>
+              <input
+                type="number"
+                min="0"
+                value={minPrice}
+                onChange={handleFilterChange(setMinPrice)}
+                className="input input-bordered w-full"
+                placeholder="0"
+              />
+            </div>
+
+            <div>
+              <label className="block text-sm font-medium mb-1">
+                Max price
+              </label>
+              <input
+                type="number"
+                min="0"
+                value={maxPrice}
+                onChange={handleFilterChange(setMaxPrice)}
+                className="input input-bordered w-full"
+                placeholder="Any"
+              />
+            </div>
+
+            <div>
+              <label className="block text-sm font-medium mb-1">Sort by</label>
+              <select
+                className="select select-bordered w-full"
+                value={sortBy}
+                onChange={handleFilterChange(setSortBy)}
               >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={2}
-                  d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
-                />
-              </svg>
+                <option value="createdAt-desc">Newest first</option>
+                <option value="createdAt-asc">Oldest first</option>
+                <option value="price-asc">Price: Low to High</option>
+                <option value="price-desc">Price: High to Low</option>
+                <option value="availableQuantity-desc">
+                  Stock: High to Low
+                </option>
+              </select>
             </div>
           </div>
         </div>
@@ -125,7 +217,11 @@ const AllProducts = () => {
         )}
 
         {isLoading ? (
-          <Loading />
+          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+            {Array.from({ length: 8 }).map((_, index) => (
+              <ProductCardSkeleton key={index} />
+            ))}
+          </div>
         ) : products.length === 0 ? (
           <div className="text-center py-12">
             <p className="text-xl text-gray-500">

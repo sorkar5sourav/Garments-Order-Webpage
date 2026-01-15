@@ -1,6 +1,7 @@
 import { Link, NavLink, useLocation } from "react-router";
 import LogoPNG from "../../assets/Logo.png";
 import LogoText from "../../assets/Logo-Text.png";
+import AvatarFallback from "../../assets/Logo.png";
 import useAuth from "../../hooks/useAuth";
 import { useState, useEffect } from "react";
 import ThemeToggle from "../atoms/ThemeToggle";
@@ -135,25 +136,15 @@ const NavBar = () => {
           All Products
         </NavLink>
       </li>
-
       <li>
-        <a
-          href="#about-us"
-          onClick={handleAboutUsClick}
-          className={getHomepageButtonClass("about-us")}
-        >
-          About Us
-        </a>
+        <NavLink to="/about" className={navLinkClass}>
+          About
+        </NavLink>
       </li>
-
       <li>
-        <a
-          href="#footer"
-          onClick={handleContactClick}
-          className={getHomepageButtonClass("footer")}
-        >
+        <NavLink to="/contact" className={navLinkClass}>
           Contact
-        </a>
+        </NavLink>
       </li>
     </>
   );
@@ -182,6 +173,18 @@ const NavBar = () => {
       <li>
         <NavLink to="/dashboard" className={navLinkClass}>
           Dashboard
+        </NavLink>
+      </li>
+
+      <li>
+        <NavLink to="/dashboard/profile" className={navLinkClass}>
+          Profile
+        </NavLink>
+      </li>
+
+      <li>
+        <NavLink to="/help" className={navLinkClass}>
+          Help
         </NavLink>
       </li>
     </>
@@ -246,7 +249,7 @@ const NavBar = () => {
                 >
                   <div className="w-10 rounded-full">
                     <img
-                      src={user?.photoURL || "https://via.placeholder.com/150"}
+                      src={user?.photoURL || AvatarFallback}
                       alt={user?.displayName || "User"}
                       title={user?.displayName || "User"}
                     />

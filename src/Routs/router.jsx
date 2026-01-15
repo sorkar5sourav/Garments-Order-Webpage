@@ -26,6 +26,12 @@ import MyOrders from "../Pages/Dashboard/Buyer/MyOrders";
 import MyProfile from "../Pages/Dashboard/Buyer/MyProfile";
 import PaymentSuccess from "../Pages/Dashboard/Buyer/Payment/PaymentSuccess";
 import PaymentCancelled from "../Pages/Dashboard/Buyer/Payment/PaymentCancelled";
+import About from "../Pages/Static/About";
+import Contact from "../Pages/Static/Contact";
+import Blog from "../Pages/Static/Blog";
+import Help from "../Pages/Static/Help";
+import Privacy from "../Pages/Static/Privacy";
+import Terms from "../Pages/Static/Terms";
 // import PaymentHistory from "../Pages/Dashboard/Buyer/Payment/PaymentHistory";
 
 export const router = createBrowserRouter([
@@ -41,6 +47,30 @@ export const router = createBrowserRouter([
       {
         path: "products/:id",
         element: <ProductDetails />,
+      },
+      {
+        path: "about",
+        element: <About />,
+      },
+      {
+        path: "contact",
+        element: <Contact />,
+      },
+      {
+        path: "blog",
+        element: <Blog />,
+      },
+      {
+        path: "help",
+        element: <Help />,
+      },
+      {
+        path: "privacy",
+        element: <Privacy />,
+      },
+      {
+        path: "terms",
+        element: <Terms />,
       },
       {
         path: "booking/:id",

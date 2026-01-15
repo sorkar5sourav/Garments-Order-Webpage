@@ -1,4 +1,6 @@
 import React from "react";
+import { motion } from "framer-motion";
+import { staggerContainer, staggerItem } from "../../utils/animations";
 
 const HowItWorks = () => {
   const steps = [
@@ -47,37 +49,62 @@ const HowItWorks = () => {
   ];
 
   return (
-    <section className="bg-base-300 py-10 md:py-20">
+    <motion.section 
+      className="bg-base-300 py-10 md:py-20"
+      initial="hidden"
+      whileInView="visible"
+      variants={{ hidden: { opacity: 0 }, visible: { opacity: 1, transition: { duration: 0.6 } } }}
+      viewport={{ once: true }}
+    >
       <div className="my-10 max-w-360 mx-auto px-4">
-        <div className="text-center mb-12">
+        <motion.div 
+          className="text-center mb-12"
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6 }}
+          viewport={{ once: true }}
+        >
           <h2 className="text-4xl font-bold text-secondary mb-6">
             How It Works
           </h2>
           <p className="text-lg text-base-content leading-relaxed">
             Follow these simple steps to order and track your garments
           </p>
-        </div>
+        </motion.div>
 
-        <div className="grid grid-cols-2 lg:grid-cols-3 gap-8">
+        <motion.div 
+          className="grid grid-cols-2 lg:grid-cols-3 gap-8"
+          variants={staggerContainer}
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true }}
+        >
           {steps.map((step) => (
-            <div
+            <motion.div
               key={step.id}
+              variants={staggerItem}
               className="card bg-base-100 shadow-lg hover:shadow-xl transition-shadow duration-300"
             >
               <div className="card-body text-center">
-                <div className="text-4xl mb-4">{step.icon}</div>
+                <motion.div 
+                  className="text-4xl mb-4"
+                  animate={{ y: [0, -5, 0] }}
+                  transition={{ duration: 2, repeat: Infinity }}
+                >
+                  {step.icon}
+                </motion.div>
                 <div className="badge badge-primary text-base-300 mb-4 text-lg font-bold">
                   Step {step.id}
                 </div>
                 <h4 className="card-title text-xl mb-2">{step.title}</h4>
-                <p className="text-base-CONTENT">{step.description}</p>
+                <p className="text-base-content">{step.description}</p>
               </div>
-            </div>
+            </motion.div>
           ))}
-        </div>
+        </motion.div>
       </div>
-    </section>
-  );
+    </motion.section>
+  )
 };
 
 export default HowItWorks;

@@ -1,9 +1,11 @@
 import React from "react";
 import { useQuery } from "@tanstack/react-query";
+import { motion } from "framer-motion";
 import useAxios from "../../hooks/useAxios";
 import Section from "../../Components/ui/Section";
 import Loading from "../../Components/atoms/Loading";
 import EmptyState from "../../Components/ui/EmptyState";
+import { staggerContainer, staggerItem } from "../../utils/animations";
 
 const FaqSection = () => {
   const axiosInstance = useAxios();
@@ -34,23 +36,32 @@ const FaqSection = () => {
           message="Admins can add FAQs from the dashboard to help buyers and managers."
         />
       ) : (
-        <div className="join join-vertical w-full">
-          {faqs.map((faq) => (
-            <div key={faq._id} className="collapse collapse-arrow join-item">
-              <input type="radio" name="faq-accordion" />
+        <motion.div 
+          className="join join-vertical w-full"
+          variants={staggerContainer}
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true }}
+        >
+          {faqs.map((faq, index) => (
+            <motion.div 
+              key={faq._id} 
+              variants={staggerItem}
+              className="collapse collapse-arrow join-item"
+            >
+              <input type="radio" name="faq-accordion" defaultChecked={index === 0} />
               <div className="collapse-title text-base font-medium">
                 {faq.question}
               </div>
               <div className="collapse-content text-sm text-base-content/80">
                 <p>{faq.answer}</p>
               </div>
-            </div>
+            </motion.div>
           ))}
-        </div>
-      )}
-    </Section>
-  );
+        </motion.div>
+        
+  )}
+</Section>
+);
 };
-
 export default FaqSection;
-

@@ -1,9 +1,11 @@
 import React from "react";
 import { useQuery } from "@tanstack/react-query";
+import { motion } from "framer-motion";
 import useAxios from "../../hooks/useAxios";
 import Section from "../../Components/ui/Section";
 import Loading from "../../Components/atoms/Loading";
 import ErrorState from "../../Components/ui/ErrorState";
+import { staggerContainer, staggerItem } from "../../utils/animations";
 
 const StatsOverview = () => {
   const axiosInstance = useAxios();
@@ -63,22 +65,34 @@ const StatsOverview = () => {
       subtitle="A quick overview of activity in the Garments Order & Production Tracker."
       className="bg-base-200"
     >
-      <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+      <motion.div 
+        className="grid grid-cols-2 md:grid-cols-4 gap-4"
+        variants={staggerContainer}
+        initial="hidden"
+        whileInView="visible"
+        viewport={{ once: true }}
+      >
         {cards.map((card) => (
-          <div
+          <motion.div
             key={card.label}
-            className="bg-base-100 rounded-2xl shadow-md p-4 md:p-5 flex flex-col gap-1"
+            variants={staggerItem}
+            className="bg-base-100 rounded-2xl shadow-md p-4 md:p-5 flex flex-col gap-1 hover:shadow-lg transition-shadow"
           >
             <span className="text-xs uppercase tracking-wide text-base-content/60">
               {card.label}
             </span>
-            <span className="text-2xl md:text-3xl font-bold text-primary">
+            <motion.span 
+              className="text-2xl md:text-3xl font-bold text-primary"
+              initial={{ opacity: 0 }}
+              whileInView={{ opacity: 1 }}
+              transition={{ delay: 0.5, duration: 0.6 }}
+            >
               {card.value ?? 0}
-            </span>
+            </motion.span>
             <span className="text-xs text-base-content/70">{card.helper}</span>
-          </div>
+          </motion.div>
         ))}
-      </div>
+      </motion.div>
     </Section>
   );
 };

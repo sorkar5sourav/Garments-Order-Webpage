@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { motion, AnimatePresence } from "framer-motion";
 
 const AboutUs = () => {
   const [activeSection, setActiveSection] = useState("story");
@@ -51,54 +52,113 @@ const AboutUs = () => {
     },
   };
 
+  const tabAnimation = {
+    hidden: { opacity: 0, x: -20 },
+    visible: { opacity: 1, x: 0, transition: { duration: 0.4 } },
+  };
+
+  const contentAnimation = {
+    hidden: { opacity: 0, y: 20 },
+    visible: { opacity: 1, y: 0, transition: { duration: 0.5 } },
+    exit: { opacity: 0, y: -20, transition: { duration: 0.3 } },
+  };
+
+  const paragraphAnimation = {
+    hidden: { opacity: 0, x: 20 },
+    visible: (index) => ({
+      opacity: 1,
+      x: 0,
+      transition: { duration: 0.5, delay: index * 0.1 },
+    }),
+  };
+
   return (
-    <div id="about-us" className="bg-base-100 py-16">
+    <motion.div 
+      id="about-us" 
+      className="bg-base-100 py-16"
+      initial={{ opacity: 0 }}
+      whileInView={{ opacity: 1 }}
+      transition={{ duration: 0.6 }}
+      viewport={{ once: true }}
+    >
       <div className="max-w-7xl mx-auto px-4">
-        <div className="text-center mb-12">
+        <motion.div 
+          className="text-center mb-12"
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6 }}
+          viewport={{ once: true }}
+        >
           <h2 className="text-4xl font-bold text-secondary mb-6">About Us</h2>
           <p className="text-lg text-base-content leading-relaxed max-w-3xl mx-auto">
             Learn more about our journey, mission, and the team behind our
             garments ordering platform.
           </p>
-        </div>
+        </motion.div>
 
         {/* Tab Navigation */}
-        <div className="flex flex-wrap justify-center mb-8 border-b border-gray-200">
-          {Object.keys(sections).map((key) => (
-            <button
+        <motion.div 
+          className="flex flex-wrap justify-center mb-8 border-b border-gray-200"
+          initial={{ opacity: 0 }}
+          whileInView={{ opacity: 1 }}
+          transition={{ duration: 0.6, delay: 0.2 }}
+          viewport={{ once: true }}
+        >
+          {Object.keys(sections).map((key, index) => (
+            <motion.button
               key={key}
               onClick={() => setActiveSection(key)}
               className={`px-6 py-3 text-lg font-medium transition-colors duration-200 ${
                 activeSection === key
                   ? "text-blue-600 border-b-2 border-blue-600 rounded-t-xl bg-blue-50"
-                  : "text-base-CONTENT hover:text-blue-600 hover:bg-base-200"
+                  : "text-base-content hover:text-blue-600 hover:bg-base-200"
               }`}
+              variants={tabAnimation}
+              initial="hidden"
+              whileInView="visible"
+              transition={{ delay: index * 0.05 }}
+              viewport={{ once: true }}
+              whileHover={{ translateY: -2 }}
+              whileTap={{ scale: 0.98 }}
             >
               {sections[key].title}
-            </button>
+            </motion.button>
           ))}
-        </div>
+        </motion.div>
 
         {/* Content Section */}
         <div className="max-w-4xl mx-auto">
-          <div className="bg-base-200 rounded-lg p-8 shadow-sm">
-            <h3 className="text-2xl font-bold text-secondary mb-6 text-center">
-              {sections[activeSection].title}
-            </h3>
-            <div className="space-y-6">
-              {sections[activeSection].content.map((paragraph, index) => (
-                <p
-                  key={index}
-                  className="text-base-content leading-relaxed text-justify"
-                >
-                  {paragraph}
-                </p>
-              ))}
-            </div>
-          </div>
+          <AnimatePresence mode="wait">
+            <motion.div 
+              key={activeSection}
+              className="bg-base-200 rounded-lg p-8 shadow-sm"
+              variants={contentAnimation}
+              initial="hidden"
+              animate="visible"
+              exit="exit"
+            >
+              <h3 className="text-2xl font-bold text-secondary mb-6 text-center">
+                {sections[activeSection].title}
+              </h3>
+              <motion.div className="space-y-6">
+                {sections[activeSection].content.map((paragraph, index) => (
+                  <motion.p
+                    key={index}
+                    className="text-base-content leading-relaxed text-justify"
+                    custom={index}
+                    variants={paragraphAnimation}
+                    initial="hidden"
+                    animate="visible"
+                  >
+                    {paragraph}
+                  </motion.p>
+                ))}
+              </motion.div>
+            </motion.div>
+          </AnimatePresence>
         </div>
       </div>
-    </div>
+    </motion.div>
   );
 };
 

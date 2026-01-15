@@ -1,5 +1,7 @@
 import React from "react";
+import { motion } from "framer-motion";
 import Section from "../../Components/ui/Section";
+import { staggerContainer, staggerItem } from "../../utils/animations";
 
 const features = [
   {
@@ -31,11 +33,18 @@ const FeaturesSection = () => {
       subtitle="Focused on the daily realities of managing garment orders and production."
       className="bg-base-100"
     >
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+      <motion.div 
+        className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6"
+        variants={staggerContainer}
+        initial="hidden"
+        whileInView="visible"
+        viewport={{ once: true }}
+      >
         {features.map((feature) => (
-          <div
+          <motion.div
             key={feature.title}
-            className="bg-base-200 rounded-2xl p-4 md:p-5 flex flex-col gap-2"
+            variants={staggerItem}
+            className="bg-base-200 rounded-2xl p-4 md:p-5 flex flex-col gap-2 hover:shadow-lg transition-all hover:-translate-y-1"
           >
             <h3 className="text-lg font-semibold text-secondary">
               {feature.title}
@@ -43,9 +52,9 @@ const FeaturesSection = () => {
             <p className="text-sm text-base-content/80">
               {feature.description}
             </p>
-          </div>
+          </motion.div>
         ))}
-      </div>
+      </motion.div>
     </Section>
   );
 };

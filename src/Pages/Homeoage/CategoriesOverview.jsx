@@ -1,9 +1,11 @@
 import React from "react";
 import { useQuery } from "@tanstack/react-query";
+import { motion } from "framer-motion";
 import useAxios from "../../hooks/useAxios";
 import Section from "../../Components/ui/Section";
 import ProductCardSkeleton from "../../Components/ui/ProductCardSkeleton";
 import EmptyState from "../../Components/ui/EmptyState";
+import { staggerContainer, staggerItem } from "../../utils/animations";
 
 const CategoriesOverview = () => {
   const axiosInstance = useAxios();
@@ -35,11 +37,18 @@ const CategoriesOverview = () => {
           message="Once managers add products, category insights will appear here."
         />
       ) : (
-        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+        <motion.div 
+          className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6"
+          variants={staggerContainer}
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true }}
+        >
           {categories.map((cat) => (
-            <div
+            <motion.div
               key={cat.category || "uncategorized"}
-              className="bg-base-100 rounded-2xl shadow-md p-4 flex flex-col justify-between"
+              variants={staggerItem}
+              className="bg-base-100 rounded-2xl shadow-md p-4 flex flex-col justify-between hover:shadow-lg transition-shadow"
             >
               <div>
                 <h3 className="text-lg font-semibold text-secondary mb-1">
@@ -54,9 +63,9 @@ const CategoriesOverview = () => {
                 Available units:{" "}
                 <span className="font-semibold">{cat.totalAvailable}</span>
               </p>
-            </div>
+            </motion.div>
           ))}
-        </div>
+        </motion.div>
       )}
     </Section>
   );

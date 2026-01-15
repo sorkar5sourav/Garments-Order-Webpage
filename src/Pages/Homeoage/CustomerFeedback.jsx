@@ -2,6 +2,7 @@ import React from "react";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Navigation, Pagination, Autoplay } from "swiper/modules";
 import { useQuery } from "@tanstack/react-query";
+import { motion } from "framer-motion";
 import useAxios from "../../hooks/useAxios";
 import "swiper/css";
 import "swiper/css/navigation";
@@ -66,15 +67,40 @@ const CustomerFeedback = () => {
 
   const displayReviews = reviews.length > 0 ? reviews : fallbackReviews;
 
-  // Only enable loop if we have enough slides (at least 2x slidesPerView for proper looping)
-  // For mobile (1 slide), need at least 2; for tablet (3 slides), need at least 6; for desktop (5 slides), need at least 10
-  const minSlidesForLoop = 10; // Based on desktop slidesPerView of 5
+  // Only enable loop if we have enough slides
+  // Swiper can loop with fewer slides - it will duplicate them internally
+  const minSlidesForLoop = 2;
   const shouldLoop = displayReviews.length >= minSlidesForLoop;
 
+  // Animation variants for section and buttons
+  const sectionAnimation = {
+    hidden: { opacity: 0, y: 20 },
+    visible: { opacity: 1, y: 0, transition: { duration: 0.6 } },
+  };
+
+  const headerAnimation = {
+    hidden: { opacity: 0, y: 20 },
+    visible: { opacity: 1, y: 0, transition: { duration: 0.6, delay: 0.2 } },
+  };
+
+  const buttonAnimation = {
+    hidden: { opacity: 0, scale: 0.8 },
+    visible: { opacity: 1, scale: 1, transition: { duration: 0.4 } },
+  };
+
   return (
-    <article className="py-24 bg-base-200">
+    <motion.article 
+      className="py-24 bg-base-200"
+      initial="hidden"
+      whileInView="visible"
+      viewport={{ once: true }}
+      variants={sectionAnimation}
+    >
       <div className="py-16">
-        <div className="text-center max-w-4xl mx-auto mb-12 px-4">
+        <motion.div 
+          className="text-center max-w-4xl mx-auto mb-12 px-4"
+          variants={headerAnimation}
+        >
           <h2 className="text-4xl font-bold text-secondary mb-6">
             What Our Customers Are Saying
           </h2>
@@ -82,7 +108,7 @@ const CustomerFeedback = () => {
             Hear from our satisfied customers about their experience with our
             garments ordering platform.
           </p>
-        </div>
+        </motion.div>
 
         <div className="max-w-7xl mx-auto px-4">
           <Swiper
@@ -93,7 +119,7 @@ const CustomerFeedback = () => {
             autoplay={
               shouldLoop
                 ? {
-                    delay: 2500,
+                    delay: 1500,
                     disableOnInteraction: false,
                   }
                 : false
@@ -112,15 +138,25 @@ const CustomerFeedback = () => {
             className="feedback-swiper"
           >
             {displayReviews.map((review) => (
-              <SwiperSlide key={review.id}>
+              <SwiperSlide key={review._id}>
                 {({ isActive }) => (
-                  <div
-                    className={`card bg-base-100 shadow-lg p-6 h-64 flex flex-col justify-between transition-all duration-300 ${
+                  <motion.div
+                    className={`card bg-base-100 shadow-lg p-6 h-64 flex flex-col justify-between transition-all duration-300 hover:shadow-xl hover:-translate-y-1 ${
                       isActive ? "scale-110 opacity-100" : "scale-90 opacity-50"
                     }`}
+                    initial={{ opacity: 0, y: 20 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    transition={{ duration: 0.5 }}
+                    viewport={{ once: true }}
                   >
                     <div className="flex items-center mb-4">
-                      <div className="text-3xl mr-3">{review.avatar}</div>
+                      <motion.div 
+                        className="text-3xl mr-3"
+                        animate={{ y: [0, -5, 0] }}
+                        transition={{ duration: 2, repeat: Infinity }}
+                      >
+                        {review.avatar}
+                      </motion.div>
                       <div>
                         <h4 className="font-semibold text-secondary">
                           {review.name}
@@ -142,20 +178,47 @@ const CustomerFeedback = () => {
                       </div>
                     </div>
                     <p className="text-base-content grow">{review.comment}</p>
-                  </div>
+                  </motion.div>
                 )}
               </SwiperSlide>
             ))}
           </Swiper>
 
-          <div className="flex justify-center items-center mt-8 mx-auto space-x-4">
-            <button className="prev-btn btn btn-circle btn-ghost">←</button>
+          <motion.div 
+            className="flex justify-center items-center mt-8 mx-auto space-x-4"
+            initial={{ opacity: 0 }}
+            whileInView={{ opacity: 1 }}
+            transition={{ duration: 0.6, delay: 0.3 }}
+            viewport={{ once: true }}
+          >
+            <motion.button 
+              className="prev-btn btn btn-circle btn-ghost"
+              variants={buttonAnimation}
+              initial="hidden"
+              whileInView="visible"
+              viewport={{ once: true }}
+              whileHover={{ scale: 1.1 }}
+              whileTap={{ scale: 0.95 }}
+            >
+              ←
+            </motion.button>
             <div className="custom-pagination"></div>
-            <button className="next-btn btn btn-circle btn-ghost">→</button>
-          </div>
+            <motion.button 
+              className="next-btn btn btn-circle btn-ghost"
+              variants={buttonAnimation}
+              initial="hidden"
+              whileInView="visible"
+              transition={{ delay: 0.1 }}
+              viewport={{ once: true }}
+              whileHover={{ scale: 1.1 }}
+              whileTap={{ scale: 0.95 }}
+            >
+              →
+            </motion.button>
+          </motion.div>
         </div>
       </div>
-    </article>
+    </motion.article>
   );
 };
 

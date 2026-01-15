@@ -1,10 +1,12 @@
 import React from "react";
 import { useQuery } from "@tanstack/react-query";
+import { motion } from "framer-motion";
 import useAxios from "../../hooks/useAxios";
 import Section from "../../Components/ui/Section";
 import EmptyState from "../../Components/ui/EmptyState";
 import ProductCardSkeleton from "../../Components/ui/ProductCardSkeleton";
 import { Link } from "react-router";
+import { staggerContainer, staggerItem, fadeInUp } from "../../utils/animations";
 
 const BlogHighlights = () => {
   const axiosInstance = useAxios();
@@ -43,11 +45,18 @@ const BlogHighlights = () => {
         />
       ) : (
         <>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+          <motion.div 
+            className="grid grid-cols-1 md:grid-cols-3 gap-6"
+            variants={staggerContainer}
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true }}
+          >
             {blogs.map((post) => (
-              <article
+              <motion.article
                 key={post._id}
-                className="bg-base-100 rounded-2xl shadow-md p-5 flex flex-col"
+                variants={staggerItem}
+                className="bg-base-100 rounded-2xl shadow-md p-5 flex flex-col hover:shadow-lg hover:-translate-y-1 transition-all"
               >
                 <h3 className="text-lg font-semibold text-secondary mb-2 line-clamp-2">
                   {post.title}
@@ -63,14 +72,20 @@ const BlogHighlights = () => {
                 <span className="text-xs uppercase tracking-wide text-primary mt-auto">
                   {post.category || "Production"}
                 </span>
-              </article>
+              </motion.article>
             ))}
-          </div>
-          <div className="text-center mt-6">
+          </motion.div>
+          <motion.div 
+            className="text-center mt-6"
+            initial={{ opacity: 0 }}
+            whileInView={{ opacity: 1 }}
+            transition={{ delay: 0.6, duration: 0.6 }}
+            viewport={{ once: true }}
+          >
             <Link to="/blog" className="btn btn-outline">
               View all articles
             </Link>
-          </div>
+          </motion.div>
         </>
       )}
     </Section>

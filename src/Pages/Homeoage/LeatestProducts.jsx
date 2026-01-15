@@ -1,8 +1,10 @@
 import React, { useEffect, useState } from "react";
 import { useQuery } from "@tanstack/react-query";
+import { motion } from "framer-motion";
 import useAxios from "../../hooks/useAxios";
 import ProductCard from "../../Components/ProductCard";
 import Loading from "../../Components/atoms/Loading";
+import { fadeInUp, staggerContainer, staggerItem } from "../../utils/animations";
 
 const LatestProducts = () => {
   const axiosInstance = useAxios();
@@ -33,16 +35,28 @@ const LatestProducts = () => {
   const { products = [] } = productData;
 
   return (
-    <div className="py-12 bg-base-200">
+    <motion.div 
+      className="py-12 bg-base-200"
+      initial="hidden"
+      whileInView="visible"
+      variants={fadeInUp}
+      viewport={{ once: true }}
+    >
       <div className="max-w-8xl max-w-380 rounded-3xl py-10 mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="text-center mb-12">
+        <motion.div 
+          className="text-center mb-12"
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6 }}
+          viewport={{ once: true }}
+        >
           <h2 className="text-4xl font-bold text-secondary mb-6">
             Latest Products
           </h2>
           <p className="text-lg text-base-content leading-relaxed">
             Check out our newest additions to the collection
           </p>
-        </div>
+        </motion.div>
 
         {isLoading ? (
           <Loading />
@@ -51,14 +65,22 @@ const LatestProducts = () => {
             <p className="text-xl text-gray-500">No products available</p>
           </div>
         ) : (
-          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+          <motion.div 
+            className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6"
+            variants={staggerContainer}
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true }}
+          >
             {products.map((product) => (
-              <ProductCard key={product._id} product={product} />
+              <motion.div key={product._id} variants={staggerItem}>
+                <ProductCard product={product} />
+              </motion.div>
             ))}
-          </div>
+          </motion.div>
         )}
       </div>
-    </div>
+    </motion.div>
   );
 };
 

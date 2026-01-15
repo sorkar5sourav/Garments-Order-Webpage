@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { useForm } from "react-hook-form";
+import { motion } from "framer-motion";
 import useAxios from "../../hooks/useAxios";
 import useAuth from "../../hooks/useAuth";
 import Swal from "sweetalert2";
@@ -60,10 +61,56 @@ const LeaveReview = () => {
     }
   };
 
+  // Animation variants
+  const containerAnimation = {
+    hidden: { opacity: 0, y: 20 },
+    visible: { opacity: 1, y: 0, transition: { duration: 0.6 } },
+  };
+
+  const headerAnimation = {
+    hidden: { opacity: 0, y: 20 },
+    visible: { opacity: 1, y: 0, transition: { duration: 0.6, delay: 0.2 } },
+  };
+
+  const formContainerAnimation = {
+    hidden: { opacity: 0, scale: 0.95 },
+    visible: { 
+      opacity: 1, 
+      scale: 1, 
+      transition: { duration: 0.6, delay: 0.3 } 
+    },
+  };
+
+  const fieldAnimation = {
+    hidden: { opacity: 0, x: -20 },
+    visible: (index) => ({
+      opacity: 1,
+      x: 0,
+      transition: { duration: 0.5, delay: 0.4 + index * 0.1 },
+    }),
+  };
+
+  const buttonAnimation = {
+    hidden: { opacity: 0, y: 20 },
+    visible: { opacity: 1, y: 0, transition: { duration: 0.5, delay: 0.7 } },
+  };
+
   return (
-    <div className="mt-10 bg-base-200 py-16">
+    <motion.div 
+      className="mt-10 bg-base-200 py-16"
+      initial="hidden"
+      whileInView="visible"
+      variants={containerAnimation}
+      viewport={{ once: true }}
+    >
       <div className="max-w-4xl mx-auto px-4">
-        <div className="text-center mb-12">
+        <motion.div 
+          className="text-center mb-12"
+          variants={headerAnimation}
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true }}
+        >
           <h2 className="text-4xl font-bold text-secondary mb-6">
             Leave a Review
           </h2>
@@ -71,12 +118,29 @@ const LeaveReview = () => {
             Share your experience with our garments ordering platform. Your
             feedback helps us improve!
           </p>
-        </div>
+        </motion.div>
 
-        <div className="bg-base-100 rounded-lg shadow-lg p-8">
+        <motion.div 
+          className="bg-base-100 rounded-lg shadow-lg p-8"
+          variants={formContainerAnimation}
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true }}
+        >
           <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              <div>
+            <motion.div 
+              className="grid grid-cols-1 md:grid-cols-2 gap-6"
+              initial="hidden"
+              whileInView="visible"
+              viewport={{ once: true }}
+            >
+              <motion.div
+                custom={0}
+                variants={fieldAnimation}
+                initial="hidden"
+                whileInView="visible"
+                viewport={{ once: true }}
+              >
                 <label className="block text-sm font-medium text-gray-700 mb-2">
                   Full Name *
                 </label>
@@ -91,9 +155,15 @@ const LeaveReview = () => {
                     {errors.name.message}
                   </p>
                 )}
-              </div>
+              </motion.div>
 
-              <div>
+              <motion.div
+                custom={1}
+                variants={fieldAnimation}
+                initial="hidden"
+                whileInView="visible"
+                viewport={{ once: true }}
+              >
                 <label className="block text-sm font-medium text-gray-700 mb-2">
                   Email Address *
                 </label>
@@ -114,10 +184,16 @@ const LeaveReview = () => {
                     {errors.email.message}
                   </p>
                 )}
-              </div>
-            </div>
+              </motion.div>
+            </motion.div>
 
-            <div>
+            <motion.div
+              custom={2}
+              variants={fieldAnimation}
+              initial="hidden"
+              whileInView="visible"
+              viewport={{ once: true }}
+            >
               <label className="block text-sm font-medium text-gray-700 mb-2">
                 Rating *
               </label>
@@ -137,9 +213,15 @@ const LeaveReview = () => {
                   {errors.rating.message}
                 </p>
               )}
-            </div>
+            </motion.div>
 
-            <div>
+            <motion.div
+              custom={3}
+              variants={fieldAnimation}
+              initial="hidden"
+              whileInView="visible"
+              viewport={{ once: true }}
+            >
               <label className="block text-sm font-medium text-gray-700 mb-2">
                 Your Review *
               </label>
@@ -164,13 +246,21 @@ const LeaveReview = () => {
                   {errors.comment.message}
                 </p>
               )}
-            </div>
+            </motion.div>
 
-            <div className="text-center">
-              <button
+            <motion.div 
+              className="text-center"
+              variants={buttonAnimation}
+              initial="hidden"
+              whileInView="visible"
+              viewport={{ once: true }}
+            >
+              <motion.button
                 type="submit"
                 disabled={isSubmitting}
                 className="bg-blue-600 hover:bg-blue-700 disabled:bg-blue-400 text-white font-semibold py-3 px-8 rounded-lg transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
+                whileHover={{ scale: 1.02 }}
+                whileTap={{ scale: 0.98 }}
               >
                 {isSubmitting ? (
                   <span className="flex items-center">
@@ -199,16 +289,22 @@ const LeaveReview = () => {
                 ) : (
                   "Submit Review"
                 )}
-              </button>
-            </div>
+              </motion.button>
+            </motion.div>
           </form>
 
-          <div className="mt-6 text-center text-sm text-gray-500">
+          <motion.div 
+            className="mt-6 text-center text-sm text-gray-500"
+            initial={{ opacity: 0 }}
+            whileInView={{ opacity: 1 }}
+            transition={{ duration: 0.5, delay: 0.8 }}
+            viewport={{ once: true }}
+          >
             <p>Your review will be published after admin approval.</p>
-          </div>
-        </div>
+          </motion.div>
+        </motion.div>
       </div>
-    </div>
+    </motion.div>
   );
 };
 
